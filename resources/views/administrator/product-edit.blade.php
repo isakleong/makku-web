@@ -45,7 +45,7 @@
                     <a href="/admin/product/brand">Brand</a>
                 </li>
                 <li class="submenu-item active">
-                    <a href="/admin/product/item">Item</a>
+                    <a href="/admin/product">Item</a>
                 </li>
             </ul>
         </li>
@@ -67,7 +67,7 @@
                     <a href="/admin/news/article">Article</a>
                 </li>
                 <li class="submenu-item ">
-                    <a href="/admin/news/item">Item</a>
+                    <a href="/admin/news">Item</a>
                 </li>
             </ul>
         </li>
@@ -143,7 +143,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="buttons">
-                    <a href="/admin/product/item" class="btn btn-outline-primary">Back</a>
+                    <a href="/admin/product" class="btn btn-outline-primary">Back</a>
                 </div>
             </div>
             <section id="basic-vertical-layouts">
@@ -152,7 +152,7 @@
                         <div class="card">
                             <div class="card-content">
                                 <div class="card-body">
-                                    <form action="{{ route('item.update', $item->id) }}" method="POST" class="form form-vertical" enctype="multipart/form-data">
+                                    <form action="{{ route('product.update', $product->id) }}" method="POST" class="form form-vertical" enctype="multipart/form-data">
                                         @csrf
                                         @method('PUT')
                                         <div class="form-body">
@@ -161,7 +161,7 @@
                                                     <div class="form-group">
                                                         <label for="name_en">Name - EN</label>
                                                         <input type="text" id="name_en" class="form-control"
-                                                            name="name_en" placeholder="Name (English)" value="{{$item->name_en}}">
+                                                            name="name_en" placeholder="Name (English)" value="{{$product->name_en}}">
                                                     </div>
                                                     @error('name_en')
                                                         <p style="color: red">{{$message}}</p>
@@ -171,7 +171,7 @@
                                                     <div class="form-group">
                                                         <label for="name_id">Name - ID</label>
                                                         <input type="text" id="name_id" class="form-control"
-                                                            name="name_id" placeholder="Name (Indonesia)" value="{{$item->name_id}}">
+                                                            name="name_id" placeholder="Name (Indonesia)" value="{{$product->name_id}}">
                                                     </div>
                                                     @error('name_id')
                                                         <p style="color: red">{{$message}}</p>
@@ -182,12 +182,12 @@
                                                     <div class="form-group">
                                                         <label for="categoryID">Category</label>
                                                         <select class="choices form-select" id="categoryID"  name="categoryID">
-                                                            @foreach($category as $item)
+                                                            @foreach($category as $row)
                                                                 {{-- <option value="{{ $item->id }}">{{ $item->name_en }}</option> --}}
-                                                                @if ($item->name == $categorySelected->name_en)
-                                                                    <option value="{{ $item->id }}" selected>{{ $item->name_en }}</option>
+                                                                @if ($row->name_en == $categorySelected->name_en)
+                                                                    <option value="{{ $row->id }}" selected>{{ $row->name_en }}</option>
                                                                 @else
-                                                                    <option value="{{ $item->id }}">{{ $item->name_en }}</option>
+                                                                    <option value="{{ $row->id }}">{{ $row->name_en }}</option>
                                                                 @endif
                                                             @endforeach
                                                         </select>
@@ -201,11 +201,11 @@
                                                     <div class="form-group">
                                                         <label for="brandID">Brand</label>
                                                         <select class="choices form-select" id="brandID"  name="brandID">
-                                                            @foreach($brand as $item)
-                                                                @if ($item->name == $brandSelected->name)
-                                                                    <option value="{{ $item->id }}" selected>{{ $item->name }}</option>
+                                                            @foreach($brand as $row)
+                                                                @if ($row->name == $brandSelected->name)
+                                                                    <option value="{{ $row->id }}" selected>{{ $row->name }}</option>
                                                                 @else
-                                                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                                                    <option value="{{ $row->id }}">{{ $row->name }}</option>
                                                                 @endif
                                                             @endforeach
                                                         </select>
@@ -217,7 +217,7 @@
 
                                                 <div class="col-6 mt-1">
                                                     <div class="form-group">
-                                                        <img src="/{{$item->image}}" alt="" class="img-fluid" width="300">
+                                                        <img src="/{{$product->image}}" alt="" class="img-fluid" width="300">
                                                     </div>
                                                 </div>
 
@@ -233,7 +233,7 @@
                                                 <div class="col-12 mt-3">
                                                     <div class="form-group">
                                                         <div class="form-check form-switch">
-                                                            <input name="active" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" {{ $item->active=='1' ? 'checked' : '' }}>
+                                                            <input name="active" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" {{ $product->active=='1' ? 'checked' : '' }}>
                                                             <label class="form-check-label" for="flexSwitchCheckChecked">Active</label>
                                                         </div>
                                                     </div>

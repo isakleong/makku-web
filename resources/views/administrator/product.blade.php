@@ -45,7 +45,7 @@
                     <a href="/admin/product/brand">Brand</a>
                 </li>
                 <li class="submenu-item active">
-                    <a href="/admin/product/item">Item</a>
+                    <a href="/admin/product">Item</a>
                 </li>
             </ul>
         </li>
@@ -67,7 +67,7 @@
                     <a href="/admin/news/article">Article</a>
                 </li>
                 <li class="submenu-item ">
-                    <a href="/admin/news/item">Item</a>
+                    <a href="/admin/news">Item</a>
                 </li>
             </ul>
         </li>
@@ -145,7 +145,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="buttons">
-                    <a href="/admin/product/item/create" class="btn btn-outline-primary">Add Data</a>
+                    <a href="/admin/product/create" class="btn btn-outline-primary">Add Data</a>
                 </div>
             </div>
             <div class="card-body">
@@ -182,10 +182,10 @@
                                     <td><span class="badge bg-danger">Inactive</span></td>
                                 @endif
                                 <td>
-                                    <a href="{{ route('item.edit', $item->id) }}" class="btn icon btn-sm btn-primary"><i class="bi bi-pencil"></i></a>
+                                    <a href="{{ route('product.edit', $item->id) }}" class="btn icon btn-sm btn-primary"><i class="bi bi-pencil"></i></a>
                                 </td>
                                 <td>
-                                    <form action="{{ route('item.destroy', $item->id) }}" method="POST">
+                                    <form action="{{ route('product.destroy', $item->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn icon btn-sm btn-danger show_confirm"><i class="bi bi-x"></i></button>

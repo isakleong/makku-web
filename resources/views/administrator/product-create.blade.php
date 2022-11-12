@@ -44,7 +44,7 @@
                     <a href="/admin/product/brand">Brand</a>
                 </li>
                 <li class="submenu-item active">
-                    <a href="/admin/product/item">Item</a>
+                    <a href="/admin/product">Item</a>
                 </li>
             </ul>
         </li>
@@ -66,7 +66,7 @@
                     <a href="/admin/news/article">Article</a>
                 </li>
                 <li class="submenu-item ">
-                    <a href="/admin/news/item">Item</a>
+                    <a href="/admin/news">Item</a>
                 </li>
             </ul>
         </li>
@@ -142,7 +142,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="buttons">
-                    <a href="/admin/product/item" class="btn btn-outline-primary">Back</a>
+                    <a href="/admin/product" class="btn btn-outline-primary">Back</a>
                 </div>
             </div>
             <section id="basic-vertical-layouts">
@@ -151,7 +151,7 @@
                         <div class="card">
                             <div class="card-content">
                                 <div class="card-body">
-                                    <form action="{{ route('item.store') }}" method="POST" class="form form-vertical" enctype="multipart/form-data">
+                                    <form action="{{ route('product.store') }}" method="POST" class="form form-vertical" enctype="multipart/form-data">
                                         @csrf
                                         <div class="form-body">
                                             <div class="row">

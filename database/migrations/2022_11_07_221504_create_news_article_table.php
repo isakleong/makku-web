@@ -17,11 +17,10 @@ return new class extends Migration
             $table->id();
             $table->string('title_en')->required();
             $table->string('title_id')->required();
-            $table->text('content_en')->required();
-            $table->text('content_id')->required();
+            $table->longText('content_en')->required();
+            $table->longText('content_id')->required();
             $table->text('tags_en')->nullable();
             $table->text('tags_id')->nullable();
-            $table->string('image')->nullable();
             $table->string('author', 100)->required();
             $table->timestamps();
         });

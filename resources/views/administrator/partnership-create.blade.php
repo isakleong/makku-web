@@ -40,7 +40,7 @@
                     <a href="/admin/product/brand">Brand</a>
                 </li>
                 <li class="submenu-item ">
-                    <a href="/admin/product/item">Item</a>
+                    <a href="/admin/product">Item</a>
                 </li>
             </ul>
         </li>
@@ -62,7 +62,7 @@
                     <a href="/admin/news/article">Article</a>
                 </li>
                 <li class="submenu-item ">
-                    <a href="/admin/news/item">Item</a>
+                    <a href="/admin/news">Item</a>
                 </li>
             </ul>
         </li>

@@ -19,7 +19,6 @@ return new class extends Migration
             $table->foreign('categoryID')->references('id')->on('news_category')->onDelete('restrict');
             $table->unsignedBigInteger('articleID')->required();
             $table->foreign('articleID')->references('id')->on('news_article')->onDelete('restrict');
-            $table->string('image')->required();
             $table->string('active', 1)->required();
             $table->timestamps();
         });

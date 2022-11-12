@@ -9,6 +9,10 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KeyFeatureController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\MenuBarController;
+use App\Http\Controllers\NewsArticleController;
+use App\Http\Controllers\NewsCategoryController;
+use App\Http\Controllers\NewsController;
+use App\Http\Controllers\NewsTagController;
 use App\Http\Controllers\PartnershipController;
 use App\Http\Controllers\ProductBrandController;
 use App\Http\Controllers\ProductHighlightController;
@@ -56,6 +60,11 @@ Route::resource('/admin/testimonial', TestimonialController::class)->middleware(
 Route::resource('/admin/product/category', ProductCategoryController::class)->middleware('auth');
 Route::resource('/admin/product/catalogue', CatalogueController::class)->middleware('auth');
 Route::resource('/admin/product/brand', ProductBrandController::class)->middleware('auth');
-Route::resource('/admin/product/item', ProductController::class)->middleware('auth');
+Route::resource('/admin/product', ProductController::class)->middleware('auth');
+
+Route::resource('/admin/news/category', NewsCategoryController::class)->middleware('auth');
+Route::resource('/admin/news/tag', NewsTagController::class)->middleware('auth');
+Route::resource('/admin/news/article', NewsArticleController::class)->middleware('auth');
+Route::resource('/admin/news', NewsController::class)->middleware('auth');
 
 // Route::resource('/admin/coba', CobaController::class)->middleware('auth');
