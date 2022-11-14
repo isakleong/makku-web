@@ -15,6 +15,10 @@ class MenuBar extends Model
         'title_en',
         'title_id',
         'orderNumber',
+        'refer',
+        'type',
+        'parent',
+        'image',
         'active'
     ];
 }

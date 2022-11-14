@@ -155,6 +155,10 @@
                             <th>No</th>
                             <th>Title - EN</th>
                             <th>Title - ID</th>
+                            <th>Refer</th>
+                            <th>Type</th>
+                            <th>Parent</th>
+                            <th>Image</th>
                             <th>Order Number</th>
                             <th>Active</th>
                             <th>Edit</th>
@@ -170,6 +174,10 @@
                                 <td>{{$i++}}</td>
                                 <td>{{$item->title_en}}</td>
                                 <td>{{$item->title_id}}</td>
+                                <td>{{$item->refer}}</td>
+                                <td>{{$item->type}}</td>
+                                <td>{{$item->parent}}</td>
+                                <td><img src="/{{$item->image}}" alt="" class="img-fluid" width="150"></td>
                                 <td>{{$item->orderNumber}}</td>
                                 @if ($item->active=='1')
                                     <td><span class="badge bg-success">Active</span></td>

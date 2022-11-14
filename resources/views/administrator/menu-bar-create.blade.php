@@ -174,6 +174,58 @@
 
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
+                                                        <label for="refer">Refer</label>
+                                                        <input type="text" id="refer" class="form-control"
+                                                            name="refer" placeholder="Refer">
+                                                    </div>
+                                                    @error('refer')
+                                                        <p style="color: red">{{$message}}</p>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="col-12 mt-1">
+                                                    <div class="form-group">
+                                                        <label for="type">Type</label>
+                                                        <select class="choices form-select" id="type"  name="type">
+                                                                <option value="parent">Parent</option>
+                                                                <option value="child">Child</option>
+                                                                <option value="sub child">Sub Child</option>
+                                                        </select>
+                                                    </div>
+                                                    @error('type')
+                                                        <p style="color: red">{{$message}}</p>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="col-12 mt-1">
+                                                    <div class="form-group">
+                                                        <label for="parent">Parent</label>
+                                                        <select class="choices form-select" id="parent"  name="parent">
+                                                            <option value="" selected>No Parent</option>
+                                                            @foreach($parent as $item)
+                                                                <option value="{{ $item->id }}">{{ $item->title_en }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    @error('parent')
+                                                        <p style="color: red">{{$message}}</p>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="col-12 mt-1">
+                                                    <div class="form-group">
+                                                        <div class="mb-3">
+                                                            <label for="image">Image</label>
+                                                            <input class="form-control" type="file" id="image" name="image">
+                                                        </div>
+                                                    </div>
+                                                    @error('image')
+                                                        <p style="color: red">{{$message}}</p>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="col-12 mt-1">
+                                                    <div class="form-group">
                                                         <label for="orderNumber">Order Number</label>
                                                         <input type="text" id="is_active" class="form-control"
                                                             name="orderNumber" placeholder="Order Number">

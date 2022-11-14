@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\MenuBar;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MenuBarController extends Controller
 {
@@ -18,7 +19,8 @@ class MenuBarController extends Controller
 
     public function create()
     {
-        return view('administrator.menu-bar-create');
+        $parent = MenuBar::all();
+        return view('administrator.menu-bar-create', compact('parent'));
     }
 
     public function store(Request $request)
@@ -26,7 +28,10 @@ class MenuBarController extends Controller
         $request->validate([
             'title_en' => 'required',
             'title_id' => 'required',
-            'orderNumber' => 'required'
+            'orderNumber' => 'required',
+            'refer' => 'required',
+            'type' => 'required',
+            'image' => 'image',
         ]);
 
         if(!$request->has('active')) {
@@ -36,6 +41,16 @@ class MenuBarController extends Controller
         }
 
         $input = $request->all();
+
+        if($image = $request->file('image')) {
+            $destinationPath = 'image/upload/';
+            $imageName = strtolower($request->title_en) . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $imageName);
+            // $input['image'] = $imageName;
+            $input['image'] = $destinationPath.$imageName;
+        } else {
+            unset($input['image']);
+        }
 
         MenuBar::create($input);
 
@@ -50,7 +65,11 @@ class MenuBarController extends Controller
     public function edit(MenuBar $menubar)
     {
         // dd($menubar->id);
-        return view('administrator.menu-bar-edit', compact('menubar'));
+        $parent = MenuBar::all();
+
+        // dd($menubar);
+
+        return view('administrator.menu-bar-edit', compact('menubar', 'parent'));
     }
 
     public function update(Request $request, MenuBar $menubar)
@@ -58,7 +77,10 @@ class MenuBarController extends Controller
         $request->validate([
             'title_en' => 'required',
             'title_id' => 'required',
-            'orderNumber' => 'required'
+            'orderNumber' => 'required',
+            'refer' => 'required',
+            'type' => 'required',
+            'image' => 'image'
         ]);
 
         if(!$request->has('active')) {
@@ -76,6 +98,16 @@ class MenuBarController extends Controller
         // }
 
         $input = $request->all();
+
+        if($image = $request->file('image')) {
+            $destinationPath = 'image/upload/';
+            $imageName = strtolower($request->title_en) . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $imageName);
+            // $input['image'] = $imageName;
+            $input['image'] = $destinationPath.$imageName;
+        } else {
+            unset($input['image']);
+        }
 
         $menubar->update($input);
 
