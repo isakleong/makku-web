@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('orderNumber', 3)->required();
             $table->string('refer', 100)->required();
             $table->string('type', 100)->required();
+            $table->string('parent', 10)->nullable();
+            $table->string('image')->nullable();
             $table->string('active', 1)->required();
             $table->timestamps();
         });

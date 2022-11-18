@@ -67,4 +67,17 @@ Route::resource('/admin/news/tag', NewsTagController::class)->middleware('auth')
 Route::resource('/admin/news/article', NewsArticleController::class)->middleware('auth');
 Route::resource('/admin/news', NewsController::class)->middleware('auth');
 
+Route::group([
+    'prefix' => '{locale}',
+    'where' => ['locale' => '[a-zA-Z]{2}'],
+], function(){
+    Route::get('/', [HomeController::class, 'index']);
+    Route::get('/our-company', [HomeController::class, 'ourCompany']);
+    Route::get('/our-product', [HomeController::class, 'ourProduct']);
+    Route::get('/catalogues', [HomeController::class, 'catalogues']);
+    Route::get('/partnership', [HomeController::class, 'partnership']);
+    Route::get('/news', [HomeController::class, 'news']);
+    Route::get('/contact-us', [HomeController::class, 'contactUs']);
+});
+
 // Route::resource('/admin/coba', CobaController::class)->middleware('auth');

@@ -2,6 +2,10 @@
 
 @section('title', 'Makku Frozen Food - Home')
 
+@php
+    
+@endphp
+
 @section('navbar')
     <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top">
@@ -17,24 +21,38 @@
         $tempSubChildMenuBar = $menubar;
       @endphp
 
+      {{-- @php
+        $money = App\Http\Controllers\HomeController::checker(12000);
+      @endphp --}}
+
+      {{-- @php
+        if (isset($_GET['val'])) {
+          // echo $_GET['val'];
+          echo "<script>alert('ajax working');</script>";
+        }  
+      @endphp --}}
+
+      <input id="language-data" value="English"/>
+      
+
       <nav id="navbar" class="navbar">
         <ul id="navbar-header">
           @foreach ($menubar as $item)
               @if (strtolower($item->type) == 'parent')
                 @if ($item->ChildrenCount > 0)
-                  <li id="navbar-title" class="dropdown"><a href="{{$item->refer}}"><span>{{$item->title_en}}</span><i class="bi bi-chevron-down"></i></a>
+                  <li id="navbar-title" class="dropdown"><a href="{{$item->refer}}"><span>{{$item->title}}</span><i class="bi bi-chevron-down"></i></a>
                     <ul>
                       @foreach ($tempChildMenuBar as $itemChild)
                         @if ($itemChild->parent == $item->id)
                           @if ($itemChild->ChildrenCount == 0)
-                            <li id="navbar-dropdown" style="background-image: url(/{{$itemChild->image}});"><a href={{$itemChild->refer}}>{{$itemChild->title_en}}</a></li>
+                            <li id="navbar-dropdown" style="background-image: url(/{{$itemChild->image}});"><a href={{$itemChild->refer}}>{{$itemChild->title}}</a></li>
                             <div style="border-bottom: 3px solid white"></div>
                           @else
                             <li class="dropdown"><a href="{{$itemChild->refer}}"><span>{{$itemChild->title_en}}</span> <i class="bi bi-chevron-right"></i></a>
                               <ul>
                                 @foreach ($tempSubChildMenuBar as $itemSubChild)
                                   @if ($itemSubChild->parent == $itemChild->id)
-                                    <li id="navbar-sub-dropdown" style="background-image: url({{$itemSubChild->image}});"><a href={{$itemSubChild->refer}}>{{$itemSubChild->title_en}}</a></li>
+                                    <li id="navbar-sub-dropdown" style="background-image: url({{$itemSubChild->image}});"><a href={{$itemSubChild->refer}}>{{$itemSubChild->title}}</a></li>
                                   @endif
                                 @endforeach
                               </ul>
@@ -45,11 +63,25 @@
                     </ul>
                   </li>
                 @else
-                <li id="navbar-title"><a class="nav-link" href={{$item->refer}}>{{$item->title_en}}</a></li>
+                  {{-- <script>
+                    alert("ajax working");
+                    if(document.getElementById("language-data").value == "English") {
+                      alert('Englishhahaha');
+                    } else {
+                      alert('IDN');
+                    }
+                  </script>   --}}
+                  <li id="navbar-title"><a class="nav-link" href={{$item->refer}}>{{$item->title}}</a></li>
                 @endif
 
               @endif
           @endforeach
+          <li id="navbar-title" class="dropdown"><a href="#"><span>EN</span> <i class="bi bi-translate"></i></a>
+            <ul>
+              <li><a href="/id">Bahasa Indonesia</a></li>
+              <li><a href="/en">English</a></li>
+            </ul>
+          </li>
           {{-- <li id="navbar-title"><a class="nav-link active" href="/">Home</a></li>
           <li id="navbar-title"><a class="nav-link" href="our-company">Our Company</a></li>
           <li id="navbar-title" class="dropdown"><a href="#"><span>Our Product</span><i class="bi bi-chevron-down"></i></a>

@@ -94,8 +94,8 @@
           </div>
 
           <div class="m-5 text-center" role="group">
-            <input id="language" type="button" class="btn btn-toggle" style="color: white" value="English">
-            <input id="language" type="button" style="color: white" class="btn" value="Indonesia">
+            <input type="button" class="btn btn-toggle" style="color: white" value="English">
+            <input type="button" style="color: white" class="btn" value="Indonesia">
           </div>
           
         </div>
@@ -112,19 +112,34 @@
     <script src="/home/assets/vendor/swiper/swiper-bundle.min.js"></script>
     <script src="/home/assets/vendor/php-email-form/validate.js"></script>
     <script src="/lte/assets/extensions/jquery/jquery.min.js"></script>
+    {{-- <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"> --}}
 
     <!-- Template Main JS File -->
     <script src="/home/assets/js/main.js"></script>
 
-    <script>
+    {{-- <script>
       $(document).ready(() => {
         $("input[type='button']").click((event) => {
           $("input[type='button']").toggleClass("btn-toggle");
           var inputString = $(".btn-toggle").val();
           console.log(inputString);
+          $("#language-data").val(inputString);
+
+          var val = inputString;
+          $.ajax ({
+            url: "index.php",
+            type: "GET",
+            data: { val : val },
+            success: function(data) {
+                // alert(data);
+                $("#language-data").val(data);
+            }
+          });
+
+
         });
       });
-    </script>
+    </script> --}}
 
     @yield('vendorScript')
 </body>
