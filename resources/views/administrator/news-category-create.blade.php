@@ -147,7 +147,7 @@
                         <div class="card">
                             <div class="card-content">
                                 <div class="card-body">
-                                    <form action="{{ route('category.store') }}" method="POST" class="form form-vertical" enctype="multipart/form-data">
+                                    <form action="{{ route('news.category.store') }}" method="POST" class="form form-vertical" enctype="multipart/form-data">
                                         @csrf
                                         <div class="form-body">
                                             <div class="row">
@@ -155,7 +155,7 @@
                                                     <div class="form-group">
                                                         <label for="title_en">Name - EN</label>
                                                         <input type="text" id="name_en" class="form-control"
-                                                            name="name_en" placeholder="Name (English)">
+                                                            name="name_en" placeholder="Name (English)" required value="{{old('name_en')}}">
                                                     </div>
                                                     @error('name_en')
                                                         <p style="color: red">{{$message}}</p>
@@ -165,7 +165,7 @@
                                                     <div class="form-group">
                                                         <label for="name_id">Name - ID</label>
                                                         <input type="text" id="name_id" class="form-control"
-                                                            name="name_id" placeholder="Name (Indonesia)">
+                                                            name="name_id" placeholder="Name (Indonesia)" required value="{{old('name_id')}}">
                                                     </div>
                                                     @error('name_id')
                                                         <p style="color: red">{{$message}}</p>

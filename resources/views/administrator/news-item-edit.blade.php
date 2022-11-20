@@ -2,11 +2,6 @@
 
 @section('title', 'Makku Frozen Food - News')
 
-@section('vendorCSS')
-<link rel="stylesheet" href="/lte/assets/extensions/simple-datatables/style.css">
-<link rel="stylesheet" href="/lte/assets/css/pages/simple-datatables.css">
-@endsection
-
 @section('navbar')
 <div class="sidebar-menu">
     <ul class="menu">

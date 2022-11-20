@@ -2,11 +2,6 @@
 
 @section('title', 'Makku Frozen Food - Catalogue')
 
-@section('vendorCSS')
-<link rel="stylesheet" href="/lte/assets/extensions/simple-datatables/style.css">
-<link rel="stylesheet" href="/lte/assets/css/pages/simple-datatables.css">
-@endsection
-
 @section('navbar')
 <div class="sidebar-menu">
     <ul class="menu">
@@ -159,14 +154,14 @@
                                             <div class="row">
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label for="name_en">Name - EN</label>
+                                                        <label for="name_en">Name - EN (Optional)</label>
                                                         <input type="text" id="name_en" class="form-control"
                                                             name="name_en" placeholder="Name (English)" value="{{$catalogue->name_en}}">
                                                     </div>
                                                 </div>
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
-                                                        <label for="name_id">Name - ID</label>
+                                                        <label for="name_id">Name - ID (Optional)</label>
                                                         <input type="text" id="name_id" class="form-control"
                                                             name="name_id" placeholder="Name (Indonesia)" value="{{$catalogue->name_id}}">
                                                     </div>
@@ -181,7 +176,7 @@
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
                                                         <div class="mb-3">
-                                                            <label for="image">Image</label>
+                                                            <label for="image">File (Optional)</label>
                                                             <input class="form-control" type="file" id="file" name="file">
                                                         </div>
                                                     </div>

@@ -205,7 +205,7 @@
 
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
-                                                        <label for="tags_en">Tags - EN</label>
+                                                        <label for="tags_en">Tags - EN (Optional)</label>
                                                         <input type="text" id="tags_en" class="form-control"
                                                             name="tags_en" placeholder="Tags (English)" value="{{$article->tags_en}}">
                                                     </div>
@@ -213,7 +213,7 @@
 
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
-                                                        <label for="tags_id">Tags - ID</label>
+                                                        <label for="tags_id">Tags - ID (Optional)</label>
                                                         <input type="text" id="tags_id" class="form-control"
                                                             name="tags_id" placeholder="Tags (Indonesia)" value="{{$article->tags_id}}">
                                                     </div>

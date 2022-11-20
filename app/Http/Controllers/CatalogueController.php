@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Catalogue;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class CatalogueController extends Controller
 {
@@ -76,7 +77,10 @@ class CatalogueController extends Controller
 
         $input = $request->all();
 
+        $imageDelete = "";
         if($image = $request->file('file')) {
+            $imageDelete = public_path()."/".$catalogue->file;
+
             $destinationPath = 'file/upload/';
             $imageName = strtolower($request->name_id) . "." . $image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
@@ -86,13 +90,26 @@ class CatalogueController extends Controller
             unset($input['file']);
         }
 
+        // if($image = $request->file('file')) {
+        //     dd('masuk 1');
+        // } else {
+        //     dd($imageDelete);
+        // }
+
         $catalogue->update($input);
+
+        if($imageDelete != "") {
+            File::delete($imageDelete);
+        }
 
         return redirect('/admin/product/catalogue')->withSuccess('Data Updated Successfully!');
     }
 
     public function destroy(Catalogue $catalogue)
     {
+        $path = public_path()."/".$catalogue->file;
+        File::delete($path);
+
         $catalogue->delete();
 
         return redirect('/admin/product/catalogue')->withSuccess('Data Deleted Successfully!');

@@ -153,7 +153,7 @@
                                             <div class="row">
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label for="name_en">Name - EN</label>
+                                                        <label for="name_en">Name - EN (Optional)</label>
                                                         <input type="text" id="name_en" class="form-control"
                                                             name="name_en" placeholder="Name (English)">
                                                     </div>
@@ -161,7 +161,7 @@
 
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
-                                                        <label for="name_id">Name - ID</label>
+                                                        <label for="name_id">Name - ID (Optional)</label>
                                                         <input type="text" id="name_id" class="form-control"
                                                             name="name_id" placeholder="Name (Indonesia)">
                                                     </div>

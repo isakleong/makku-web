@@ -2,11 +2,6 @@
 
 @section('title', 'Makku Frozen Food - Product Category')
 
-@section('vendorCSS')
-<link rel="stylesheet" href="/lte/assets/extensions/simple-datatables/style.css">
-<link rel="stylesheet" href="/lte/assets/css/pages/simple-datatables.css">
-@endsection
-
 @section('navbar')
 <div class="sidebar-menu">
     <ul class="menu">
@@ -152,7 +147,7 @@
                         <div class="card">
                             <div class="card-content">
                                 <div class="card-body">
-                                    <form action="{{ route('category.update', $category->id) }}" method="POST" class="form form-vertical" enctype="multipart/form-data">
+                                    <form action="{{ route('product.category.update', $category->id) }}" method="POST" class="form form-vertical" enctype="multipart/form-data">
                                         @csrf
                                         @method('PUT')
                                         <div class="form-body">
@@ -187,7 +182,7 @@
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
                                                         <div class="mb-3">
-                                                            <label for="image">Image</label>
+                                                            <label for="image">Image (Optional)</label>
                                                             <input class="form-control" type="file" id="image" name="image">
                                                         </div>
                                                     </div>

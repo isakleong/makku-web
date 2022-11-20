@@ -2,11 +2,6 @@
 
 @section('title', 'Makku Frozen Food - News Category')
 
-@section('vendorCSS')
-<link rel="stylesheet" href="/lte/assets/extensions/simple-datatables/style.css">
-<link rel="stylesheet" href="/lte/assets/css/pages/simple-datatables.css">
-@endsection
-
 @section('navbar')
 <div class="sidebar-menu">
     <ul class="menu">
@@ -152,7 +147,7 @@
                         <div class="card">
                             <div class="card-content">
                                 <div class="card-body">
-                                    <form action="{{ route('category.update', $category->id) }}" method="POST" class="form form-vertical" enctype="multipart/form-data">
+                                    <form action="{{ route('news.category.update', $category->id) }}" method="POST" class="form form-vertical" enctype="multipart/form-data">
                                         @csrf
                                         @method('PUT')
                                         <div class="form-body">

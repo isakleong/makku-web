@@ -153,9 +153,9 @@
                                             <div class="row">
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label for="title_en">Content - EN</label>
+                                                        <label for="content_en">Content - EN</label>
                                                         <input type="text" id="content_en" class="form-control"
-                                                            name="content_en" placeholder="Content (English)">
+                                                            name="content_en" placeholder="Content (English)" required value="{{old('content_en')}}">
                                                     </div>
                                                     @error('content_en')
                                                         <p style="color: red">{{$message}}</p>
@@ -166,7 +166,7 @@
                                                     <div class="form-group">
                                                         <label for="content_id">Content - ID</label>
                                                         <input type="text" id="content_id" class="form-control"
-                                                            name="content_id" placeholder="Title (Indonesia)">
+                                                            name="content_id" placeholder="Title (Indonesia)" required value="{{old('content_id')}}">
                                                     </div>
                                                     @error('content_id')
                                                         <p style="color: red">{{$message}}</p>
@@ -177,7 +177,7 @@
                                                     <div class="form-group">
                                                         <label for="author">Author</label>
                                                         <input type="text" id="author" class="form-control"
-                                                            name="author" placeholder="Author">
+                                                            name="author" placeholder="Author" required value="{{old('author')}}">
                                                     </div>
                                                     @error('author')
                                                         <p style="color: red">{{$message}}</p>

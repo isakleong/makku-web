@@ -155,7 +155,7 @@
                                                     <div class="form-group">
                                                         <label for="title_en">Name - EN</label>
                                                         <input type="text" id="name_en" class="form-control"
-                                                            name="name_en" placeholder="Title (English)">
+                                                            name="name_en" placeholder="Title (English)" required value="{{old('name_en')}}">
                                                     </div>
                                                     @error('name_en')
                                                         <p style="color: red">{{$message}}</p>
@@ -165,7 +165,7 @@
                                                     <div class="form-group">
                                                         <label for="name_id">Name - ID</label>
                                                         <input type="text" id="name_id" class="form-control"
-                                                            name="name_id" placeholder="Title (Indonesia)">
+                                                            name="name_id" placeholder="Title (Indonesia)" required value="{{old('name_id')}}">
                                                     </div>
                                                     @error('name_id')
                                                         <p style="color: red">{{$message}}</p>
@@ -193,7 +193,7 @@
                                                     <div class="form-group">
                                                         <label for="orderNumber">Order Number</label>
                                                         <input type="text" class="form-control"
-                                                            name="orderNumber" placeholder="Order Number">
+                                                            name="orderNumber" placeholder="Order Number" required value="{{old('orderNumber')}}">
                                                     </div>
                                                     @error('orderNumber')
                                                         <p style="color: red">{{$message}}</p>

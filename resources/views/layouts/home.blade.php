@@ -73,30 +73,26 @@
         <div class="container py-4">
           <div class="text-center">
             <div>
-              <a href="index.html"><img src="/home/assets/img/logo_white.png" alt="" width="150px"></a>
+              <a href="/"><img src="/{{$company->logoSecondary}}" alt="" width="150px"></a>
             </div>
             <div class="credits py-3">
               <h3><i class="bi bi-geo-alt-fill"></i></h3>
-              <p>
-                Ruko Soekarno Hatta Indah Blok A7<br>
-                Mojolangu, Lowokwaru<br>
-                Malang, Jawa Timur<br>
-              </p>
+              <p>{{$company->address}}</p>
             </div>
     
             
           </div>
           <div class="social-links text-center text-md-right pt-3 pt-md-0">
-            <a href="#" class="email"><i class="bx bxl-gmail"></i></a>
-            <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
-            <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
-            <a href="#" class="whatsapp"><i class="bx bxl-whatsapp"></i></a>
+            <a href="mailto:{{$company->email}}" class="email"><i class="bx bxl-gmail"></i></a>
+            <a href="{{$company->facebook}}" target="_blank" class="facebook"><i class="bx bxl-facebook"></i></a>
+            <a href="{{$company->instagram}}" target="_blank" class="instagram"><i class="bx bxl-instagram"></i></a>
+            <a href="{{$company->whatsapp}}" target="_blank" class="whatsapp"><i class="bx bxl-whatsapp"></i></a>
           </div>
 
-          <div class="m-5 text-center" role="group">
+          {{-- <div class="m-5 text-center" role="group">
             <input type="button" class="btn btn-toggle" style="color: white" value="English">
             <input type="button" style="color: white" class="btn" value="Indonesia">
-          </div>
+          </div> --}}
           
         </div>
     </footer>

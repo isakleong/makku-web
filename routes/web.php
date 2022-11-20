@@ -57,12 +57,12 @@ Route::resource('/admin/master/company', CompanyController::class)->middleware('
 Route::resource('/admin/partnership', PartnershipController::class)->middleware('auth');
 Route::resource('/admin/testimonial', TestimonialController::class)->middleware('auth');
 
-Route::resource('/admin/product/category', ProductCategoryController::class)->middleware('auth');
+Route::resource('/admin/product/category', ProductCategoryController::class, ["as"=>"product"])->middleware('auth');
 Route::resource('/admin/product/catalogue', CatalogueController::class)->middleware('auth');
 Route::resource('/admin/product/brand', ProductBrandController::class)->middleware('auth');
 Route::resource('/admin/product', ProductController::class)->middleware('auth');
 
-Route::resource('/admin/news/category', NewsCategoryController::class)->middleware('auth');
+Route::resource('/admin/news/category', NewsCategoryController::class, ["as"=>"news"])->middleware('auth');
 Route::resource('/admin/news/tag', NewsTagController::class)->middleware('auth');
 Route::resource('/admin/news/article', NewsArticleController::class)->middleware('auth');
 Route::resource('/admin/news', NewsController::class)->middleware('auth');

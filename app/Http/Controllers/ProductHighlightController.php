@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ProductHighlight;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class ProductHighlightController extends Controller
 {
@@ -28,25 +29,47 @@ class ProductHighlightController extends Controller
             'orderNumber' => 'required'
         ]);
 
-        if(!$request->has('active')) {
-            $request->merge(['active'=>'0']);
+        $productHighlight = ProductHighlight::where([
+            'active' => 1,
+            'orderNumber' => $request->orderNumber
+        ])->get();
+
+        $cntData = $productHighlight->count();
+        if($cntData == 0) {
+            if(!$request->has('active')) {
+                $request->merge(['active'=>'0']);
+            } else {
+                $request->merge(['active'=>'1']);
+            }
+    
+            $input = $request->all();
+    
+            if($image = $request->file('image')) {
+                $destinationPath = 'image/upload/';
+                $imageName = strtolower($request->name_id) . "." . $image->getClientOriginalExtension();
+                $image->move($destinationPath, $imageName);
+                // $input['image'] = $imageName;
+                $input['image'] = $destinationPath.$imageName;
+            }
+    
+            ProductHighlight::create($input);
+    
+            return redirect('/admin/master/producthighlight')->withSuccess('Data Added Successfully!');
         } else {
-            $request->merge(['active'=>'1']);
+            $dataExist = "";
+            $i = 0;
+            foreach($productHighlight as $item) {
+                if($i == $cntData-1) {
+                    $dataExist.=$item->name_en;
+                } else {
+                    $dataExist.=$item->name_en.", ";
+                }
+                $i++;
+            }
+            return redirect('/admin/master/producthighlight')->with('error', $dataExist);
         }
 
-        $input = $request->all();
-
-        if($image = $request->file('image')) {
-            $destinationPath = 'image/upload/';
-            $imageName = strtolower($request->name_id) . "." . $image->getClientOriginalExtension();
-            $image->move($destinationPath, $imageName);
-            // $input['image'] = $imageName;
-            $input['image'] = $destinationPath.$imageName;
-        }
-
-        ProductHighlight::create($input);
-
-        return redirect('/admin/master/producthighlight')->withSuccess('Data Added Successfully!');
+        
     }
 
     public function show(ProductHighlight $productHighlight)
@@ -93,6 +116,9 @@ class ProductHighlightController extends Controller
 
     public function destroy(ProductHighlight $producthighlight)
     {
+        $path = public_path()."/".$producthighlight->image;
+        File::delete($path);
+        
         $producthighlight->delete();
 
         return redirect('/admin/master/producthighlight')->withSuccess('Data Deleted Successfully!');

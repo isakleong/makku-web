@@ -2,11 +2,6 @@
 
 @section('title', 'Makku Frozen Food - Key Feature')
 
-@section('vendorCSS')
-<link rel="stylesheet" href="/lte/assets/extensions/simple-datatables/style.css">
-<link rel="stylesheet" href="/lte/assets/css/pages/simple-datatables.css">
-@endsection
-
 @section('navbar')
 <div class="sidebar-menu">
     <ul class="menu">
@@ -178,19 +173,27 @@
                                                     @enderror
                                                 </div>
 
-                                                <div class="col-6 mt-1">
-                                                    <div class="form-group">
-                                                        <img src="/{{$keyfeature->image}}" alt="" class="img-fluid" width="300">
-                                                    </div>
-                                                </div>
-
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
                                                         <div class="mb-3">
-                                                            <label for="image">Image</label>
-                                                            <input class="form-control" type="file" id="image" name="image">
+                                                            <label for="image">Image (Optional)</label>
+                                                            @if ($keyfeature->image != "")
+                                                                <img src="/{{$keyfeature->image}}" alt="" class="img-preview img-fluid mb-3 mt-3 col-4 d-block"> 
+                                                                <div class="form-check">
+                                                                    <div class="checkbox">
+                                                                        <input name="discard" type="checkbox" id="checkbox3" class="form-check-input"/>
+                                                                        <label for="checkbox3">Discard Old Image</label>
+                                                                    </div>
+                                                                </div>
+                                                            @else
+                                                                <img class="img-preview img-fluid mb-3 mt-3 col-4">
+                                                            @endif
+                                                            <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image" accept="image/*" onchange="previewImage()">
                                                         </div>
                                                     </div>
+                                                    @error('image')
+                                                        <p style="color: red">{{$message}}</p>
+                                                    @enderror
                                                 </div>
 
                                                 <div class="col-12 mt-1">

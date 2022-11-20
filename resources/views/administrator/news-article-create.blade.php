@@ -169,7 +169,7 @@
                                                     <div class="form-group">
                                                         <label for="title_en">Title - EN</label>
                                                         <input type="text" id="title_en" class="form-control"
-                                                            name="title_en" placeholder="Title (English)">
+                                                            name="title_en" placeholder="Title (English)" required value="{{old('title_en')}}">
                                                     </div>
                                                     @error('title_en')
                                                         <p style="color: red">{{$message}}</p>
@@ -180,7 +180,7 @@
                                                     <div class="form-group">
                                                         <label for="title_id">Title - ID</label>
                                                         <input type="text" id="title_id" class="form-control"
-                                                            name="title_id" placeholder="Title (Indonesia)">
+                                                            name="title_id" placeholder="Title (Indonesia)" required value="{{old('title_id')}}">
                                                     </div>
                                                     @error('title_id')
                                                         <p style="color: red">{{$message}}</p>
@@ -200,7 +200,7 @@
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
                                                         <label for="content_id">Content - ID</label>
-                                                        <textarea class="form-control" id="content_id" name="content_id" rows="3" style="display: none;"></textarea>
+                                                        <textarea class="form-control" id="content_id" name="content_id" rows="3" style="display: none;" required value="{{old('content_id')}}"></textarea>
                                                         @error('content_id')
                                                             <p style="color: red">{{$message}}</p>
                                                         @enderror
@@ -209,7 +209,7 @@
 
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
-                                                        <label for="tags_en">Tags - EN</label>
+                                                        <label for="tags_en">Tags - EN (Optional)</label>
                                                         <input type="text" id="tags_en" class="form-control"
                                                             name="tags_en" placeholder="Tags (English)">
                                                     </div>
@@ -217,7 +217,7 @@
 
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
-                                                        <label for="tags_id">Tags - ID</label>
+                                                        <label for="tags_id">Tags - ID (Optional)</label>
                                                         <input type="text" id="tags_id" class="form-control"
                                                             name="tags_id" placeholder="Tags (Indonesia)">
                                                     </div>
@@ -227,7 +227,7 @@
                                                     <div class="form-group">
                                                         <label for="author">Author</label>
                                                         <input type="text" id="author" class="form-control"
-                                                            name="author" placeholder="Author">
+                                                            name="author" placeholder="Author" required value="{{old('author')}}">
                                                     </div>
                                                     @error('author')
                                                         <p style="color: red">{{$message}}</p>

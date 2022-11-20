@@ -2,11 +2,6 @@
 
 @section('title', 'Makku Frozen Food - Partnership')
 
-@section('vendorCSS')
-<link rel="stylesheet" href="/lte/assets/extensions/simple-datatables/style.css">
-<link rel="stylesheet" href="/lte/assets/css/pages/simple-datatables.css">
-@endsection
-
 @section('navbar')
 <div class="sidebar-menu">
     <ul class="menu">
@@ -177,7 +172,7 @@
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
                                                         <div class="mb-3">
-                                                            <label for="image">Image</label>
+                                                            <label for="image">Image (Optional)</label>
                                                             <input class="form-control" type="file" id="image" name="image">
                                                         </div>
                                                     </div>
@@ -192,7 +187,7 @@
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
                                                         <div class="mb-3">
-                                                            <label for="logo">Logo</label>
+                                                            <label for="logo">Logo (Optional)</label>
                                                             <input class="form-control" type="file" id="logo" name="logo">
                                                         </div>
                                                     </div>
@@ -200,7 +195,7 @@
 
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label for="address">Address</label>
+                                                        <label for="address">Address (Optional)</label>
                                                         <input type="text" id="address" class="form-control"
                                                             name="address" placeholder="Address" value="{{$partnership->address}}">
                                                     </div>
@@ -208,7 +203,7 @@
 
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label for="instagram">Instagram</label>
+                                                        <label for="instagram">Instagram (Optional)</label>
                                                         <input type="text" id="instagram" class="form-control"
                                                             name="instagram" placeholder="Instagram" value="{{$partnership->instagram}}">
                                                     </div>
@@ -216,7 +211,7 @@
 
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label for="whatsapp">Whatsapp</label>
+                                                        <label for="whatsapp">Whatsapp (Optional)</label>
                                                         <input type="text" id="whatsapp" class="form-control"
                                                             name="whatsapp" placeholder="Whatsapp" value="{{$partnership->whatsapp}}">
                                                     </div>
@@ -224,7 +219,7 @@
 
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label for="phoneNo">Address</label>
+                                                        <label for="phoneNo">Phone (Optional)</label>
                                                         <input type="text" id="phoneNo" class="form-control"
                                                             name="phoneNo" placeholder="Phone" value="{{$partnership->phoneNo}}">
                                                     </div>

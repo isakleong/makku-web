@@ -155,7 +155,7 @@
                                                     <div class="form-group">
                                                         <label for="title_en">Title - EN</label>
                                                         <input type="text" id="title_en" class="form-control"
-                                                            name="title_en" placeholder="Title (English)">
+                                                            name="title_en" placeholder="Title (English)" required value="{{old('title_en')}}">
                                                     </div>
                                                     @error('title_en')
                                                         <p style="color: red">{{$message}}</p>
@@ -165,7 +165,7 @@
                                                     <div class="form-group">
                                                         <label for="title_id">Title - ID</label>
                                                         <input type="text" id="title_id" class="form-control"
-                                                            name="title_id" placeholder="Title (Indonesia)">
+                                                            name="title_id" placeholder="Title (Indonesia)" required value="{{old('title_id')}}">
                                                     </div>
                                                     @error('title_id')
                                                         <p style="color: red">{{$message}}</p>
@@ -176,7 +176,7 @@
                                                     <div class="form-group">
                                                         <label for="refer">Refer</label>
                                                         <input type="text" id="refer" class="form-control"
-                                                            name="refer" placeholder="Refer">
+                                                            name="refer" placeholder="Refer" required value="{{old('refer')}}">
                                                     </div>
                                                     @error('refer')
                                                         <p style="color: red">{{$message}}</p>
@@ -215,7 +215,7 @@
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
                                                         <div class="mb-3">
-                                                            <label for="image">Image</label>
+                                                            <label for="image">Image (Optional)</label>
                                                             <input class="form-control" type="file" id="image" name="image">
                                                         </div>
                                                     </div>
@@ -228,7 +228,7 @@
                                                     <div class="form-group">
                                                         <label for="orderNumber">Order Number</label>
                                                         <input type="text" id="is_active" class="form-control"
-                                                            name="orderNumber" placeholder="Order Number">
+                                                            name="orderNumber" placeholder="Order Number" required value="{{old('orderNumber')}}">
                                                     </div>
                                                     @error('orderNumber')
                                                         <p style="color: red">{{$message}}</p>

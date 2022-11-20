@@ -17,6 +17,8 @@ class Company extends Model
         'highlight_id',
         'description_en',
         'description_id',
+        'about_en',
+        'about_id',
         'image',
         'logoPrimary',
         'logoSecondary',

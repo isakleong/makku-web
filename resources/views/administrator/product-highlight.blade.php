@@ -3,8 +3,7 @@
 @section('title', 'Makku Frozen Food - Product Highlight')
 
 @section('vendorCSS')
-<link rel="stylesheet" href="/lte/assets/extensions/simple-datatables/style.css">
-<link rel="stylesheet" href="/lte/assets/css/pages/simple-datatables.css">
+<link rel="stylesheet" type="text/css" href="/vendor/datatable/css/datatables.min.css"/>
 @endsection
 
 @section('navbar')
@@ -149,7 +148,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <table class="table table-striped" id="table1">
+                <table class="table table-striped" id="table1" style="width:100%">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -158,8 +157,7 @@
                             <th>Image</th>
                             <th>Order Number</th>
                             <th>Active</th>
-                            <th>Edit</th>
-                            <th>Delete</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -172,7 +170,7 @@
                                 <td>{{$item->name_en}}</td>
                                 <td>{{$item->name_id}}</td>
                                 {{-- <td>{{$item->image}}</td> --}}
-                                <td><img src="/{{$item->image}}" alt="" class="img-fluid" width="150"></td>
+                                <td><img src="/{{$item->image}}" alt="" class="img-fluid" width="100"></td>
                                 <td>{{$item->orderNumber}}</td>
                                 @if ($item->active=='1')
                                     <td><span class="badge bg-success">Active</span></td>
@@ -180,10 +178,8 @@
                                     <td><span class="badge bg-danger">Inactive</span></td>
                                 @endif
                                 <td>
-                                    <a href="{{ route('producthighlight.edit', $item->id) }}" class="btn icon btn-sm btn-primary"><i class="bi bi-pencil"></i></a>
-                                </td>
-                                <td>
-                                    <form action="{{ route('producthighlight.destroy', $item->id) }}" method="POST">
+                                    <a href="{{ route('producthighlight.edit', $item->id) }}" class="btn icon btn-sm btn-primary d-inline" data-bs-toggle="tooltip" title="Edit"><i class="bi bi-pencil"></i></a>
+                                    <form action="{{ route('producthighlight.destroy', $item->id) }}" method="POST" class="d-inline" data-bs-toggle="tooltip" title="Delete">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn icon btn-sm btn-danger show_confirm"><i class="bi bi-x"></i></button>
@@ -202,32 +198,55 @@
 @endsection
 
 @section('vendorScript')
-
-<script src="/lte/assets/extensions/simple-datatables/umd/simple-datatables.js"></script>
-<script src="/lte/assets/js/pages/simple-datatables.js"></script>
+<script type="text/javascript" src="/vendor/datatable/js/datatables.min.js"></script>
 
 <script src="/vendor/sweetalert/sweetalert.all.js"></script>
 
 <script>
-    $('.show_confirm').click(function(event) {
-        var form =  $(this).closest("form");
-        var name = $(this).data("name");
-        event.preventDefault();
-        Swal.fire({
-        title: 'Delete the data?',
-        text: "If you delete this, it will be gone forever.",
-        icon: 'question',
-        showDenyButton: true,
-        confirmButtonText: 'Yes, delete',
-        denyButtonText: 'No',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                form.submit();
-            } else if (result.isDenied) {
-                // Swal.fire('Changes are not saved', '', 'info');
-            }
+    $(document).ready(function () {
+        $('#table1').DataTable( {
+            responsive: true
+        } );
+
+        const registerDeleteItemHandlers = () => {
+            $('.show_confirm').click(function(event) {
+                var form =  $(this).closest("form");
+                var name = $(this).data("name");
+                event.preventDefault();
+                Swal.fire({
+                title: 'Delete the data?',
+                text: "If you delete this, it will be gone forever.",
+                icon: 'question',
+                showDenyButton: true,
+                confirmButtonText: 'Yes, delete',
+                denyButtonText: 'No',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    } else if (result.isDenied) {
+                        // Swal.fire('Changes are not saved', '', 'info');
+                    }
+                });
+            });
+        };
+
+        registerDeleteItemHandlers();
+
+        $("#table1")
+            .on("draw.dt", function () {
+            registerDeleteItemHandlers();
         });
     });
+</script>
+
+<script>
+    @if($message = session('error'))
+        Swal.fire(
+            'Data with the same Order Number already exists!',
+            'The existing data is <b>{{ $message }}</b>',
+            'error'
+        )
+    @endif
 </script>
 
 @endsection

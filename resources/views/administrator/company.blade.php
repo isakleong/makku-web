@@ -3,8 +3,7 @@
 @section('title', 'Makku Frozen Food - Company')
 
 @section('vendorCSS')
-<link rel="stylesheet" href="/lte/assets/extensions/simple-datatables/style.css">
-<link rel="stylesheet" href="/lte/assets/css/pages/simple-datatables.css">
+<link rel="stylesheet" type="text/css" href="/vendor/datatable/css/datatables.min.css"/>
 @endsection
 
 @section('navbar')
@@ -144,7 +143,7 @@
     <section class="section">
         <div class="card">
             <div class="card-body">
-                <table class="table table-striped" id="table1">
+                <table class="table table-striped" id="table1" style="width:100%">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -186,8 +185,14 @@
 @endsection
 
 @section('vendorScript')
+<script type="text/javascript" src="/vendor/datatable/js/datatables.min.js"></script>
 
-<script src="/lte/assets/extensions/simple-datatables/umd/simple-datatables.js"></script>
-<script src="/lte/assets/js/pages/simple-datatables.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#table1').DataTable( {
+            responsive: true
+        } );
+    });
+</script>
 
 @endsection

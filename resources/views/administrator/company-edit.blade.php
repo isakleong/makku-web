@@ -2,11 +2,6 @@
 
 @section('title', 'Makku Frozen Food - Company')
 
-@section('vendorCSS')
-<link rel="stylesheet" href="/lte/assets/extensions/simple-datatables/style.css">
-<link rel="stylesheet" href="/lte/assets/css/pages/simple-datatables.css">
-@endsection
-
 @section('navbar')
 <div class="sidebar-menu">
     <ul class="menu">
@@ -152,7 +147,7 @@
                         <div class="card">
                             <div class="card-content">
                                 <div class="card-body">
-                                    <form action="{{ route('company.update', $keyfeature->id) }}" method="POST" class="form form-vertical" enctype="multipart/form-data">
+                                    <form action="{{ route('company.update', $company->id) }}" method="POST" class="form form-vertical" enctype="multipart/form-data">
                                         @csrf
                                         @method('PUT')
                                         <div class="form-body">
@@ -161,7 +156,7 @@
                                                     <div class="form-group">
                                                         <label for="name_en">Name - EN</label>
                                                         <input type="text" id="name_en" class="form-control"
-                                                            name="name_en" placeholder="Name (English)" value="{{$keyfeature->name_en}}">
+                                                            name="name_en" placeholder="Name (English)" value="{{$company->name_en}}">
                                                     </div>
                                                     @error('name_en')
                                                         <p style="color: red">{{$message}}</p>
@@ -171,7 +166,7 @@
                                                     <div class="form-group">
                                                         <label for="name_id">Name - ID</label>
                                                         <input type="text" id="name_id" class="form-control"
-                                                            name="name_id" placeholder="Name (Indonesia)" value="{{$keyfeature->name_id}}">
+                                                            name="name_id" placeholder="Name (Indonesia)" value="{{$company->name_id}}">
                                                     </div>
                                                     @error('name_id')
                                                         <p style="color: red">{{$message}}</p>
@@ -180,7 +175,7 @@
 
                                                 <div class="col-6 mt-1">
                                                     <div class="form-group">
-                                                        <img src="/{{$keyfeature->image}}" alt="" class="img-fluid" width="300">
+                                                        <img src="/{{$company->image}}" alt="" class="img-fluid" width="300">
                                                     </div>
                                                 </div>
 
@@ -200,7 +195,7 @@
                                                     <div class="form-group">
                                                         <label for="orderNumber">Order Number</label>
                                                         <input type="text" id="orderNumber" class="form-control"
-                                                            name="orderNumber" placeholder="Order Number" value="{{$keyfeature->orderNumber}}">
+                                                            name="orderNumber" placeholder="Order Number" value="{{$company->orderNumber}}">
                                                     </div>
                                                     @error('orderNumber')
                                                         <p style="color: red">{{$message}}</p>
@@ -210,7 +205,7 @@
                                                 <div class="col-12 mt-3">
                                                     <div class="form-group">
                                                         <div class="form-check form-switch">
-                                                            <input name="active" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" {{ $keyfeature->active=='1' ? 'checked' : '' }}>
+                                                            <input name="active" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" {{ $company->active=='1' ? 'checked' : '' }}>
                                                             <label class="form-check-label" for="flexSwitchCheckChecked">Active</label>
                                                         </div>
                                                     </div>

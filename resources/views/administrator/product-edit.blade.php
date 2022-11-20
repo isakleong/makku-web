@@ -2,11 +2,6 @@
 
 @section('title', 'Makku Frozen Food - Product')
 
-@section('vendorCSS')
-<link rel="stylesheet" href="/lte/assets/extensions/simple-datatables/style.css">
-<link rel="stylesheet" href="/lte/assets/css/pages/simple-datatables.css">
-@endsection
-
 @section('navbar')
 <div class="sidebar-menu">
     <ul class="menu">
@@ -224,7 +219,7 @@
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
                                                         <div class="mb-3">
-                                                            <label for="image">Image</label>
+                                                            <label for="image">Image (Optional)</label>
                                                             <input class="form-control" type="file" id="image" name="image">
                                                         </div>
                                                     </div>
