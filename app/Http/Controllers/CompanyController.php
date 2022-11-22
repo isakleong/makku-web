@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class CompanyController extends Controller
 {
@@ -86,9 +87,9 @@ class CompanyController extends Controller
             'highlight_id' => 'required',
             'description_en' => 'required',
             'description_id' => 'required',
-            'image' => 'required|image',
-            'logoPrimary' => 'required|image',
-            'logoSecondary' => 'required|image',
+            'image' => 'image',
+            'logoPrimary' => 'image',
+            'logoSecondary' => 'image',
             'address' => 'required',
             'email' => 'required',
             'facebook' => 'required',
@@ -100,30 +101,42 @@ class CompanyController extends Controller
 
         if($image = $request->file('image')) {
             $destinationPath = 'image/upload/';
-            $imageName = strtolower($request->name_id) . "." . $image->getClientOriginalExtension();
+            $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
             // $input['image'] = $imageName;
             $input['image'] = $destinationPath.$imageName;
+
+            $path = public_path()."/".$company->image;
+            File::delete($path);
         } else {
             unset($input['image']);
         }
 
         if($image = $request->file('logoPrimary')) {
             $destinationPath = 'image/upload/';
-            $imageName = strtolower($request->name_id) . "." . $image->getClientOriginalExtension();
+            $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
             // $input['image'] = $imageName;
             $input['logoPrimary'] = $destinationPath.$imageName;
+
+            $path = public_path()."/".$company->logoPrimary;
+            File::delete($path);
         } else {
             unset($input['logoPrimary']);
         }
 
         if($image = $request->file('logoSecondary')) {
             $destinationPath = 'image/upload/';
-            $imageName = strtolower($request->name_id) . "." . $image->getClientOriginalExtension();
+            $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
             // $input['image'] = $imageName;
             $input['logoSecondary'] = $destinationPath.$imageName;
+
+            $path = public_path()."/".$company->logoSecondary;
+            File::delete($path);
         } else {
             unset($input['logoSecondary']);
         }
@@ -135,6 +148,15 @@ class CompanyController extends Controller
 
     public function destroy(Company $company)
     {
+        $path = public_path()."/".$company->image;
+        File::delete($path);
+
+        $path = public_path()."/".$company->logoPrimary;
+        File::delete($path);
+
+        $path = public_path()."/".$company->logoSecondary;
+        File::delete($path);
+
         $company->delete();
 
         return redirect('/admin/master/company')->withSuccess('Data Deleted Successfully!');

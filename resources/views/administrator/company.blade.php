@@ -142,6 +142,17 @@
     </div>
     <section class="section">
         <div class="card">
+            <div class="card-header">
+                @if (count($company) < 0)
+                    <div class="buttons">
+                        <a href="/admin/master/company/create" class="btn btn-outline-primary">Add Data</a>
+                    </div>
+                @else
+                    <div class="buttons">
+                        <a href="/admin/master/company/create" class="btn btn-outline-primary disabled" style="cursor: not-allowed; pointer-events: all !important;" onclick="return false;">Add Data</a>
+                    </div>
+                @endif
+            </div>
             <div class="card-body">
                 <table class="table table-striped" id="table1" style="width:100%">
                     <thead>
@@ -149,10 +160,6 @@
                             <th>No</th>
                             <th>Name</th>
                             <th>Address</th>
-                            <th>Email</th>
-                            <th>Facebook</th>
-                            <th>Instagram</th>
-                            <th>Whatsapp</th>
                             <th>Edit</th>
                         </tr>
                     </thead>
@@ -165,10 +172,6 @@
                                 <td>{{$i++}}</td>
                                 <td>{{$item->name}}</td>
                                 <td>{{$item->address}}</td>
-                                <td>{{$item->email}}</td>
-                                <td>{{$item->facebook}}</td>
-                                <td>{{$item->instagram}}</td>
-                                <td>{{$item->whatsapp}}</td>
                                 <td>
                                     <a href="{{ route('company.edit', $item->id) }}" class="btn icon btn-sm btn-primary"><i class="bi bi-pencil"></i></a>
                                 </td>

@@ -63,6 +63,19 @@
                 imgPreview.src = oFREvent.target.result;
             }
         }
+
+        function companyImagePreview(imageData, previewData) {
+            const image = document.querySelector(imageData);
+            const imgPreview = document.querySelector(previewData);
+
+            imgPreview.style.display = 'block';
+
+            const oFReader = new FileReader();
+            oFReader.readAsDataURL(image.files[0]);
+            oFReader.onload = function (oFREvent) {
+                imgPreview.src = oFREvent.target.result;
+            }
+        }
     </script>
 
     @yield('vendorScript')
