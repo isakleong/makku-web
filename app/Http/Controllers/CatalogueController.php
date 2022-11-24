@@ -38,9 +38,10 @@ class CatalogueController extends Controller
 
         if($image = $request->file('file')) {
             $destinationPath = 'file/upload/';
-            $imageName = strtolower($request->name_id) . "." . $image->getClientOriginalExtension();
+            $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
-            // $input['image'] = $imageName;
+            
             $input['file'] = $destinationPath.$imageName;
         } else {
             unset($input['file']);
@@ -82,19 +83,13 @@ class CatalogueController extends Controller
             $imageDelete = public_path()."/".$catalogue->file;
 
             $destinationPath = 'file/upload/';
-            $imageName = strtolower($request->name_id) . "." . $image->getClientOriginalExtension();
+            $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
-            // $input['image'] = $imageName;
             $input['file'] = $destinationPath.$imageName;
         } else {
             unset($input['file']);
         }
-
-        // if($image = $request->file('file')) {
-        //     dd('masuk 1');
-        // } else {
-        //     dd($imageDelete);
-        // }
 
         $catalogue->update($input);
 
@@ -107,10 +102,13 @@ class CatalogueController extends Controller
 
     public function destroy(Catalogue $catalogue)
     {
-        $path = public_path()."/".$catalogue->file;
-        File::delete($path);
+        $imageDelete = public_path()."/".$catalogue->file;
 
         $catalogue->delete();
+
+        if($imageDelete != "") {
+            File::delete($imageDelete);
+        }
 
         return redirect('/admin/product/catalogue')->withSuccess('Data Deleted Successfully!');
     }

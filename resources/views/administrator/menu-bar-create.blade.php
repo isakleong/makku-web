@@ -216,7 +216,8 @@
                                                     <div class="form-group">
                                                         <div class="mb-3">
                                                             <label for="image">Image (Optional)</label>
-                                                            <input class="form-control" type="file" id="image" name="image">
+                                                            <img class="img-preview img-fluid mb-3 mt-3 col-4">
+                                                            <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image" accept="image/*" onchange="previewImage()">
                                                         </div>
                                                     </div>
                                                     @error('image')

@@ -175,8 +175,9 @@
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
                                                         <div class="mb-3">
-                                                            <label for="image">Image</label>
-                                                            <input class="form-control" type="file" id="image" name="image">
+                                                            <label for="image">Highlight Image</label>
+                                                            <img class="img-preview img-fluid mb-3 mt-3 col-4">
+                                                            <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image" accept="image/*" onchange="previewImage('#image', '.img-preview')">
                                                         </div>
                                                     </div>
                                                     @error('image')

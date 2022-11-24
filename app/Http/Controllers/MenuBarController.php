@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\MenuBar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class MenuBarController extends Controller
 {
@@ -44,9 +45,10 @@ class MenuBarController extends Controller
 
         if($image = $request->file('image')) {
             $destinationPath = 'image/upload/';
-            $imageName = strtolower($request->title_en) . "." . $image->getClientOriginalExtension();
+            $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
-            // $input['image'] = $imageName;
+
             $input['image'] = $destinationPath.$imageName;
         } else {
             unset($input['image']);
@@ -89,22 +91,23 @@ class MenuBarController extends Controller
             $request->merge(['active'=>'1']);
         }
 
-        // dd($request->all());
-
-        // if(strtolower($request->active) == 'on') {
-        //     $request->merge(['active'=>'1']);
-        // } else {
-        //     $request->merge(['active'=>'0']);
-        // }
+        if($request->has('discard')) {
+            $request->merge(['image'=>null]);
+            $path = public_path()."/".$menubar->image;
+            File::delete($path);
+        }
 
         $input = $request->all();
 
         if($image = $request->file('image')) {
             $destinationPath = 'image/upload/';
-            $imageName = strtolower($request->title_en) . "." . $image->getClientOriginalExtension();
+            $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
-            // $input['image'] = $imageName;
             $input['image'] = $destinationPath.$imageName;
+
+            $path = public_path()."/".$menubar->image;
+            File::delete($path);
         } else {
             unset($input['image']);
         }
@@ -122,6 +125,9 @@ class MenuBarController extends Controller
      */
     public function destroy(MenuBar $menubar)
     {
+        $path = public_path()."/".$menubar->image;
+        File::delete($path);
+
         $menubar->delete();
 
         return redirect('/admin/master/menubar')->withSuccess('Data Deleted Successfully!');

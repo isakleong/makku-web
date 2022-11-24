@@ -236,7 +236,18 @@
                                                     <div class="form-group">
                                                         <div class="mb-3">
                                                             <label for="image">Image (Optional)</label>
-                                                            <input class="form-control" type="file" id="image" name="image">
+                                                            @if ($menubar->image != "")
+                                                                <img src="/{{$menubar->image}}" alt="" class="img-preview img-fluid mb-3 mt-3 col-4 d-block"> 
+                                                                <div class="form-check">
+                                                                    <div class="checkbox">
+                                                                        <input name="discard" type="checkbox" id="checkbox3" class="form-check-input"/>
+                                                                        <label for="checkbox3">Discard Old Image</label>
+                                                                    </div>
+                                                                </div>
+                                                            @else
+                                                                <img class="img-preview img-fluid mb-3 mt-3 col-4">
+                                                            @endif
+                                                            <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image" accept="image/*" onchange="previewImage()">
                                                         </div>
                                                     </div>
                                                     @error('image')

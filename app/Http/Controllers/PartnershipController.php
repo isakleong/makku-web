@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Partnership;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class PartnershipController extends Controller
 {
@@ -94,22 +95,43 @@ class PartnershipController extends Controller
             $request->merge(['active'=>'1']);
         }
 
+        if($request->has('discard-image')) {
+            $request->merge(['image'=>null]);
+            $path = public_path()."/".$partnership->image;
+            File::delete($path);
+        }
+        if($request->has('discard-logo')) {
+            $request->merge(['logo'=>null]);
+            $path = public_path()."/".$partnership->logo;
+            File::delete($path);
+        }
+
         $input = $request->all();
 
         if($image = $request->file('image')) {
             $destinationPath = 'image/upload/';
-            $imageName = strtolower($request->name_id) . "." . $image->getClientOriginalExtension();
+            $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
+
             $input['image'] = $destinationPath.$imageName;
+
+            $path = public_path()."/".$partnership->image;
+            File::delete($path);
         } else {
             unset($input['image']);
         }
 
         if($image = $request->file('logo')) {
             $destinationPath = 'image/upload/';
-            $imageName = strtolower($request->name_id) . "." . $image->getClientOriginalExtension();
+            $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
+
             $input['logo'] = $destinationPath.$imageName;
+
+            $path = public_path()."/".$partnership->logo;
+            File::delete($path);
         } else {
             unset($input['logo']);
         }
@@ -121,6 +143,12 @@ class PartnershipController extends Controller
 
     public function destroy(Partnership $partnership)
     {
+        $path = public_path()."/".$partnership->image;
+        File::delete($path);
+
+        $path = public_path()."/".$partnership->logo;
+        File::delete($path);
+        
         $partnership->delete();
 
         return redirect('/admin/partnership')->withSuccess('Data Deleted Successfully!');

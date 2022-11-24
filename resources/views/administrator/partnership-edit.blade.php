@@ -201,7 +201,7 @@
                                                                 <img src="/{{$partnership->image}}" alt="" class="img-preview img-fluid mb-3 mt-3 col-4 d-block"> 
                                                                 <div class="form-check">
                                                                     <div class="checkbox">
-                                                                        <input name="discard" type="checkbox" id="checkbox3" class="form-check-input"/>
+                                                                        <input name="discard-image" type="checkbox" id="checkbox3" class="form-check-input"/>
                                                                         <label for="checkbox3">Discard Old Image</label>
                                                                     </div>
                                                                 </div>
@@ -221,17 +221,17 @@
                                                         <div class="mb-3">
                                                             <label for="image">Logo (Optional)</label>
                                                             @if ($partnership->logo != "")
-                                                                <img src="/{{$partnership->logo}}" alt="" class="img-preview img-fluid mb-3 mt-3 col-4 d-block"> 
+                                                                <img src="/{{$partnership->logo}}" alt="" class="img-preview-logo img-fluid mb-3 mt-3 col-4 d-block"> 
                                                                 <div class="form-check">
                                                                     <div class="checkbox">
-                                                                        <input name="discard" type="checkbox" id="checkbox3" class="form-check-input"/>
-                                                                        <label for="checkbox3">Discard Old Image</label>
+                                                                        <input name="discard-logo" type="checkbox" id="checkbox3" class="form-check-input"/>
+                                                                        <label for="checkbox3">Discard Old Logo</label>
                                                                     </div>
                                                                 </div>
                                                             @else
                                                                 <img class="img-preview-logo img-fluid mb-3 mt-3 col-4">
                                                             @endif
-                                                            <input class="form-control @error('image') is-invalid @enderror" type="file" id="image-logo" name="logo" accept="image/*" onchange="multiplePreviewImage('#image-logo', '.img-preview-logo')">
+                                                            <input class="form-control @error('logo') is-invalid @enderror" type="file" id="image-logo" name="logo" accept="image/*" onchange="multiplePreviewImage('#image-logo', '.img-preview-logo')">
                                                         </div>
                                                     </div>
                                                     @error('logo')
