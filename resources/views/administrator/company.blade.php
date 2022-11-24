@@ -160,7 +160,7 @@
                             <th>No</th>
                             <th>Name</th>
                             <th>Address</th>
-                            <th>Edit</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -173,8 +173,14 @@
                                 <td>{{$item->name}}</td>
                                 <td>{{$item->address}}</td>
                                 <td>
-                                    <a href="{{ route('company.edit', $item->id) }}" class="btn icon btn-sm btn-primary"><i class="bi bi-pencil"></i></a>
+                                    <a href="{{ route('company.edit', $item->id) }}" class="btn icon btn-sm btn-primary d-inline" data-bs-toggle="tooltip" title="Edit"><i class="bi bi-pencil"></i></a>
+                                    <form action="{{ route('company.destroy', $item->id) }}" method="POST" class="d-inline" data-bs-toggle="tooltip" title="Delete">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn icon btn-sm btn-danger show_confirm"><i class="bi bi-x"></i></button>
+                                    </form>
                                 </td>
+
                             </tr>
                         @endforeach
                     </tbody>
@@ -190,11 +196,42 @@
 @section('vendorScript')
 <script type="text/javascript" src="/vendor/datatable/js/datatables.min.js"></script>
 
+<script src="/vendor/sweetalert/sweetalert.all.js"></script>
+
 <script>
     $(document).ready(function () {
         $('#table1').DataTable( {
             responsive: true
         } );
+
+        const registerDeleteItemHandlers = () => {
+            $('.show_confirm').click(function(event) {
+                var form =  $(this).closest("form");
+                var name = $(this).data("name");
+                event.preventDefault();
+                Swal.fire({
+                title: 'Delete the data?',
+                text: "If you delete this, it will be gone forever.",
+                icon: 'question',
+                showDenyButton: true,
+                confirmButtonText: 'Yes, delete',
+                denyButtonText: 'No',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    } else if (result.isDenied) {
+                        // Swal.fire('Changes are not saved', '', 'info');
+                    }
+                });
+            });
+        };
+
+        registerDeleteItemHandlers();
+
+        $("#table1")
+            .on("draw.dt", function () {
+            registerDeleteItemHandlers();
+        });
     });
 </script>
 

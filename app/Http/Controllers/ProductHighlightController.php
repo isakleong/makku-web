@@ -46,9 +46,9 @@ class ProductHighlightController extends Controller
     
             if($image = $request->file('image')) {
                 $destinationPath = 'image/upload/';
-                $imageName = strtolower($request->name_id) . "." . $image->getClientOriginalExtension();
+                $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
                 $image->move($destinationPath, $imageName);
-                // $input['image'] = $imageName;
                 $input['image'] = $destinationPath.$imageName;
             }
     
@@ -101,10 +101,13 @@ class ProductHighlightController extends Controller
 
         if($image = $request->file('image')) {
             $destinationPath = 'image/upload/';
-            $imageName = strtolower($request->name_id) . "." . $image->getClientOriginalExtension();
+            $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
-            // $input['image'] = $imageName;
             $input['image'] = $destinationPath.$imageName;
+
+            $path = public_path()."/".$producthighlight->image;
+            File::delete($path);
         } else {
             unset($input['image']);
         }

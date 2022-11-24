@@ -64,7 +64,7 @@
             }
         }
 
-        function companyImagePreview(imageData, previewData) {
+        function multiplePreviewImage(imageData, previewData) {
             const image = document.querySelector(imageData);
             const imgPreview = document.querySelector(previewData);
 

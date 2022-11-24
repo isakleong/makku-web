@@ -17,7 +17,17 @@ class CompanyController extends Controller
 
     public function create()
     {
-        return view('administrator.company-create');
+        $company = Company::all();
+        if(!count($company) > 0) {
+            return view('administrator.company', compact('company'));
+            // return redirect()->route('/admin/master/company');
+
+            return redirect()->action([CompanyController::class, 'index']);
+        } else {
+            return view('administrator.company-create');
+        }
+
+        // return view('administrator.company-create');
     }
 
     public function store(Request $request)
@@ -42,25 +52,25 @@ class CompanyController extends Controller
 
         if($image = $request->file('image')) {
             $destinationPath = 'image/upload/';
-            $imageName = strtolower($request->name_id) . "." . $image->getClientOriginalExtension();
+            $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
-            // $input['image'] = $imageName;
             $input['image'] = $destinationPath.$imageName;
         }
 
         if($image = $request->file('logoPrimary')) {
             $destinationPath = 'image/upload/';
-            $imageName = strtolower($request->name_id) . "." . $image->getClientOriginalExtension();
+            $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
-            // $input['image'] = $imageName;
             $input['logoPrimary'] = $destinationPath.$imageName;
         }
 
         if($image = $request->file('logoSecondary')) {
             $destinationPath = 'image/upload/';
-            $imageName = strtolower($request->name_id) . "." . $image->getClientOriginalExtension();
+            $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
-            // $input['image'] = $imageName;
             $input['logoSecondary'] = $destinationPath.$imageName;
         }
 
@@ -104,7 +114,6 @@ class CompanyController extends Controller
             $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
             $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
-            // $input['image'] = $imageName;
             $input['image'] = $destinationPath.$imageName;
 
             $path = public_path()."/".$company->image;
@@ -118,7 +127,6 @@ class CompanyController extends Controller
             $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
             $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
-            // $input['image'] = $imageName;
             $input['logoPrimary'] = $destinationPath.$imageName;
 
             $path = public_path()."/".$company->logoPrimary;
@@ -132,7 +140,6 @@ class CompanyController extends Controller
             $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
             $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
-            // $input['image'] = $imageName;
             $input['logoSecondary'] = $destinationPath.$imageName;
 
             $path = public_path()."/".$company->logoSecondary;

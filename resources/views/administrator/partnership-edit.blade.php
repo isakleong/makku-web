@@ -163,7 +163,7 @@
                                                     @enderror
                                                 </div>
 
-                                                <div class="col-6 mt-1">
+                                                {{-- <div class="col-6 mt-1">
                                                     <div class="form-group">
                                                         <img src="/{{$partnership->image}}" alt="" class="img-fluid" width="300">
                                                     </div>
@@ -176,9 +176,9 @@
                                                             <input class="form-control" type="file" id="image" name="image">
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div> --}}
 
-                                                <div class="col-6 mt-1">
+                                                {{-- <div class="col-6 mt-1">
                                                     <div class="form-group">
                                                         <img src="/{{$partnership->logo}}" alt="" class="img-fluid" width="300">
                                                     </div>
@@ -191,6 +191,52 @@
                                                             <input class="form-control" type="file" id="logo" name="logo">
                                                         </div>
                                                     </div>
+                                                </div> --}}
+
+                                                <div class="col-12 mt-1">
+                                                    <div class="form-group">
+                                                        <div class="mb-3">
+                                                            <label for="image">Image (Optional)</label>
+                                                            @if ($partnership->image != "")
+                                                                <img src="/{{$partnership->image}}" alt="" class="img-preview img-fluid mb-3 mt-3 col-4 d-block"> 
+                                                                <div class="form-check">
+                                                                    <div class="checkbox">
+                                                                        <input name="discard" type="checkbox" id="checkbox3" class="form-check-input"/>
+                                                                        <label for="checkbox3">Discard Old Image</label>
+                                                                    </div>
+                                                                </div>
+                                                            @else
+                                                                <img class="img-preview img-fluid mb-3 mt-3 col-4">
+                                                            @endif
+                                                            <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image" accept="image/*" onchange="multiplePreviewImage('#image', '.img-preview')">
+                                                        </div>
+                                                    </div>
+                                                    @error('image')
+                                                        <p style="color: red">{{$message}}</p>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="col-12 mt-1">
+                                                    <div class="form-group">
+                                                        <div class="mb-3">
+                                                            <label for="image">Logo (Optional)</label>
+                                                            @if ($partnership->logo != "")
+                                                                <img src="/{{$partnership->logo}}" alt="" class="img-preview img-fluid mb-3 mt-3 col-4 d-block"> 
+                                                                <div class="form-check">
+                                                                    <div class="checkbox">
+                                                                        <input name="discard" type="checkbox" id="checkbox3" class="form-check-input"/>
+                                                                        <label for="checkbox3">Discard Old Image</label>
+                                                                    </div>
+                                                                </div>
+                                                            @else
+                                                                <img class="img-preview-logo img-fluid mb-3 mt-3 col-4">
+                                                            @endif
+                                                            <input class="form-control @error('image') is-invalid @enderror" type="file" id="image-logo" name="logo" accept="image/*" onchange="multiplePreviewImage('#image-logo', '.img-preview-logo')">
+                                                        </div>
+                                                    </div>
+                                                    @error('logo')
+                                                        <p style="color: red">{{$message}}</p>
+                                                    @enderror
                                                 </div>
 
                                                 <div class="col-12">

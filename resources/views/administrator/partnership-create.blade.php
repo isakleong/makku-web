@@ -166,24 +166,26 @@
                                                     <div class="form-group">
                                                         <div class="mb-3">
                                                             <label for="image">Image (Optional)</label>
-                                                            <input class="form-control" type="file" id="image" name="image">
+                                                            <img class="img-preview img-fluid mb-3 mt-3 col-4">
+                                                            <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image" accept="image/*" onchange="multiplePreviewImage('#image', '.img-preview')">
                                                         </div>
                                                     </div>
-                                                    {{-- @error('image')
+                                                    @error('image')
                                                         <p style="color: red">{{$message}}</p>
-                                                    @enderror --}}
+                                                    @enderror
                                                 </div>
 
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
                                                         <div class="mb-3">
-                                                            <label for="logo">Logo (Optional)</label>
-                                                            <input class="form-control" type="file" id="logo" name="logo">
+                                                            <label for="image">Logo (Optional)</label>
+                                                            <img class="img-preview-logo img-fluid mb-3 mt-3 col-4">
+                                                            <input class="form-control @error('logo') is-invalid @enderror" type="file" id="logo" name="logo" accept="image/*" onchange="multiplePreviewImage('#logo', '.img-preview-logo')">
                                                         </div>
                                                     </div>
-                                                    {{-- @error('logo')
+                                                    @error('logo')
                                                         <p style="color: red">{{$message}}</p>
-                                                    @enderror --}}
+                                                    @enderror
                                                 </div>
 
                                                 <div class="col-12">

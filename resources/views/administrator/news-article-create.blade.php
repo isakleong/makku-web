@@ -65,7 +65,7 @@
                 <i class="bi bi-newspaper"></i>
                 <span>News</span>
             </a>
-            <ul class="submenu v">
+            <ul class="submenu">
                 <li class="submenu-item ">
                     <a href="/admin/news/category">Category</a>
                 </li>

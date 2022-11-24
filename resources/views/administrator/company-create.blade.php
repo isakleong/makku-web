@@ -9,6 +9,7 @@
 <style>
     .note-editable { background-color: #f2f7ff !important; color: black !important; };
 </style>
+
 @endsection
 
 @section('navbar')
@@ -38,11 +39,11 @@
                 <i class="bi bi-basket-fill"></i>
                 <span>Product</span>
             </a>
-            <ul class="submenu ">
+            <ul class="submenu">
                 <li class="submenu-item ">
                     <a href="/admin/product/catalogue">Catalogue</a>
                 </li>
-                <li class="submenu-item ">
+                <li class="submenu-item">
                     <a href="/admin/product/category">Category</a>
                 </li>
                 <li class="submenu-item ">
@@ -60,14 +61,14 @@
                 <i class="bi bi-newspaper"></i>
                 <span>News</span>
             </a>
-            <ul class="submenu ">
+            <ul class="submenu">
                 <li class="submenu-item ">
                     <a href="/admin/news/category">Category</a>
                 </li>
                 <li class="submenu-item ">
                     <a href="/admin/news/tag">Tag</a>
                 </li>
-                <li class="submenu-item ">
+                <li class="submenu-item">
                     <a href="/admin/news/article">Article</a>
                 </li>
                 <li class="submenu-item ">
@@ -93,7 +94,7 @@
         </li>
 
         <li
-            class="sidebar-item  has-sub active">
+            class="sidebar-item has-sub active">
             <a href="/master" class='sidebar-link'>
                 <i class="bi bi-stack"></i>
                 <span>Master</span>
@@ -156,28 +157,15 @@
                         <div class="card">
                             <div class="card-content">
                                 <div class="card-body">
-                                    <form action="{{ route('company.update', $company->id) }}" method="POST" class="form form-vertical" enctype="multipart/form-data">
+                                    <form action="{{ route('company.store') }}" method="POST" class="form form-vertical" enctype="multipart/form-data">
                                         @csrf
-                                        @method('PUT')
                                         <div class="form-body">
                                             <div class="row">
-                                                {{-- <div class="col-12">
-                                                    <div class="form-group">
-                                                        <label for="name_en">Name</label>
-                                                        <input type="text" id="name" class="form-control"
-                                                            name="name" placeholder="Name (English)" value="{{$company->name}}">
-                                                    </div>
-                                                    @error('name')
-                                                        <p style="color: red">{{$message}}</p>
-                                                    @enderror
-                                                </div> --}}
-
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label for="name_en">Name</label>
-                                                        {{-- <input type="text" id="name" class="form-control"
-                                                            name="name" placeholder="Name (English)" value="{{$company->name}}"> --}}
-                                                        <textarea class="form-control @error('name') is-invalid @enderror" id="name" name="name" rows="3">{{$company->name}}</textarea>
+                                                        <label for="name">Name</label>
+                                                        <input type="text" id="name" class="form-control"
+                                                            name="name" placeholder="Name" required value="{{old('name')}}">
                                                     </div>
                                                     @error('name')
                                                         <p style="color: red">{{$message}}</p>
@@ -186,20 +174,9 @@
 
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
-                                                        <label for="address">Address</label>
-                                                        {{-- <textarea class="form-control @error('addressx') is-invalid @enderror" id="addressx" name="addressx" rows="3" hidden>{{$company->address}}</textarea> --}}
-                                                        <textarea class="form-control @error('address') is-invalid @enderror" id="address" name="address" rows="3">{{$company->address}}</textarea>
-                                                        @error('address')
-                                                            <p style="color: red">{{$message}}</p>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-12 mt-1">
-                                                    <div class="form-group">
-                                                        <label for="highlight_en">Highlight EN</label>
+                                                        <label for="highlight_en">Highlight - EN</label>
                                                         <input type="text" id="highlight_en" class="form-control"
-                                                            name="highlight_en" placeholder="Highlight (English)" value="{{$company->highlight_en}}">
+                                                            name="highlight_en" placeholder="Highlight (English)" required value="{{old('highlight_en')}}">
                                                     </div>
                                                     @error('highlight_en')
                                                         <p style="color: red">{{$message}}</p>
@@ -208,9 +185,9 @@
 
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
-                                                        <label for="highlight_id">Highlight ID</label>
+                                                        <label for="highlight_id">Highlight - ID</label>
                                                         <input type="text" id="highlight_id" class="form-control"
-                                                            name="highlight_id" placeholder="Highlight (Indonesia)" value="{{$company->highlight_id}}">
+                                                            name="highlight_id" placeholder="Highlight (Indonesia)" required value="{{old('highlight_id')}}">
                                                     </div>
                                                     @error('highlight_id')
                                                         <p style="color: red">{{$message}}</p>
@@ -219,8 +196,8 @@
 
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
-                                                        <label for="description_en">Description EN</label>
-                                                        <textarea class="form-control" id="description_en" name="description_en" rows="3">{{$company->description_en}}</textarea>
+                                                        <label for="description_en">Description - EN</label>
+                                                        <textarea class="form-control" id="description_en" name="description_en" rows="3" style="display: none;"></textarea>
                                                         @error('description_en')
                                                             <p style="color: red">{{$message}}</p>
                                                         @enderror
@@ -229,8 +206,8 @@
 
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
-                                                        <label for="description_id">Description ID</label>
-                                                        <textarea class="form-control" id="description_id" name="description_id" rows="3">{{$company->description_id}}</textarea>
+                                                        <label for="description_id">Description - ID</label>
+                                                        <textarea class="form-control" id="description_id" name="description_id" rows="3" style="display: none;"></textarea>
                                                         @error('description_id')
                                                             <p style="color: red">{{$message}}</p>
                                                         @enderror
@@ -239,8 +216,8 @@
 
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
-                                                        <label for="about_en">About EN</label>
-                                                        <textarea class="form-control" id="about_en" name="about_en" rows="3">{{$company->about_en}}</textarea>
+                                                        <label for="about_en">About - EN</label>
+                                                        <textarea class="form-control" id="about_en" name="about_en" rows="3" style="display: none;"></textarea>
                                                         @error('about_en')
                                                             <p style="color: red">{{$message}}</p>
                                                         @enderror
@@ -249,9 +226,19 @@
 
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
-                                                        <label for="about_id">About ID</label>
-                                                        <textarea class="form-control" id="about_id" name="about_id" rows="3">{{$company->about_id}}</textarea>
+                                                        <label for="about_id">About - ID</label>
+                                                        <textarea class="form-control" id="about_id" name="about_id" rows="3" style="display: none;"></textarea>
                                                         @error('about_id')
+                                                            <p style="color: red">{{$message}}</p>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12 mt-1">
+                                                    <div class="form-group">
+                                                        <label for="address">Address</label>
+                                                        <textarea class="form-control" id="address" name="address" rows="3" style="display: none;"></textarea>
+                                                        @error('address')
                                                             <p style="color: red">{{$message}}</p>
                                                         @enderror
                                                     </div>
@@ -261,11 +248,7 @@
                                                     <div class="form-group">
                                                         <div class="mb-3">
                                                             <label for="image">Highlight Image</label>
-                                                            @if ($company->image != "")
-                                                                <img src="/{{$company->image}}" alt="" class="img-preview img-fluid mb-3 mt-3 col-4 d-block"> 
-                                                            @else
-                                                                <img class="img-preview img-fluid mb-3 mt-3 col-4">
-                                                            @endif
+                                                            <img class="img-preview img-fluid mb-3 mt-3 col-4">
                                                             <input class="form-control @error('image') is-invalid @enderror" type="file" id="highlight-image" name="image" accept="image/*" onchange="multiplePreviewImage('#highlight-image', '.img-preview')">
                                                         </div>
                                                     </div>
@@ -278,11 +261,7 @@
                                                     <div class="form-group">
                                                         <div class="mb-3">
                                                             <label for="logoPrimary">Logo Primary</label>
-                                                            @if ($company->logoPrimary != "")
-                                                                <img src="/{{$company->logoPrimary}}" alt="" class="img-preview-logo-primary img-fluid mb-3 mt-3 col-4 d-block" style="background: lightgrey"> 
-                                                            @else
-                                                                <img class="img-preview-logo-primary img-fluid mb-3 mt-3 col-4">
-                                                            @endif
+                                                            <img class="img-preview-logo-primary img-fluid mb-3 mt-3 col-4">
                                                             <input class="form-control @error('logoPrimary') is-invalid @enderror" type="file" id="logo-primary-image" name="logoPrimary" accept="image/*" onchange="multiplePreviewImage('#logo-primary-image', '.img-preview-logo-primary')">
                                                         </div>
                                                     </div>
@@ -295,11 +274,7 @@
                                                     <div class="form-group">
                                                         <div class="mb-3">
                                                             <label for="logoSecondary">Logo Secondary</label>
-                                                            @if ($company->logoSecondary != "")
-                                                                <img src="/{{$company->logoSecondary}}" alt="" class="img-preview-logo-secondary img-fluid mb-3 mt-3 col-4 d-block" style="background: lightgrey">
-                                                            @else
-                                                                <img class="img-preview-logo-secondary img-fluid mb-3 mt-3 col-4">
-                                                            @endif
+                                                            <img class="img-preview-logo-secondary img-fluid mb-3 mt-3 col-4">
                                                             <input class="form-control @error('logoSecondary') is-invalid @enderror" type="file" id="logo-secondary-image" name="logoSecondary" accept="image/*" onchange="multiplePreviewImage('#logo-secondary-image', '.img-preview-logo-secondary')">
                                                         </div>
                                                     </div>
@@ -312,7 +287,7 @@
                                                     <div class="form-group">
                                                         <label for="email">Email</label>
                                                         <input type="text" id="email" class="form-control"
-                                                            name="email" placeholder="Email" value="{{$company->email}}">
+                                                            name="email" placeholder="Email" required value="{{old('email')}}">
                                                     </div>
                                                     @error('email')
                                                         <p style="color: red">{{$message}}</p>
@@ -323,7 +298,7 @@
                                                     <div class="form-group">
                                                         <label for="facebook">Facebook</label>
                                                         <input type="text" id="facebook" class="form-control"
-                                                            name="facebook" placeholder="Facebook" value="{{$company->facebook}}">
+                                                            name="facebook" placeholder="Facebook" required value="{{old('facebook')}}">
                                                     </div>
                                                     @error('facebook')
                                                         <p style="color: red">{{$message}}</p>
@@ -334,7 +309,7 @@
                                                     <div class="form-group">
                                                         <label for="instagram">Instagram</label>
                                                         <input type="text" id="instagram" class="form-control"
-                                                            name="instagram" placeholder="Instagram" value="{{$company->instagram}}">
+                                                            name="instagram" placeholder="Instagram" required value="{{old('instagram')}}">
                                                     </div>
                                                     @error('instagram')
                                                         <p style="color: red">{{$message}}</p>
@@ -345,7 +320,7 @@
                                                     <div class="form-group">
                                                         <label for="whatsapp">Whatsapp</label>
                                                         <input type="text" id="whatsapp" class="form-control"
-                                                            name="whatsapp" placeholder="Whatsapp" value="{{$company->whatsapp}}">
+                                                            name="whatsapp" placeholder="Whatsapp" required value="{{old('whatsapp')}}">
                                                     </div>
                                                     @error('whatsapp')
                                                         <p style="color: red">{{$message}}</p>
@@ -353,7 +328,7 @@
                                                 </div>
 
                                                 <div class="col-12 d-flex justify-content-end mt-3">
-                                                    <button type="submit" class="btn btn-primary me-1 mb-1 show_confirm">Update</button>
+                                                    <button type="submit" class="btn btn-primary me-1 mb-1 show_confirm">Add</button>
                                                     <button type="reset"
                                                         class="btn btn-light-secondary me-1 mb-1">Reset</button>
                                                 </div>
@@ -450,36 +425,16 @@
 </script>
 
 <script>
+
     $('.show_confirm').click(function(event) {
-
-        var text = $('#address').summernote('code');
-        $('#address').text();
-        var data = $('#address').text().trim().length > 1;
-        // alert(data);
-
-        if (!$.trim(text)) {
-            // textarea is empty or contains only white-space
-            alert('empty ges');
-        }
-
-        // if ($('#address').summernote('isEmpty')) {
-        //     alert('editor content is empty');
-        // }
-
-        // if (data) {
-        //     alert('editor content is empty');
-        // }
-
-        // $("#addressx").val('');
-
         var form =  $(this).closest("form");
         var name = $(this).data("name");
         event.preventDefault();
         Swal.fire({
-        title: 'Update the data?',
+        title: 'Add the data?',
         icon: 'question',
         showDenyButton: true,
-        confirmButtonText: 'Yes, update',
+        confirmButtonText: 'Yes, add',
         denyButtonText: 'No',
         }).then((result) => {
             if (result.isConfirmed) {
@@ -488,7 +443,5 @@
         });
     });
 </script>
-
-
 
 @endsection

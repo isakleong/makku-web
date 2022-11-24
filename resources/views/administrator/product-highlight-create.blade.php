@@ -176,18 +176,14 @@
                                                     <div class="form-group">
                                                         <div class="mb-3">
                                                             <label for="image">Image</label>
-                                                            <input class="form-control" type="file" id="image" name="image">
+                                                            <img class="img-preview img-fluid mb-3 mt-3 col-4">
+                                                            <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image" accept="image/*" onchange="companyImagePreview('#image', '.img-preview')">
                                                         </div>
                                                     </div>
                                                     @error('image')
                                                         <p style="color: red">{{$message}}</p>
                                                     @enderror
                                                 </div>
-                                                
-                                                {{-- <div class="col-md-12 mt-1">
-                                                    <img id="preview-image" src="https://www.riobeauty.co.uk/images/product_image_not_found.gif"
-                                                        alt="preview image" style="max-height: 250px;">
-                                                </div> --}}
 
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
@@ -199,8 +195,6 @@
                                                         <p style="color: red">{{$message}}</p>
                                                     @enderror
                                                 </div>
-
-                                                {{-- <input type="checkbox" id="statuschannel" name="active" value="{{$channel->channelStatus}}" @if($channel->channelStatus=='on') checked @endif> --}}
 
                                                 <div class="col-12 mt-3">
                                                     <div class="form-group">
