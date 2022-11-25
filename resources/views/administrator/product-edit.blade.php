@@ -102,9 +102,6 @@
                 <li class="submenu-item ">
                     <a href="/admin/master/company">Company</a>
                 </li>
-                <li class="submenu-item ">
-                    <a href="/admin/languages">Languages</a>
-                </li>
             </ul>
         </li>
 
@@ -210,19 +207,21 @@
                                                     @enderror
                                                 </div>
 
-                                                <div class="col-6 mt-1">
-                                                    <div class="form-group">
-                                                        <img src="/{{$product->image}}" alt="" class="img-fluid" width="300">
-                                                    </div>
-                                                </div>
-
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
                                                         <div class="mb-3">
                                                             <label for="image">Image (Optional)</label>
-                                                            <input class="form-control" type="file" id="image" name="image">
+                                                            @if ($product->image != "")
+                                                                <img src="/{{$product->image}}" alt="" class="img-preview img-fluid mb-3 mt-3 col-4 d-block"> 
+                                                            @else
+                                                                <img class="img-preview img-fluid mb-3 mt-3 col-4">
+                                                            @endif
+                                                            <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image" accept="image/*" onchange="previewImage()">
                                                         </div>
                                                     </div>
+                                                    @error('image')
+                                                        <p style="color: red">{{$message}}</p>
+                                                    @enderror
                                                 </div>
 
                                                 <div class="col-12 mt-3">

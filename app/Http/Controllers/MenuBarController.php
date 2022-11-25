@@ -99,20 +99,24 @@ class MenuBarController extends Controller
 
         $input = $request->all();
 
+        $imageDelete = "";
         if($image = $request->file('image')) {
+            $imageDelete = public_path()."/".$menubar->image;
+
             $destinationPath = 'image/upload/';
             $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
             $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
             $input['image'] = $destinationPath.$imageName;
-
-            $path = public_path()."/".$menubar->image;
-            File::delete($path);
         } else {
             unset($input['image']);
         }
 
         $menubar->update($input);
+
+        if($imageDelete != "") {
+            File::delete($imageDelete);
+        }
 
         return redirect('/admin/master/menubar')->withSuccess('Data Updated Successfully!');
     }
@@ -125,10 +129,11 @@ class MenuBarController extends Controller
      */
     public function destroy(MenuBar $menubar)
     {
-        $path = public_path()."/".$menubar->image;
-        File::delete($path);
+        $imageDelete = public_path()."/".$menubar->image;
 
         $menubar->delete();
+
+        File::delete($imageDelete);
 
         return redirect('/admin/master/menubar')->withSuccess('Data Deleted Successfully!');
     }

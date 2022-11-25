@@ -111,9 +111,6 @@
                 <li class="submenu-item ">
                     <a href="/admin/master/company">Company</a>
                 </li>
-                <li class="submenu-item ">
-                    <a href="/admin/languages">Languages</a>
-                </li>
             </ul>
         </li>
 

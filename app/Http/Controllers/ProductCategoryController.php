@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ProductCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class ProductCategoryController extends Controller
 {
@@ -37,9 +38,9 @@ class ProductCategoryController extends Controller
 
         if($image = $request->file('image')) {
             $destinationPath = 'image/upload/';
-            $imageName = strtolower($request->name_id) . "." . $image->getClientOriginalExtension();
+            $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
-            // $input['image'] = $imageName;
             $input['image'] = $destinationPath.$imageName;
         } else {
             unset($input['image']);
@@ -76,11 +77,14 @@ class ProductCategoryController extends Controller
 
         $input = $request->all();
 
+        $imageDelete = "";
         if($image = $request->file('image')) {
+            $imageDelete = public_path()."/".$category->image;
+
             $destinationPath = 'image/upload/';
-            $imageName = strtolower($request->name_id) . "." . $image->getClientOriginalExtension();
+            $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
-            // $input['image'] = $imageName;
             $input['image'] = $destinationPath.$imageName;
         } else {
             unset($input['image']);
@@ -88,12 +92,20 @@ class ProductCategoryController extends Controller
 
         $category->update($input);
 
+        if($imageDelete != "") {
+            File::delete($imageDelete);
+        }
+
         return redirect('/admin/product/category')->withSuccess('Data Updated Successfully!');
     }
 
     public function destroy(ProductCategory $category)
     {
+        $imageDelete = public_path()."/".$category->image;
+
         $category->delete();
+
+        File::delete($imageDelete);
 
         return redirect('/admin/product/category')->withSuccess('Data Deleted Successfully!');
     }

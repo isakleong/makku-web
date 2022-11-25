@@ -108,48 +108,55 @@ class PartnershipController extends Controller
 
         $input = $request->all();
 
+        $imageDelete = "";
         if($image = $request->file('image')) {
+            $imageDelete = public_path()."/".$partnership->image;
+
             $destinationPath = 'image/upload/';
             $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
             $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
 
             $input['image'] = $destinationPath.$imageName;
-
-            $path = public_path()."/".$partnership->image;
-            File::delete($path);
         } else {
             unset($input['image']);
         }
 
+        $logoDelete = "";
         if($image = $request->file('logo')) {
+            $logoDelete = public_path()."/".$partnership->logo;
+
             $destinationPath = 'image/upload/';
             $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
             $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
 
             $input['logo'] = $destinationPath.$imageName;
-
-            $path = public_path()."/".$partnership->logo;
-            File::delete($path);
         } else {
             unset($input['logo']);
         }
 
         $partnership->update($input);
 
+        if($imageDelete != ""){
+            File::delete($imageDelete);
+        }
+        if($logoDelete != "") {
+            File::delete($imageDelete);
+        }
+
         return redirect('/admin/partnership')->withSuccess('Data Updated Successfully!');
     }
 
     public function destroy(Partnership $partnership)
     {
-        $path = public_path()."/".$partnership->image;
-        File::delete($path);
-
-        $path = public_path()."/".$partnership->logo;
-        File::delete($path);
+        $imageDelete = public_path()."/".$partnership->image;
+        $logoDelete = public_path()."/".$partnership->logo;
         
         $partnership->delete();
+
+        File::delete($imageDelete);
+        File::delete($logoDelete);
 
         return redirect('/admin/partnership')->withSuccess('Data Deleted Successfully!');
     }

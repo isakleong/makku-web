@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CatalogueController;
 use App\Http\Controllers\CobaController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\CompanyImageController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KeyFeatureController;
@@ -52,7 +53,20 @@ Route::get('/admin/dashboard', [DashboardController::class, 'index'])->middlewar
 Route::resource('/admin/master/menubar', MenuBarController::class)->middleware('auth');
 Route::resource('/admin/master/producthighlight', ProductHighlightController::class)->middleware('auth');
 Route::resource('/admin/master/keyfeature', KeyFeatureController::class)->middleware('auth');
-Route::resource('/admin/master/company', CompanyController::class)->middleware('auth');
+// Route::resource('/admin/master/company', CompanyController::class)->middleware('auth');
+// Route::resource('/admin/master/company/image', CompanyImageController::class)->middleware('auth');
+
+Route::prefix('admin')->group(static function() {
+    Route::middleware('auth')->group(static function () {
+        Route::resource('master/companyimage', CompanyImageController::class);
+    });
+});
+
+Route::prefix('admin')->group(static function() {
+    Route::middleware('auth')->group(static function () {
+        Route::resource('master/company', CompanyController::class);
+    });
+});
 
 Route::resource('/admin/partnership', PartnershipController::class)->middleware('auth');
 Route::resource('/admin/testimonial', TestimonialController::class)->middleware('auth');

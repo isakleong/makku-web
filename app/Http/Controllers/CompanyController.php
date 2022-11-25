@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\CompanyImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -11,8 +12,9 @@ class CompanyController extends Controller
     public function index()
     {
         $company = Company::all();
+        $companyImage = CompanyImage::all();
 
-        return view('administrator.company', compact('company'));
+        return view('administrator.company', compact('company', 'companyImage'));
     }
 
     public function create()
@@ -109,62 +111,71 @@ class CompanyController extends Controller
 
         $input = $request->all();
 
+        $imageDelete = "";
         if($image = $request->file('image')) {
+            $imageDelete = public_path()."/".$company->image;
+
             $destinationPath = 'image/upload/';
             $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
             $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
             $input['image'] = $destinationPath.$imageName;
-
-            $path = public_path()."/".$company->image;
-            File::delete($path);
         } else {
             unset($input['image']);
         }
 
+        $logoPrimaryDelete = "";
         if($image = $request->file('logoPrimary')) {
+            $logoPrimaryDelete = public_path()."/".$company->logoPrimary;
+
             $destinationPath = 'image/upload/';
             $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
             $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
             $input['logoPrimary'] = $destinationPath.$imageName;
-
-            $path = public_path()."/".$company->logoPrimary;
-            File::delete($path);
         } else {
             unset($input['logoPrimary']);
         }
 
+        $logoSecondaryDelete  = "";
         if($image = $request->file('logoSecondary')) {
+            $logoSecondaryDelete = public_path()."/".$company->logoSecondary;
+
             $destinationPath = 'image/upload/';
             $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
             $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
             $input['logoSecondary'] = $destinationPath.$imageName;
-
-            $path = public_path()."/".$company->logoSecondary;
-            File::delete($path);
         } else {
             unset($input['logoSecondary']);
         }
 
         $company->update($input);
 
+        if($imageDelete != "") {
+            File::delete($imageDelete);
+        }
+        if($logoPrimaryDelete != "") {
+            File::delete($logoPrimaryDelete);
+        }
+        if($logoSecondaryDelete != "") {
+            File::delete($logoSecondaryDelete);
+        }
+
         return redirect('/admin/master/company')->withSuccess('Data Updated Successfully!');
     }
 
     public function destroy(Company $company)
     {
-        $path = public_path()."/".$company->image;
-        File::delete($path);
-
-        $path = public_path()."/".$company->logoPrimary;
-        File::delete($path);
-
-        $path = public_path()."/".$company->logoSecondary;
-        File::delete($path);
+        $imageDelete = public_path()."/".$company->image;
+        $logoPrimaryDelete = public_path()."/".$company->logoPrimary;
+        $logoSecondaryDelete = public_path()."/".$company->logoSecondary;
 
         $company->delete();
+
+        File::delete($imageDelete);
+        File::delete($logoPrimaryDelete);
+        File::delete($logoSecondaryDelete);
 
         return redirect('/admin/master/company')->withSuccess('Data Deleted Successfully!');
     }

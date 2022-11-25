@@ -106,16 +106,15 @@ class KeyFeatureController extends Controller
 
         $input = $request->all();
 
+        $imageDelete = "";
         if($image = $request->file('image')) {
+            $imageDelete = public_path()."/".$keyfeature->image;
+
             $destinationPath = 'image/upload/';
             $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
             $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
-            // $input['image'] = $imageName;
             $input['image'] = $destinationPath.$imageName;
-
-            $path = public_path()."/".$keyfeature->image;
-            File::delete($path);
         } else {
             if(!$request->has('discard')) {
                 unset($input['image']);
@@ -124,15 +123,20 @@ class KeyFeatureController extends Controller
 
         $keyfeature->update($input);
 
+        if($imageDelete != "") {
+            File::delete($imageDelete);
+        }
+
         return redirect('/admin/master/keyfeature')->withSuccess('Data Updated Successfully!');
     }
 
     public function destroy(KeyFeature $keyfeature)
     {
-        $path = public_path()."/".$keyfeature->image;
-        File::delete($path);
+        $imageDelete = public_path()."/".$keyfeature->image;
 
         $keyfeature->delete();
+
+        File::delete($imageDelete);
 
         return redirect('/admin/master/keyfeature')->withSuccess('Data Deleted Successfully!');
     }

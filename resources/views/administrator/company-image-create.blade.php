@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Makku Frozen Food - Catalogue')
+@section('title', 'Makku Frozen Food - Company Image')
 
 @section('navbar')
 <div class="sidebar-menu">
@@ -24,16 +24,16 @@
         </li>
 
         <li
-            class="sidebar-item  has-sub active">
+            class="sidebar-item  has-sub">
             <a href="" class='sidebar-link'>
                 <i class="bi bi-basket-fill"></i>
                 <span>Product</span>
             </a>
-            <ul class="submenu active">
-                <li class="submenu-item active">
+            <ul class="submenu ">
+                <li class="submenu-item ">
                     <a href="/admin/product/catalogue">Catalogue</a>
                 </li>
-                <li class="submenu-item">
+                <li class="submenu-item ">
                     <a href="/admin/product/category">Category</a>
                 </li>
                 <li class="submenu-item ">
@@ -84,12 +84,12 @@
         </li>
 
         <li
-            class="sidebar-item  has-sub">
+            class="sidebar-item  has-sub active">
             <a href="/master" class='sidebar-link'>
                 <i class="bi bi-stack"></i>
                 <span>Master</span>
             </a>
-            <ul class="submenu">
+            <ul class="submenu active">
                 <li class="submenu-item">
                     <a href="/admin/master/menubar">Menu Bar</a>
                 </li>
@@ -99,7 +99,7 @@
                 <li class="submenu-item">
                     <a href="/admin/master/keyfeature">Key Feature</a>
                 </li>
-                <li class="submenu-item ">
+                <li class="submenu-item active">
                     <a href="/admin/master/company">Company</a>
                 </li>
             </ul>
@@ -126,8 +126,8 @@
     <div class="page-title">
         <div class="row">
             <div class="col-12 col-md-6 order-md-1 order-last">
-                <h3>Catalogue</h3>
-                <p class="text-subtitle text-muted">Catalogue master data</p>
+                <h3>Company Image</h3>
+                <p class="text-subtitle text-muted">Company image master data</p>
             </div>
         </div>
     </div>
@@ -135,7 +135,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="buttons">
-                    <a href="/admin/product/catalogue" class="btn btn-outline-primary">Back</a>
+                    <a href="/admin/master/company" class="btn btn-outline-primary">Back</a>
                 </div>
             </div>
             <section id="basic-vertical-layouts">
@@ -144,51 +144,36 @@
                         <div class="card">
                             <div class="card-content">
                                 <div class="card-body">
-                                    <form action="{{ route('catalogue.update', $catalogue->id) }}" method="POST" class="form form-vertical" enctype="multipart/form-data">
+                                    <form action="{{ route('image.store') }}" method="POST" class="form form-vertical" enctype="multipart/form-data">
                                         @csrf
-                                        @method('PUT')
                                         <div class="form-body">
                                             <div class="row">
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label for="name_en">Name - EN (Optional)</label>
-                                                        <input type="text" id="name_en" class="form-control"
-                                                            name="name_en" placeholder="Name (English)" value="{{$catalogue->name_en}}">
-                                                    </div>
-                                                </div>
-                                                <div class="col-12 mt-1">
-                                                    <div class="form-group">
-                                                        <label for="name_id">Name - ID (Optional)</label>
-                                                        <input type="text" id="name_id" class="form-control"
-                                                            name="name_id" placeholder="Name (Indonesia)" value="{{$catalogue->name_id}}">
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-6 mt-1">
-                                                    <div class="form-group">
-                                                        <img src="/{{$catalogue->file}}" alt="" class="img-fluid" width="300">
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-12 mt-1">
-                                                    <div class="form-group">
                                                         <div class="mb-3">
-                                                            <label for="image">File (Optional)</label>
-                                                            <input class="form-control" type="file" id="file" name="file">
+                                                            <label for="image">Image</label>
+                                                            <img class="img-preview img-fluid mb-3 mt-3 col-4">
+                                                            <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image" accept="image/*" onchange="previewImage()">
                                                         </div>
                                                     </div>
+                                                    @error('image')
+                                                        <p style="color: red">{{$message}}</p>
+                                                    @enderror
                                                 </div>
 
-                                                <div class="col-12 mt-3">
+                                                <div class="col-12 mt-1">
                                                     <div class="form-group">
-                                                        <div class="form-check form-switch">
-                                                            <input name="active" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" {{ $catalogue->active=='1' ? 'checked' : '' }}>
-                                                            <label class="form-check-label" for="flexSwitchCheckChecked">Active</label>
-                                                        </div>
+                                                        <label for="orderNumber">Order Number</label>
+                                                        <input type="text" class="form-control"
+                                                            name="orderNumber" placeholder="Order Number" required value="{{old('orderNumber')}}">
                                                     </div>
+                                                    @error('orderNumber')
+                                                        <p style="color: red">{{$message}}</p>
+                                                    @enderror
                                                 </div>
+                                                
                                                 <div class="col-12 d-flex justify-content-end mt-3">
-                                                    <button type="submit" class="btn btn-primary me-1 mb-1 show_confirm">Update</button>
+                                                    <button type="submit" class="btn btn-primary me-1 mb-1 show_confirm">Add</button>
                                                     <button type="reset"
                                                         class="btn btn-light-secondary me-1 mb-1">Reset</button>
                                                 </div>
@@ -217,10 +202,10 @@
         var name = $(this).data("name");
         event.preventDefault();
         Swal.fire({
-        title: 'Update the data?',
+        title: 'Add the data?',
         icon: 'question',
         showDenyButton: true,
-        confirmButtonText: 'Yes, update',
+        confirmButtonText: 'Yes, add',
         denyButtonText: 'No',
         }).then((result) => {
             if (result.isConfirmed) {

@@ -7,6 +7,7 @@ use App\Models\ProductBrand;
 use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
@@ -68,9 +69,9 @@ class ProductController extends Controller
 
         if($image = $request->file('image')) {
             $destinationPath = 'image/upload/';
-            $imageName = strtolower($request->name_id) . "." . $image->getClientOriginalExtension();
+            $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
-            // $input['image'] = $imageName;
             $input['image'] = $destinationPath.$imageName;
         } else {
             unset($input['image']);
@@ -115,11 +116,14 @@ class ProductController extends Controller
 
         $input = $request->all();
 
+        $imageDelete = "";
         if($image = $request->file('image')) {
+            $imageDelete = public_path()."/".$product->image;
+
             $destinationPath = 'image/upload/';
-            $imageName = strtolower($request->name_id) . "." . $image->getClientOriginalExtension();
+            $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
-            // $input['image'] = $imageName;
             $input['image'] = $destinationPath.$imageName;
         } else {
             unset($input['image']);
@@ -127,12 +131,20 @@ class ProductController extends Controller
 
         $product->update($input);
 
+        if($imageDelete != "") {
+            File::delete($imageDelete);
+        }
+
         return redirect('/admin/product')->withSuccess('Data Updated Successfully!');
     }
 
     public function destroy(Product $product)
     {
+        $imageDelete = public_path()."/".$product->image;
+
         $product->delete();
+
+        File::delete($imageDelete);
 
         return redirect('/admin/product')->withSuccess('Data Deleted Successfully!');
     }

@@ -99,30 +99,35 @@ class ProductHighlightController extends Controller
 
         $input = $request->all();
 
+        $imageDelete = "";
         if($image = $request->file('image')) {
+            $imageDelete = public_path()."/".$producthighlight->image;
+
             $destinationPath = 'image/upload/';
             $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
             $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
-            $input['image'] = $destinationPath.$imageName;
-
-            $path = public_path()."/".$producthighlight->image;
-            File::delete($path);
+            $input['image'] = $destinationPath.$imageName;            
         } else {
             unset($input['image']);
         }
 
         $producthighlight->update($input);
 
+        if($imageDelete != "") {
+            File::delete($imageDelete);
+        }
+
         return redirect('/admin/master/producthighlight')->withSuccess('Data Updated Successfully!');
     }
 
     public function destroy(ProductHighlight $producthighlight)
     {
-        $path = public_path()."/".$producthighlight->image;
-        File::delete($path);
+        $imageDelete = public_path()."/".$producthighlight->image;
         
         $producthighlight->delete();
+
+        File::delete($imageDelete);
 
         return redirect('/admin/master/producthighlight')->withSuccess('Data Deleted Successfully!');
     }

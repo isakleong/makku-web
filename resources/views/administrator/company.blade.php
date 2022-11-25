@@ -106,9 +106,6 @@
                 <li class="submenu-item active">
                     <a href="/admin/master/company">Company</a>
                 </li>
-                <li class="submenu-item ">
-                    <a href="/admin/languages">Languages</a>
-                </li>
             </ul>
         </li>
 
@@ -143,13 +140,15 @@
     <section class="section">
         <div class="card">
             <div class="card-header">
-                @if (count($company) < 0)
+                <h4>Master Data</h4>
+                @if (count($company) == 0)
                     <div class="buttons">
-                        <a href="/admin/master/company/create" class="btn btn-outline-primary">Add Data</a>
+                        <a class="btn btn-outline-primary" onclick="location.href='/admin/master/company/create'">Add Data</a>
                     </div>
                 @else
                     <div class="buttons">
-                        <a href="/admin/master/company/create" class="btn btn-outline-primary disabled" style="cursor: not-allowed; pointer-events: all !important;" onclick="return false;">Add Data</a>
+                        <a class="btn btn-outline-primary disabled" onclick="return false;" style="cursor: not-allowed; pointer-events: all !important;">Add Data</a>
+                        <a href="/admin/master/company/image" class="btn btn-outline-primary">Manage Image</a>
                     </div>
                 @endif
             </div>
@@ -188,6 +187,54 @@
             </div>
         </div>
 
+        <div class="card">
+            <div class="card-header">
+                <h4>Master Image</h4>
+                @if (count($company) == 0)
+                    <div class="buttons">
+                        <a class="btn btn-outline-primary" onclick="location.href='/admin/master/company/create'">Add Data</a>
+                    </div>
+                @else
+                    <div class="buttons">
+                        <a href="/admin/master/company/image/create" class="btn btn-outline-primary">Add Data</a>
+                    </div>
+                @endif
+            </div>
+            <div class="card-body">
+                <table class="table table-striped" id="table2" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Image</th>
+                            <th>Order Number</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php
+                            $i = 1
+                        @endphp
+                        @foreach ($companyImage as $item)
+                            <tr>
+                                <td>{{$i++}}</td>
+                                <td><img src="/{{$item->image}}" alt="" class="img-fluid" width="100"></td>
+                                <td>{{$item->orderNumber}}</td>
+                                <td>
+                                    <a href="{{ route('companyimage.edit', $item->id) }}" class="btn icon btn-sm btn-primary d-inline" data-bs-toggle="tooltip" title="Edit"><i class="bi bi-pencil"></i></a>
+                                    <form action="{{ route('companyimage.destroy', $item->id) }}" method="POST" class="d-inline" data-bs-toggle="tooltip" title="Delete">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn icon btn-sm btn-danger show_confirm"><i class="bi bi-x"></i></button>
+                                    </form>
+                                </td>
+
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </section>
 </div>
 
@@ -201,6 +248,10 @@
 <script>
     $(document).ready(function () {
         $('#table1').DataTable( {
+            responsive: true
+        } );
+
+        $('#table2').DataTable( {
             responsive: true
         } );
 

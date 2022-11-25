@@ -105,10 +105,8 @@ class CatalogueController extends Controller
         $imageDelete = public_path()."/".$catalogue->file;
 
         $catalogue->delete();
-
-        if($imageDelete != "") {
-            File::delete($imageDelete);
-        }
+        
+        File::delete($imageDelete);
 
         return redirect('/admin/product/catalogue')->withSuccess('Data Deleted Successfully!');
     }
