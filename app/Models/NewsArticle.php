@@ -12,8 +12,11 @@ class NewsArticle extends Model
     protected $table = 'news_article';
 
     protected $fillable = [
+        'categoryID',
         'title_en',
         'title_id',
+        'slug_en',
+        'slug_id',
         'content_en',
         'content_id',
         'tags_en',
@@ -21,4 +24,9 @@ class NewsArticle extends Model
         'image',
         'author'
     ];
+
+    public function category() {
+        return $this->belongsTo(NewsCategory::class);
+    }
+
 }

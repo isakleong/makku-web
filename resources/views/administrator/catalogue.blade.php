@@ -65,9 +65,6 @@
                 <li class="submenu-item ">
                     <a href="/admin/news/article">Article</a>
                 </li>
-                <li class="submenu-item ">
-                    <a href="/admin/news">Item</a>
-                </li>
             </ul>
         </li>
 

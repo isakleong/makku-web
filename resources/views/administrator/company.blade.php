@@ -65,9 +65,6 @@
                 <li class="submenu-item ">
                     <a href="/admin/news/article">Article</a>
                 </li>
-                <li class="submenu-item ">
-                    <a href="/admin/news">Item</a>
-                </li>
             </ul>
         </li>
 
@@ -192,11 +189,11 @@
                 <h4>Master Image</h4>
                 @if (count($company) == 0)
                     <div class="buttons">
-                        <a class="btn btn-outline-primary" onclick="location.href='/admin/master/company/create'">Add Data</a>
+                        <a class="btn btn-outline-primary" onclick="location.href='/admin/master/companyimage/create'">Add Data</a>
                     </div>
                 @else
                     <div class="buttons">
-                        <a href="/admin/master/company/image/create" class="btn btn-outline-primary">Add Data</a>
+                        <a href="/admin/master/companyimage/create" class="btn btn-outline-primary">Add Data</a>
                     </div>
                 @endif
             </div>

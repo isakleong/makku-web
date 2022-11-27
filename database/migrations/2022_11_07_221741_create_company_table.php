@@ -20,6 +20,8 @@ return new class extends Migration
             $table->text('highlight_id')->required();
             $table->text('description_en')->required();
             $table->text('description_id')->required();
+            $table->longText('about_en')->required();
+            $table->longText('about_id')->required();
             $table->string('image')->required();
             $table->string('logoPrimary')->required();
             $table->string('logoSecondary')->required();

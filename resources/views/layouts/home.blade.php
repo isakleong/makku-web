@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-100">
 
 <head>
   <meta charset="utf-8">
@@ -39,8 +39,77 @@
   @yield('vendorCSS')
 </head>
 
-<body>
-    @yield('navbar')
+<body class="d-flex flex-column h-100">
+    {{-- @yield('navbar') --}}
+
+    <header id="header" class="header fixed-top">
+      <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+  
+        <a href="index.html" class="logo d-flex align-items-center">
+          <img src="/{{$company->logoPrimary}}" alt="">
+        </a>
+  
+        @php
+          $tempChildMenuBar = $menubar;
+          $tempSubChildMenuBar = $menubar;
+        @endphp
+  
+        <nav id="navbar" class="navbar">
+          <ul id="navbar-header">
+            @foreach ($menubar as $item)
+                @if (strtolower($item->type) == 'parent')
+                  @if ($item->ChildrenCount > 0)
+                    <li id="navbar-title" class="dropdown"><a href="{{$item->refer}}"><span>{{$item->title}}</span><i class="bi bi-chevron-down"></i></a>
+                      <ul>
+                        @foreach ($tempChildMenuBar as $itemChild)
+                          @if ($itemChild->parent == $item->id)
+                            @if ($itemChild->ChildrenCount == 0)
+                              <li id="navbar-dropdown" style="background-image: url(/{{$itemChild->image}});"><a href={{$itemChild->refer}}>{{$itemChild->title}}</a></li>
+                              <div style="border-bottom: 3px solid white"></div>
+                            @else
+                              <li class="dropdown"><a href="{{$itemChild->refer}}"><span>{{$itemChild->title}}</span> <i class="bi bi-chevron-right"></i></a>
+                                <ul>
+                                  @foreach ($tempSubChildMenuBar as $itemSubChild)
+                                    @if ($itemSubChild->parent == $itemChild->id)
+                                      <li id="navbar-sub-dropdown" style="background-image: url({{$itemSubChild->image}});"><a href={{$itemSubChild->refer}}>{{$itemSubChild->title}}</a></li>
+                                    @endif
+                                  @endforeach
+                                </ul>
+                              </li>
+                            @endif
+                          @endif
+                        @endforeach
+                      </ul>
+                    </li>
+                  @else
+                    <li id="navbar-title"><a class="nav-link" href={{$item->refer}}>{{$item->title}}</a></li>
+                  @endif
+  
+                @endif
+            @endforeach
+            {{-- <li id="navbar-title" class="dropdown"><a href="#"><span>EN</span> <i class="bi bi-translate"></i></a>
+              <ul>
+                <li><a href="/en/">English</a></li>
+                <li><a href="/id/">Bahasa Indonesia</a></li>
+                
+                <li><a href="/en/{{Route::current()->getName()}}">English</a></li>
+                <li><a href="/id/{{Route::current()->getName()}}">Bahasa Indonesia</a></li>
+              </ul>
+            </li> --}}
+
+            <form id="selectbox" name="" >
+              <select onchange="javascript:location.href = this.value;">
+                  <option value={{ url('/en') }}>English</option>
+                  <option value={{ url('/id') }}>Indonesia</option>
+              </select>
+            </form>
+
+          </ul>
+          <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav>
+      </div>
+    </header>
+
     <main id="main">
         @yield('content')
     </main>
@@ -77,7 +146,7 @@
             </div>
             <div class="credits py-3">
               <h3><i class="bi bi-geo-alt-fill"></i></h3>
-              <p>{{$company->address}}</p>
+              <p>{!!$company->address!!}</p>
             </div>
     
             

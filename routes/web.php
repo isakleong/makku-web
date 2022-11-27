@@ -20,6 +20,7 @@ use App\Http\Controllers\ProductHighlightController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TestimonialController;
+use App\Models\NewsArticle;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/', function () {
@@ -86,12 +87,20 @@ Route::group([
     'where' => ['locale' => '[a-zA-Z]{2}'],
 ], function(){
     Route::get('/', [HomeController::class, 'index']);
-    Route::get('/our-company', [HomeController::class, 'ourCompany']);
-    Route::get('/our-product', [HomeController::class, 'ourProduct']);
-    Route::get('/catalogues', [HomeController::class, 'catalogues']);
-    Route::get('/partnership', [HomeController::class, 'partnership']);
-    Route::get('/news', [HomeController::class, 'news']);
+    Route::get('/our-company', [HomeController::class, 'ourCompany'])->name('our-company');
+    Route::get('/our-product', [HomeController::class, 'ourProduct'])->name('our-product');
+    Route::get('/catalogues', [HomeController::class, 'catalogues'])->name('catalogues');
+    Route::get('/partnership', [HomeController::class, 'partnership'])->name('partnership');
+    Route::get('/news', [HomeController::class, 'news'])->name('news');
+    // Route::get('/news/{category}/{slug}', function($category, $slug) {
+    //     return view('home.news-detail');
+    // });
+    // Route::get('/news/{category}/{slug}', [HomeController::class, 'newsDetail']);
+
+    Route::get('/news/{slug}', [NewsArticleController::class, 'show']);
+    
+    // Route::get('/news/{article:slug_en}', [NewsArticleController::class, 'show']);
+    // Route::get('/news/{article:slug_id}', [NewsArticleController::class, 'show']);
+
     Route::get('/contact-us', [HomeController::class, 'contactUs']);
 });
-
-// Route::resource('/admin/coba', CobaController::class)->middleware('auth');

@@ -53,9 +53,44 @@ class NewsController extends Controller
         return redirect('/admin/news')->withSuccess('Data Added Successfully!');
     }
 
-    public function show(News $news)
+    public function show($locale, $xx, $id)
     {
-        //
+        // dd($locale. " - ". $xx. " - ".$id);
+        $availableLanguage = ['en', 'id'];
+
+        if(in_array($locale, $availableLanguage)) {
+            if($locale == "en") {
+                $sectionTitle = 'News';
+
+                $menubar = DB::table('menu_bar as b')
+                ->select(DB::raw('b.id, b.title_en as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
+                ->where('b.active', 1)
+                ->orderByRaw('CASE WHEN b.type="parent" THEN 1 WHEN b.type="child" THEN 2 WHEN b.type="sub child" THEN 3 END, b.orderNumber+0')
+                ->get();
+
+                $company = DB::table('company')
+                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->get()->first();
+
+                $news = NewsArticle::find($id);
+
+            } elseif($locale == "id") {
+                $sectionTitle = 'Berita';
+
+                $menubar = DB::table('menu_bar as b')
+                ->select(DB::raw('b.id, b.title_id as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
+                ->where('b.active', 1)
+                ->orderByRaw('CASE WHEN b.type="parent" THEN 1 WHEN b.type="child" THEN 2 WHEN b.type="sub child" THEN 3 END, b.orderNumber+0')
+                ->get();
+
+                $company = DB::table('company')
+                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->get()->first();
+
+                $news = NewsArticle::find($id);
+            }
+            return view('home.news-detail', compact(['sectionTitle', 'menubar', 'company', 'news']));
+        }   
     }
 
     public function edit(News $news)

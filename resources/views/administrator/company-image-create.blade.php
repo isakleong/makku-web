@@ -61,9 +61,6 @@
                 <li class="submenu-item ">
                     <a href="/admin/news/article">Article</a>
                 </li>
-                <li class="submenu-item ">
-                    <a href="/admin/news">Item</a>
-                </li>
             </ul>
         </li>
 
@@ -144,7 +141,7 @@
                         <div class="card">
                             <div class="card-content">
                                 <div class="card-body">
-                                    <form action="{{ route('image.store') }}" method="POST" class="form form-vertical" enctype="multipart/form-data">
+                                    <form action="{{ route('companyimage.store') }}" method="POST" class="form form-vertical" enctype="multipart/form-data">
                                         @csrf
                                         <div class="form-body">
                                             <div class="row">

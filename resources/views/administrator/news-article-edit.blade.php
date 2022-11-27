@@ -70,9 +70,6 @@
                 <li class="submenu-item active">
                     <a href="/admin/news/article">Article</a>
                 </li>
-                <li class="submenu-item ">
-                    <a href="/admin/news">Item</a>
-                </li>
             </ul>
         </li>
 
@@ -160,6 +157,25 @@
                                             <div class="row">
                                                 <div class="col-12">
                                                     <div class="form-group">
+                                                        <label for="categoryID">Category</label>
+                                                        <select class="choices form-select" id="categoryID"  name="categoryID">
+                                                            @foreach($category as $row)
+                                                                {{-- <option value="{{ $item->id }}">{{ $item->name_en }}</option> --}}
+                                                                @if ($row->name_en == $categorySelected->name_en)
+                                                                    <option value="{{ $row->id }}" selected>{{ $row->name_en }}</option>
+                                                                @else
+                                                                    <option value="{{ $row->id }}">{{ $row->name_en }}</option>
+                                                                @endif
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    @error('categoryID')
+                                                        <p style="color: red">{{$message}}</p>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="col-12 mt-1">
+                                                    <div class="form-group">
                                                         <label for="title_en">Title - EN</label>
                                                         <input type="text" id="title_en" class="form-control"
                                                             name="title_en" placeholder="Title (English)" value="{{$article->title_en}}">
@@ -176,6 +192,34 @@
                                                             name="title_id" placeholder="Title (Indonesia)" value="{{$article->title_id}}">
                                                     </div>
                                                     @error('title_id')
+                                                        <p style="color: red">{{$message}}</p>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="col-12 mt-1">
+                                                    <div class="form-group">
+                                                        <button type="button" class="btn btn-primary" onclick="generateSlug()">Generate Slug</button>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-6 mt-1">
+                                                    <div class="form-group">
+                                                        <label for="slug_en">Slug - EN</label>
+                                                        <input type="text" id="slug_en" class="form-control"
+                                                            name="slug_en" placeholder="Slug (English)" value="{{$article->slug_en}}">
+                                                    </div>
+                                                    @error('slug_en')
+                                                        <p style="color: red">{{$message}}</p>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="col-6 mt-1">
+                                                    <div class="form-group">
+                                                        <label for="slug_id">Slug - ID</label>
+                                                        <input type="text" id="slug_id" class="form-control"
+                                                            name="slug_id" placeholder="Slug (Indonesia)" value="{{$article->slug_id}}">
+                                                    </div>
+                                                    @error('slug_id')
                                                         <p style="color: red">{{$message}}</p>
                                                     @enderror
                                                 </div>
@@ -223,6 +267,23 @@
                                                             name="author" placeholder="Author" value="{{$article->author}}">
                                                     </div>
                                                     @error('author')
+                                                        <p style="color: red">{{$message}}</p>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="col-12 mt-1">
+                                                    <div class="form-group">
+                                                        <div class="mb-3">
+                                                            <label for="image">Cover Image (Optional)</label>
+                                                            @if ($article->image != "")
+                                                                <img src="/{{$article->image}}" alt="" class="img-preview img-fluid mb-3 mt-3 col-4 d-block"> 
+                                                            @else
+                                                                <img class="img-preview img-fluid mb-3 mt-3 col-4">
+                                                            @endif
+                                                            <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image" accept="image/*" onchange="previewImage()">
+                                                        </div>
+                                                    </div>
+                                                    @error('image')
                                                         <p style="color: red">{{$message}}</p>
                                                     @enderror
                                                 </div>
@@ -302,6 +363,28 @@
             }
         });
     });
+</script>
+
+<script>
+    function generateSlug(){
+        var title_en = $("#title_en").val();
+        var title_id = $("#title_id").val();
+
+        if((!$("#title_en").val()) || (!$("#title_id").val()) ){
+            Swal.fire({
+                title: 'Please fill out Title field first',
+                icon: 'warning',
+                showDenyButton: false,
+                confirmButtonText: 'OK'
+            });
+        } else {
+            var slug_en = title_en.trim().toLowerCase().replace(/ /g,'-').replace(/[-]+/g, '-').replace(/[^\w-]+/g,'');
+            var slug_id = title_id.trim().toLowerCase().replace(/ /g,'-').replace(/[-]+/g, '-').replace(/[^\w-]+/g,'');
+
+            $("#slug_en").val(slug_en);
+            $("#slug_id").val(slug_id);
+        }
+    }
 </script>
 
 @endsection

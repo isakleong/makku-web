@@ -6,9 +6,9 @@
     
 @endphp
 
-@section('navbar')
+{{-- @section('navbar') --}}
     <!-- ======= Header ======= -->
-  <header id="header" class="header fixed-top">
+  {{-- <header id="header" class="header fixed-top">
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
       <a href="index.html" class="logo d-flex align-items-center">
@@ -19,8 +19,6 @@
         $tempChildMenuBar = $menubar;
         $tempSubChildMenuBar = $menubar;
       @endphp
-
-      {{-- <input id="language-data" value="English"/> --}}
 
       <nav id="navbar" class="navbar">
         <ul id="navbar-header">
@@ -65,9 +63,11 @@
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav>
     </div>
-  </header>
+  </header> --}}
   <!-- End Header -->
+{{-- @endsection --}}
 
+@section('content')
   <!-- ======= Company Section ======= -->
   <section id="hero" class="hero d-flex align-items-center">
     <div class="container">
@@ -78,7 +78,7 @@
 
         <div class="col-lg-12 d-flex flex-column justify-content-center mt-3">
           <h1 data-aos="fade-up">{{$company->highlight}}</h1>
-          <p data-aos="fade-up" data-aos-delay="400">{{$company->description}}</p>
+          <p data-aos="fade-up" data-aos-delay="400">{!!$company->description!!}</p>
           <div class="col-lg-12 mt-3" data-aos="fade-in" data-aos-delay="600">
             <div class="divider div-transparent div-dot"></div>
           </div>
@@ -87,9 +87,7 @@
     </div>
   </section>
   <!-- End Company -->
-@endsection
 
-@section('content')
     <!-- ======= Product Section ======= -->
     <section id="product" class="product">
         <div class="container" data-aos="fade-up">

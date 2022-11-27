@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\MenuBar;
+use App\Models\News;
+use App\Models\NewsArticle;
+use App\Models\Partnership;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -75,26 +78,262 @@ class HomeController extends Controller {
         }
     }
 
-    public function ourCompany() {
-        
+    public function ourCompany($locale = 'en') {
+        $availableLanguage = ['en', 'id'];
 
-        return view('home.our-company');
+        if(in_array($locale, $availableLanguage)) {
+            if($locale == "en") {
+                $sectionTitle = 'Our Company';
+
+                $menubar = DB::table('menu_bar as b')
+                ->select(DB::raw('b.id, b.title_en as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
+                ->where('b.active', 1)
+                ->orderByRaw('CASE WHEN b.type="parent" THEN 1 WHEN b.type="child" THEN 2 WHEN b.type="sub child" THEN 3 END, b.orderNumber+0')
+                ->get();
+
+                $company = DB::table('company')
+                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->get()->first();
+
+                $companyImage = DB::table('company_image')
+                ->select(DB::raw('image'))
+                ->orderByRaw('company_image.orderNumber+0')
+                ->get();
+
+            } elseif($locale == "id") {
+                $sectionTitle = 'Tentang Kami';
+
+                $menubar = DB::table('menu_bar as b')
+                ->select(DB::raw('b.id, b.title_id as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
+                ->where('b.active', 1)
+                ->orderByRaw('CASE WHEN b.type="parent" THEN 1 WHEN b.type="child" THEN 2 WHEN b.type="sub child" THEN 3 END, b.orderNumber+0')
+                ->get();
+
+                $company = DB::table('company')
+                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->get()->first();
+
+                $companyImage = DB::table('company_image')
+                ->select(DB::raw('image'))
+                ->orderByRaw('company_image.orderNumber+0')
+                ->get();
+            }
+            return view('home.our-company', compact(['sectionTitle', 'menubar', 'company', 'companyImage']));
+        } else {
+            abort(404);
+        }
     }
 
     public function ourProduct() {
         return view('home.our-product');
     }
 
-    public function catalogues() {
-        return view('home.catalogues');
+    public function catalogues($locale = 'en') {
+        $availableLanguage = ['en', 'id'];
+
+        if(in_array($locale, $availableLanguage)) {
+            if($locale == "en") {
+                $sectionTitle = 'Catalogue';
+
+                $menubar = DB::table('menu_bar as b')
+                ->select(DB::raw('b.id, b.title_en as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
+                ->where('b.active', 1)
+                ->orderByRaw('CASE WHEN b.type="parent" THEN 1 WHEN b.type="child" THEN 2 WHEN b.type="sub child" THEN 3 END, b.orderNumber+0')
+                ->get();
+
+                $company = DB::table('company')
+                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->get()->first();
+
+                $catalogue = DB::table('catalogue')
+                ->select(DB::raw('file, name_en as name'))
+                ->where('active', 1)
+                ->get();
+
+            } elseif($locale == "id") {
+                $sectionTitle = 'Katalog';
+
+                $menubar = DB::table('menu_bar as b')
+                ->select(DB::raw('b.id, b.title_id as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
+                ->where('b.active', 1)
+                ->orderByRaw('CASE WHEN b.type="parent" THEN 1 WHEN b.type="child" THEN 2 WHEN b.type="sub child" THEN 3 END, b.orderNumber+0')
+                ->get();
+
+                $company = DB::table('company')
+                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->get()->first();
+
+                $catalogue = DB::table('catalogue')
+                ->select(DB::raw('file, name_id as name'))
+                ->where('active', 1)
+                ->get();
+            }
+            return view('home.catalogues', compact(['sectionTitle', 'menubar', 'company', 'catalogue']));
+        } else {
+            abort(404);
+        }
     }
 
-    public function partnership() {
-        return view('home.partnership');
+    public function partnership($locale = 'en') {
+        $availableLanguage = ['en', 'id'];
+
+        if(in_array($locale, $availableLanguage)) {
+            if($locale == "en") {
+                $sectionTitle = 'Partnership / Reseller';
+
+                $menubar = DB::table('menu_bar as b')
+                ->select(DB::raw('b.id, b.title_en as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
+                ->where('b.active', 1)
+                ->orderByRaw('CASE WHEN b.type="parent" THEN 1 WHEN b.type="child" THEN 2 WHEN b.type="sub child" THEN 3 END, b.orderNumber+0')
+                ->get();
+
+                $company = DB::table('company')
+                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->get()->first();
+
+            } elseif($locale == "id") {
+                $sectionTitle = 'Kemitraan';
+
+                $menubar = DB::table('menu_bar as b')
+                ->select(DB::raw('b.id, b.title_id as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
+                ->where('b.active', 1)
+                ->orderByRaw('CASE WHEN b.type="parent" THEN 1 WHEN b.type="child" THEN 2 WHEN b.type="sub child" THEN 3 END, b.orderNumber+0')
+                ->get();
+
+                $company = DB::table('company')
+                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->get()->first();
+            }
+
+            $partnership = Partnership::all()->where('active', 1);
+
+            return view('home.partnership', compact(['sectionTitle', 'menubar', 'company', 'partnership']));
+        } else {
+            abort(404);
+        }
     }
 
-    public function news() {
-        return view('home.news');
+    public function news($locale = 'en') {
+        $availableLanguage = ['en', 'id'];
+
+        if(in_array($locale, $availableLanguage)) {
+            if($locale == "en") {
+                $sectionTitle = 'News';
+
+                $menubar = DB::table('menu_bar as b')
+                ->select(DB::raw('b.id, b.title_en as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
+                ->where('b.active', 1)
+                ->orderByRaw('CASE WHEN b.type="parent" THEN 1 WHEN b.type="child" THEN 2 WHEN b.type="sub child" THEN 3 END, b.orderNumber+0')
+                ->get();
+
+                $company = DB::table('company')
+                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->get()->first();
+
+                // $news = DB::table('news')
+                // ->join('news_category', 'news_category.id', '=', 'news.categoryID')
+                // ->join('news_article', 'news_article.id', '=', 'news.articleID')
+                // ->select(DB::raw('news.*, news_category.name_en as category, news_article.image as image, news_article.title_en as title, news_article.content_en as content, news_article.tags_en as tags, news_article.author, news_article.created_at as publishDate'))
+                // ->where('news.active', 1)
+                // ->where('news_category.active', 1)
+                // ->orderByRaw('news.created_at')
+                // ->get();
+
+                $news = DB::table('news_article')
+                ->join('news_category', 'news_category.id', '=', 'news_article.categoryID')
+                ->select(DB::raw('news_article.*, news_category.name_en as category, news_article.image as image, news_article.title_en as title, news_article.slug_en as slug, news_article.content_en as content, news_article.tags_en as tags, news_article.author, news_article.created_at as publishDate'))
+                ->where('news_category.active', 1)
+                ->get();
+
+            } elseif($locale == "id") {
+                $sectionTitle = 'Berita';
+
+                $menubar = DB::table('menu_bar as b')
+                ->select(DB::raw('b.id, b.title_id as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
+                ->where('b.active', 1)
+                ->orderByRaw('CASE WHEN b.type="parent" THEN 1 WHEN b.type="child" THEN 2 WHEN b.type="sub child" THEN 3 END, b.orderNumber+0')
+                ->get();
+
+                $company = DB::table('company')
+                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->get()->first();
+
+                // $news = DB::table('news')
+                // ->join('news_category', 'news_category.id', '=', 'news.categoryID')
+                // ->join('news_article', 'news_article.id', '=', 'news.articleID')
+                // ->select(DB::raw('news.*, news_category.name_id as category, news_article.image as image, news_article.title_id as title, news_article.content_id as content, news_article.tags_id as tags, news_article.author, news_article.created_at as publishDate'))
+                // ->where('news.active', 1)
+                // ->where('news_category.active', 1)
+                // ->orderByRaw('news.created_at')
+                // ->get();
+
+                $news = DB::table('news_article')
+                ->join('news_category', 'news_category.id', '=', 'news_article.categoryID')
+                ->select(DB::raw('news_article.*, news_category.name_id as category, news_article.image as image, news_article.title_id as title, news_article.slug_id as slug, news_article.content_id as content, news_article.tags_id as tags, news_article.author, news_article.created_at as publishDate'))
+                ->where('news_category.active', 1)
+                ->get();
+            }
+
+            return view('home.news', compact(['sectionTitle', 'menubar', 'company', 'news']));
+        } else {
+            abort(404);
+        }
+    }
+
+    public function newsDetail($locale = 'en') {
+
+        $availableLanguage = ['en', 'id'];
+
+        if(in_array($locale, $availableLanguage)) {
+            if($locale == "en") {
+                $sectionTitle = 'News';
+
+                $menubar = DB::table('menu_bar as b')
+                ->select(DB::raw('b.id, b.title_en as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
+                ->where('b.active', 1)
+                ->orderByRaw('CASE WHEN b.type="parent" THEN 1 WHEN b.type="child" THEN 2 WHEN b.type="sub child" THEN 3 END, b.orderNumber+0')
+                ->get();
+
+                $company = DB::table('company')
+                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->get()->first();
+
+                $news = DB::table('news')
+                ->join('news_category', 'news_category.id', '=', 'news.categoryID')
+                ->join('news_article', 'news_article.id', '=', 'news.articleID')
+                ->select(DB::raw('news.*, news_category.name_en as category, news_article.image as image, news_article.title_en as title, news_article.content_en as content, news_article.tags_en as tags, news_article.author, news_article.created_at as publishDate'))
+                ->where('news.active', 1)
+                ->where('news_category.active', 1)
+                ->orderByRaw('news.created_at')
+                ->get();
+
+            } elseif($locale == "id") {
+                $sectionTitle = 'Berita';
+
+                $menubar = DB::table('menu_bar as b')
+                ->select(DB::raw('b.id, b.title_id as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
+                ->where('b.active', 1)
+                ->orderByRaw('CASE WHEN b.type="parent" THEN 1 WHEN b.type="child" THEN 2 WHEN b.type="sub child" THEN 3 END, b.orderNumber+0')
+                ->get();
+
+                $company = DB::table('company')
+                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->get()->first();
+
+                $news = DB::table('news')
+                ->join('news_category', 'news_category.id', '=', 'news.categoryID')
+                ->join('news_article', 'news_article.id', '=', 'news.articleID')
+                ->select(DB::raw('news.*, news_category.name_id as category, news_article.image as image, news_article.title_id as title, news_article.content_id as content, news_article.tags_id as tags, news_article.author, news_article.created_at as publishDate'))
+                ->where('news.active', 1)
+                ->where('news_category.active', 1)
+                ->orderByRaw('news.created_at')
+                ->get();
+            }
+
+            return view('home.news-detail', compact(['sectionTitle', 'menubar', 'company', 'news']));
+        } else {
+            abort(404);
+        }
     }
 
     public function contactUs() {

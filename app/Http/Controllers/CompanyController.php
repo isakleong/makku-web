@@ -20,7 +20,7 @@ class CompanyController extends Controller
     public function create()
     {
         $company = Company::all();
-        if(!count($company) > 0) {
+        if(count($company) > 0) {
             return view('administrator.company', compact('company'));
             // return redirect()->route('/admin/master/company');
 
@@ -28,8 +28,6 @@ class CompanyController extends Controller
         } else {
             return view('administrator.company-create');
         }
-
-        // return view('administrator.company-create');
     }
 
     public function store(Request $request)
