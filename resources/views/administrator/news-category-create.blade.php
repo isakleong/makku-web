@@ -147,7 +147,7 @@
                                             <div class="row">
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label for="title_en">Name - EN</label>
+                                                        <label for="name_en">Name - EN</label>
                                                         <input type="text" id="name_en" class="form-control"
                                                             name="name_en" placeholder="Name (English)" required value="{{old('name_en')}}">
                                                     </div>
@@ -155,6 +155,7 @@
                                                         <p style="color: red">{{$message}}</p>
                                                     @enderror
                                                 </div>
+
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
                                                         <label for="name_id">Name - ID</label>
@@ -162,6 +163,23 @@
                                                             name="name_id" placeholder="Name (Indonesia)" required value="{{old('name_id')}}">
                                                     </div>
                                                     @error('name_id')
+                                                        <p style="color: red">{{$message}}</p>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="col-12 mt-1">
+                                                    <div class="form-group">
+                                                        <button type="button" class="btn btn-primary" onclick="generateSlug()">Generate Slug</button>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12 mt-1">
+                                                    <div class="form-group">
+                                                        <label for="slug">Slug</label>
+                                                        <input type="text" id="slug" class="form-control"
+                                                            name="slug" placeholder="Slug" required value="{{old('slug')}}">
+                                                    </div>
+                                                    @error('slug')
                                                         <p style="color: red">{{$message}}</p>
                                                     @enderror
                                                 </div>
@@ -216,6 +234,25 @@
             }
         });
     });
+</script>
+
+<script>
+    function generateSlug(){
+        var title = $("#name_id").val();
+
+        if((!$("#name_id").val()) ){
+            Swal.fire({
+                title: 'Please fill out Title field first',
+                icon: 'warning',
+                showDenyButton: false,
+                confirmButtonText: 'OK'
+            });
+        } else {
+            var slug = title.trim().toLowerCase().replace(/\d+|^\s+|\s+$/g,"").replace(/\s+/g, "-").replace(/[^\w\-]+/g, "").replace(/\-\-+/g, "-").replace(/^-+/, "").replace(/-+$/, "");
+
+            $("#slug").val(slug);
+        }
+    }
 </script>
 
 @endsection

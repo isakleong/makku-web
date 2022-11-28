@@ -15,14 +15,10 @@ class NewsArticle extends Model
         'categoryID',
         'title_en',
         'title_id',
-        'slug_en',
-        'slug_id',
+        'slug',
         'content_en',
         'content_id',
-        'tags_en',
-        'tags_id',
-        'image',
-        'author'
+        'image'
     ];
 
     public function category() {

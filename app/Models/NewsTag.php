@@ -14,6 +14,7 @@ class NewsTag extends Model
     protected $fillable = [
         'name_en',
         'name_id',
+        'slug',
         'active'
     ];
 }

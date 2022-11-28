@@ -19,14 +19,11 @@ return new class extends Migration
             $table->foreign('categoryID')->references('id')->on('news_category')->onDelete('restrict');
             $table->string('title_en')->required();
             $table->string('title_id')->required();
-            $table->string('slug_en')->unique()->required();
-            $table->string('slug_id')->unique()->required();
+            $table->string('slug')->unique()->required();
             $table->longText('content_en')->required();
             $table->longText('content_id')->required();
-            $table->text('tags_en')->nullable();
-            $table->text('tags_id')->nullable();
             $table->string('image')->required();
-            $table->string('author', 100)->required();
+            $table->timestamp('publish_date');
             $table->timestamps();
         });
     }

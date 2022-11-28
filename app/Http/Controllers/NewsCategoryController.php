@@ -24,7 +24,8 @@ class NewsCategoryController extends Controller
     {
         $request->validate([
             'name_en' => 'required',
-            'name_id' => 'required'
+            'name_id' => 'required',
+            'slug' => 'required'
         ]);
 
         if(!$request->has('active')) {
@@ -54,7 +55,8 @@ class NewsCategoryController extends Controller
     {
         $request->validate([
             'name_en' => 'required',
-            'name_id' => 'required'
+            'name_id' => 'required',
+            'slug' => 'required'
         ]);
 
         if(!$request->has('active')) {

@@ -7,8 +7,11 @@
 {{-- <link rel="stylesheet" href="/lte/assets/extensions/quill/quill.snow.css"> --}}
 {{-- <link rel="stylesheet" href="/lte/assets/extensions/quill/quill.bubble.css"> --}}
 
-<link rel="stylesheet" href="/lte/assets/css/pages/summernote.css">
-<link rel="stylesheet" href="/lte/assets/extensions/summernote/summernote-lite.css">
+{{-- <link rel="stylesheet" href="/lte/assets/css/pages/summernote.css">
+<link rel="stylesheet" href="/lte/assets/extensions/summernote/summernote-lite.css"> --}}
+
+<link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.0/dist/trix.css">
+<script type="text/javascript" src="https://unpkg.com/trix@2.0.0/dist/trix.umd.min.js"></script>
 
 <style>
     .note-editable { background-color: #f2f7ff !important; color: black !important; };
@@ -201,24 +204,13 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-6 mt-1">
+                                                <div class="col-12 mt-1">
                                                     <div class="form-group">
-                                                        <label for="slug_en">Slug - EN</label>
-                                                        <input type="text" id="slug_en" class="form-control"
-                                                            name="slug_en" placeholder="Slug (English)" required value="{{old('slug_en')}}">
+                                                        <label for="slug">Slug</label>
+                                                        <input type="text" id="slug" class="form-control"
+                                                            name="slug" placeholder="Slug" required value="{{old('slug')}}">
                                                     </div>
-                                                    @error('slug_en')
-                                                        <p style="color: red">{{$message}}</p>
-                                                    @enderror
-                                                </div>
-
-                                                <div class="col-6 mt-1">
-                                                    <div class="form-group">
-                                                        <label for="slug_id">Slug - ID</label>
-                                                        <input type="text" id="slug_id" class="form-control"
-                                                            name="slug_id" placeholder="Slug (Indonesia)" required value="{{old('slug_id')}}">
-                                                    </div>
-                                                    @error('slug_id')
+                                                    @error('slug')
                                                         <p style="color: red">{{$message}}</p>
                                                     @enderror
                                                 </div>
@@ -226,7 +218,8 @@
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
                                                         <label for="content_en">Content - EN</label>
-                                                        <textarea class="form-control" id="content_en" name="content_en" rows="3" style="display: none;"></textarea>
+                                                        <input id="content_en" type="hidden" name="content_en">
+                                                        <trix-editor input="content_en"></trix-editor>
                                                         @error('content_en')
                                                             <p style="color: red">{{$message}}</p>
                                                         @enderror
@@ -235,40 +228,38 @@
 
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
-                                                        <label for="content_id">Content - ID</label>
-                                                        <textarea class="form-control" id="content_id" name="content_id" rows="3" style="display: none;" required value="{{old('content_id')}}"></textarea>
+                                                        <label for="content_id">Content - EN</label>
+                                                        <input id="content_id" type="hidden" name="content_id">
+                                                        <trix-editor input="content_id" x-data="{
+                                                            
+                                                        }">
+
+                                                        </trix-editor>
                                                         @error('content_id')
                                                             <p style="color: red">{{$message}}</p>
                                                         @enderror
                                                     </div>
                                                 </div>
 
-                                                <div class="col-12 mt-1">
+                                                {{-- <div class="col-12 mt-1">
                                                     <div class="form-group">
-                                                        <label for="tags_en">Tags - EN (Optional)</label>
-                                                        <input type="text" id="tags_en" class="form-control"
-                                                            name="tags_en" placeholder="Tags (English)">
+                                                        <label for="content_en">Content - EN</label>
+                                                        <textarea class="form-control" id="content_en" name="content_en" rows="3" style="display: none;"></textarea>
+                                                        @error('content_en')
+                                                            <p style="color: red">{{$message}}</p>
+                                                        @enderror
                                                     </div>
-                                                </div>
+                                                </div> --}}
 
-                                                <div class="col-12 mt-1">
+                                                {{-- <div class="col-12 mt-1">
                                                     <div class="form-group">
-                                                        <label for="tags_id">Tags - ID (Optional)</label>
-                                                        <input type="text" id="tags_id" class="form-control"
-                                                            name="tags_id" placeholder="Tags (Indonesia)">
+                                                        <label for="content_id">Content - ID</label>
+                                                        <textarea class="form-control" id="content_id" name="content_id" rows="3" style="display: none;" required value="{{old('content_id')}}"></textarea>
+                                                        @error('content_id')
+                                                            <p style="color: red">{{$message}}</p>
+                                                        @enderror
                                                     </div>
-                                                </div>
-
-                                                <div class="col-12 mt-1">
-                                                    <div class="form-group">
-                                                        <label for="author">Author</label>
-                                                        <input type="text" id="author" class="form-control"
-                                                            name="author" placeholder="Author" required value="{{old('author')}}">
-                                                    </div>
-                                                    @error('author')
-                                                        <p style="color: red">{{$message}}</p>
-                                                    @enderror
-                                                </div>
+                                                </div> --}}
 
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
@@ -307,45 +298,12 @@
 
 <script src="/vendor/sweetalert/sweetalert.all.js"></script>
 
-{{-- <script src="/lte/assets/extensions/quill/quill.min.js"></script>
-<script src="/lte/assets/js/pages/quill.js"></script> --}}
-
+{{-- uncomment --}}
 <script src="/lte/assets/extensions/jquery/jquery.min.js"></script>
-<script src="/lte/assets/extensions/summernote/summernote-lite.min.js"></script>
-<script src="/lte/assets/js/pages/summernote.js"></script>
+{{-- <script src="/lte/assets/extensions/summernote/summernote-lite.min.js"></script>
+<script src="/lte/assets/js/pages/summernote.js"></script> --}}
 
-{{-- <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-
-<script>
-    var toolbarOptions = [['bold', 'italic'], ['link', 'image']];
-    var quill = new Quill('#full', {
-        modules: {
-            toolbar: toolbarOptions
-        },
-        theme: 'snow',
-        handlers: {
-            'image': function (value) {
-                if (value) {
-                    document.querySelector('#imageUpload').click();
-                } else {
-                    this.quill.format('image', false);
-                }
-            }
-        }
-    });
-
-    quill.on('text-change', function(delta, oldDelta, source) {
-        if (source == 'api') {
-            console.log("An API call triggered this change.");
-        } else if (source == 'user') {
-            $('#content_en').val(quill.getText(0, quill.getLength()));
-            console.log(quill.getText(0, quill.getLength()));
-        }
-    });
-
-</script> --}}
-
-<script>
+{{-- <script>
     $(document).ready(function(){
         $('#content_en').summernote({
             spellCheck: false,
@@ -373,7 +331,7 @@
             ],
         });
     });
-</script>
+</script> --}}
 
 <script>
 
@@ -397,10 +355,9 @@
 
 <script>
     function generateSlug(){
-        var title_en = $("#title_en").val();
-        var title_id = $("#title_id").val();
+        var title = $("#title_id").val();
 
-        if((!$("#title_en").val()) || (!$("#title_id").val()) ){
+        if((!$("#title_id").val()) ){
             Swal.fire({
                 title: 'Please fill out Title field first',
                 icon: 'warning',
@@ -408,11 +365,9 @@
                 confirmButtonText: 'OK'
             });
         } else {
-            var slug_en = title_en.trim().toLowerCase().replace(/ /g,'-').replace(/[-]+/g, '-').replace(/[^\w-]+/g,'');
-            var slug_id = title_id.trim().toLowerCase().replace(/ /g,'-').replace(/[-]+/g, '-').replace(/[^\w-]+/g,'');
+            var slug = title.trim().toLowerCase().replace(/\d+|^\s+|\s+$/g,"").replace(/\s+/g, "-").replace(/[^\w\-]+/g, "").replace(/\-\-+/g, "-").replace(/^-+/, "").replace(/-+$/, "");
 
-            $("#slug_en").val(slug_en);
-            $("#slug_id").val(slug_id);
+            $("#slug").val(slug);
         }
     }
 </script>

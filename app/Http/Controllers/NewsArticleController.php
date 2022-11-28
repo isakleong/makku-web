@@ -31,12 +31,10 @@ class NewsArticleController extends Controller
             'categoryID' => 'required',
             'title_en' => 'required',
             'title_id' => 'required',
-            'slug_en' => 'required',
-            'slug_id' => 'required',
+            'slug' => 'required',
             'content_en' => 'required',
             'content_id' => 'required',
             'image' => 'required',
-            'author' => 'required'
         ]);
 
         $input = $request->all();
@@ -116,12 +114,10 @@ class NewsArticleController extends Controller
             'categoryID' => 'required',
             'title_en' => 'required',
             'title_id' => 'required',
-            'slug_en' => 'required',
-            'slug_id' => 'required',
+            'slug' => 'required',
             'content_en' => 'required',
             'content_id' => 'required',
-            'image' => 'image',
-            'author' => 'required'
+            'image' => 'image'
         ]);
 
         $input = $request->all();

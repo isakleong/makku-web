@@ -168,6 +168,23 @@
                                                     @enderror
                                                 </div>
 
+                                                <div class="col-12 mt-1">
+                                                    <div class="form-group">
+                                                        <button type="button" class="btn btn-primary" onclick="generateSlug()">Generate Slug</button>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12 mt-1">
+                                                    <div class="form-group">
+                                                        <label for="slug">Slug</label>
+                                                        <input type="text" id="slug" class="form-control"
+                                                            name="slug" placeholder="Slug" value="{{$category->slug}}">
+                                                    </div>
+                                                    @error('slug')
+                                                        <p style="color: red">{{$message}}</p>
+                                                    @enderror
+                                                </div>
+
                                                 <div class="col-12 mt-3">
                                                     <div class="form-group">
                                                         <div class="form-check form-switch">
@@ -217,6 +234,25 @@
             }
         });
     });
+</script>
+
+<script>
+    function generateSlug(){
+        var title = $("#name_id").val();
+
+        if((!$("#name_id").val()) ){
+            Swal.fire({
+                title: 'Please fill out Title field first',
+                icon: 'warning',
+                showDenyButton: false,
+                confirmButtonText: 'OK'
+            });
+        } else {
+            var slug = title.trim().toLowerCase().replace(/\d+|^\s+|\s+$/g,"").replace(/\s+/g, "-").replace(/[^\w\-]+/g, "").replace(/\-\-+/g, "-").replace(/^-+/, "").replace(/-+$/, "");
+
+            $("#slug").val(slug);
+        }
+    }
 </script>
 
 @endsection

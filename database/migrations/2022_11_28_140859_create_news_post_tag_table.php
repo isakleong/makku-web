@@ -13,12 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('news_category', function (Blueprint $table) {
+        Schema::create('news_post_tag', function (Blueprint $table) {
             $table->id();
-            $table->string('name_en', 100)->required();
-            $table->string('name_id', 100)->required();
-            $table->string('slug')->required();
-            $table->string('active', 1)->required();
+            $table->unsignedBigInteger('articleID')->required();
+            $table->foreign('articleID')->references('id')->on('news_article')->onDelete('restrict');
+            $table->unsignedBigInteger('tagID')->required();
+            $table->foreign('tagID')->references('id')->on('news_tag')->onDelete('restrict');
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('news_category');
+        Schema::dropIfExists('news_post_tag');
     }
 };

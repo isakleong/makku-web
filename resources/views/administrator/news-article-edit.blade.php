@@ -202,24 +202,13 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-6 mt-1">
+                                                <div class="col-12 mt-1">
                                                     <div class="form-group">
-                                                        <label for="slug_en">Slug - EN</label>
-                                                        <input type="text" id="slug_en" class="form-control"
-                                                            name="slug_en" placeholder="Slug (English)" value="{{$article->slug_en}}">
+                                                        <label for="slug">Slug</label>
+                                                        <input type="text" id="slug" class="form-control"
+                                                            name="slug" placeholder="Slug" value="{{$article->slug}}">
                                                     </div>
-                                                    @error('slug_en')
-                                                        <p style="color: red">{{$message}}</p>
-                                                    @enderror
-                                                </div>
-
-                                                <div class="col-6 mt-1">
-                                                    <div class="form-group">
-                                                        <label for="slug_id">Slug - ID</label>
-                                                        <input type="text" id="slug_id" class="form-control"
-                                                            name="slug_id" placeholder="Slug (Indonesia)" value="{{$article->slug_id}}">
-                                                    </div>
-                                                    @error('slug_id')
+                                                    @error('slug')
                                                         <p style="color: red">{{$message}}</p>
                                                     @enderror
                                                 </div>
@@ -367,10 +356,9 @@
 
 <script>
     function generateSlug(){
-        var title_en = $("#title_en").val();
-        var title_id = $("#title_id").val();
+        var title = $("#name_id").val();
 
-        if((!$("#title_en").val()) || (!$("#title_id").val()) ){
+        if((!$("#name_id").val()) ){
             Swal.fire({
                 title: 'Please fill out Title field first',
                 icon: 'warning',
@@ -378,11 +366,9 @@
                 confirmButtonText: 'OK'
             });
         } else {
-            var slug_en = title_en.trim().toLowerCase().replace(/ /g,'-').replace(/[-]+/g, '-').replace(/[^\w-]+/g,'');
-            var slug_id = title_id.trim().toLowerCase().replace(/ /g,'-').replace(/[-]+/g, '-').replace(/[^\w-]+/g,'');
+            var slug = title.trim().toLowerCase().replace(/\d+|^\s+|\s+$/g,"").replace(/\s+/g, "-").replace(/[^\w\-]+/g, "").replace(/\-\-+/g, "-").replace(/^-+/, "").replace(/-+$/, "");
 
-            $("#slug_en").val(slug_en);
-            $("#slug_id").val(slug_id);
+            $("#slug").val(slug);
         }
     }
 </script>
