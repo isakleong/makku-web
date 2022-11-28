@@ -7,6 +7,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CompanyImageController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\KeyFeatureController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\MenuBarController;
@@ -82,6 +83,8 @@ Route::resource('/admin/news/tag', NewsTagController::class)->middleware('auth')
 Route::resource('/admin/news/article', NewsArticleController::class)->middleware('auth');
 Route::resource('/admin/news', NewsController::class)->middleware('auth');
 
+Route::post('/admin/images', [ImageController::class, 'store'])->middleware('auth')->name('images.store');
+
 Route::group([
     'prefix' => '{locale}',
     'where' => ['locale' => '[a-zA-Z]{2}'],
@@ -104,3 +107,5 @@ Route::group([
 
     Route::get('/contact-us', [HomeController::class, 'contactUs']);
 });
+
+Route::post('/upload', [NewsArticleController::class, 'uploadimage'])->name('ckeditor.upload');

@@ -11,6 +11,31 @@ use Illuminate\Support\Facades\File;
 
 class NewsArticleController extends Controller
 {
+    public function uploadimage(Request $request){
+        if($request->hasFile('upload')){
+            $originName = $request->file('upload')->getClientOriginalName();
+            $fileName = pathinfo($originName, PATHINFO_FILENAME);
+            $extension = $request->file('upload')->getClientOriginalExtension();
+            $fileName = $fileName . '-' . time() . '.' . $extension;
+
+            $request->file('upload')->move(public_path('image/upload'), $fileName);
+
+            $url = asset('/image/upload', $fileName);
+
+            // $destinationPath = 'image/upload/';
+            // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
+            // $image->move($destinationPath, $imageName);
+            // $input['image'] = $destinationPath.$imageName;  
+
+            return response()->json([
+                'fileName' => $fileName,
+                'uploaded' => 1,
+                'url' => $url
+            ]);
+        }
+    }
+
     public function index()
     {
         $article = NewsArticle::all();
