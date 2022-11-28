@@ -24,8 +24,7 @@ class NewsCategoryController extends Controller
     {
         $request->validate([
             'name_en' => 'required',
-            'name_id' => 'required',
-            'slug' => 'required'
+            'name_id' => 'required'
         ]);
 
         if(!$request->has('active')) {
@@ -55,8 +54,7 @@ class NewsCategoryController extends Controller
     {
         $request->validate([
             'name_en' => 'required',
-            'name_id' => 'required',
-            'slug' => 'required'
+            'name_id' => 'required'
         ]);
 
         if(!$request->has('active')) {
@@ -67,6 +65,7 @@ class NewsCategoryController extends Controller
 
         $input = $request->all();
 
+        $category->slug = null;
         $category->update($input);
 
         return redirect('/admin/news/category')->withSuccess('Data Updated Successfully!');

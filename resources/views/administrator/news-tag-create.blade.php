@@ -166,7 +166,7 @@
                                                     @enderror
                                                 </div>
 
-                                                <div class="col-12 mt-1">
+                                                {{-- <div class="col-12 mt-1">
                                                     <div class="form-group">
                                                         <button type="button" class="btn btn-primary" onclick="generateSlug()">Generate Slug</button>
                                                     </div>
@@ -181,7 +181,7 @@
                                                     @error('slug')
                                                         <p style="color: red">{{$message}}</p>
                                                     @enderror
-                                                </div>
+                                                </div> --}}
 
                                                 <div class="col-12 mt-3">
                                                     <div class="form-group">

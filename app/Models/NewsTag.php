@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class NewsTag extends Model
 {
-    use HasFactory;
+    use HasFactory, Sluggable;
 
     protected $table = 'news_tag';
 
@@ -17,4 +18,13 @@ class NewsTag extends Model
         'slug',
         'active'
     ];
+
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'name_id'
+            ]
+        ];
+    }
 }

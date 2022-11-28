@@ -24,8 +24,7 @@ class NewsTagController extends Controller
     {
         $request->validate([
             'name_en' => 'required',
-            'name_id' => 'required',
-            'slug' => 'required'
+            'name_id' => 'required'
         ]);
 
         if(!$request->has('active')) {
@@ -55,8 +54,7 @@ class NewsTagController extends Controller
     {
         $request->validate([
             'name_en' => 'required',
-            'name_id' => 'required',
-            'slug' => 'required'
+            'name_id' => 'required'
         ]);
 
         if(!$request->has('active')) {
@@ -67,6 +65,7 @@ class NewsTagController extends Controller
 
         $input = $request->all();
 
+        $tag->slug = null;
         $tag->update($input);
 
         return redirect('/admin/news/tag')->withSuccess('Data Updated Successfully!');
