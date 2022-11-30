@@ -83,7 +83,10 @@ Route::resource('/admin/news/tag', NewsTagController::class)->middleware('auth')
 Route::resource('/admin/news/article', NewsArticleController::class)->middleware('auth');
 Route::resource('/admin/news', NewsController::class)->middleware('auth');
 
-Route::post('/admin/images', [ImageController::class, 'store'])->middleware('auth')->name('images.store');
+Route::group(['prefix' => 'admin', 'as' =>'admin.'], function(){
+    Route::post('images', [\App\Http\Controllers\ImageController::class, 'store'])->middleware('auth')->name('images.store');
+});
+Route::post('/admin/upload', 'ImageController@upload')->name('admin.upload');
 
 Route::group([
     'prefix' => '{locale}',
@@ -108,4 +111,4 @@ Route::group([
     Route::get('/contact-us', [HomeController::class, 'contactUs']);
 });
 
-Route::post('/upload', [NewsArticleController::class, 'uploadimage'])->name('ckeditor.upload');
+// Route::post('/upload', [NewsArticleController::class, 'uploadimage'])->name('ckeditor.upload');

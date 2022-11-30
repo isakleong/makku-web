@@ -9,7 +9,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 class NewsArticle extends Model implements HasMedia
 {
-    use HasFactory, IntesWithMedia;
+    use HasFactory, InteractsWithMedia;
 
     protected $table = 'news_article';
 
@@ -26,5 +26,7 @@ class NewsArticle extends Model implements HasMedia
     public function category() {
         return $this->belongsTo(NewsCategory::class);
     }
+
+    public function __construct(array $attributes = []) {}
 
 }
