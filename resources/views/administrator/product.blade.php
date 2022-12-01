@@ -148,6 +148,7 @@
                             <th>No</th>
                             <th>Name - EN</th>
                             <th>Name - ID</th>
+                            <th>Slug</th>
                             <th>Image</th>
                             <th>Category</th>
                             <th>Brand</th>
@@ -165,6 +166,7 @@
                                 <td>{{$i++}}</td>
                                 <td>{{$item->name_en}}</td>
                                 <td>{{$item->name_id}}</td>
+                                <td>{{$item->slug}}</td>
                                 <td><img src="/{{$item->image}}" alt="" class="img-fluid" width="100"></td>
                                 <td>{{$item->categoryName}}</td>
                                 <td>{{$item->brandName}}</td>

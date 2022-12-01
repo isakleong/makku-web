@@ -13,12 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('product_brand', function (Blueprint $table) {
-            $table->id();
-            $table->string('name', 100)->required();
-            $table->string('slug')->required();
-            $table->string('active', 1)->required();
-            $table->timestamps();
+        Schema::table('product_brand', function (Blueprint $table) {
+            $table->string('slug')->after('name')->unique()->required();
         });
     }
 
@@ -29,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product_brand');
+        Schema::table('product_brand', function (Blueprint $table) {
+            $table->drop('slug');
+        });
     }
 };

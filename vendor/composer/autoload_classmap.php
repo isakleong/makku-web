@@ -28,6 +28,7 @@ return array(
     'App\\Http\\Controllers\\ProductCategoryController' => $baseDir . '/app/Http/Controllers/ProductCategoryController.php',
     'App\\Http\\Controllers\\ProductController' => $baseDir . '/app/Http/Controllers/ProductController.php',
     'App\\Http\\Controllers\\ProductHighlightController' => $baseDir . '/app/Http/Controllers/ProductHighlightController.php',
+    'App\\Http\\Controllers\\SessionController' => $baseDir . '/app/Http/Controllers/SessionController.php',
     'App\\Http\\Controllers\\TestimonialController' => $baseDir . '/app/Http/Controllers/TestimonialController.php',
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',
     'App\\Http\\Middleware\\Authenticate' => $baseDir . '/app/Http/Middleware/Authenticate.php',

@@ -2,14 +2,11 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CatalogueController;
-use App\Http\Controllers\CobaController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CompanyImageController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ImageController;
 use App\Http\Controllers\KeyFeatureController;
-use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\MenuBarController;
 use App\Http\Controllers\NewsArticleController;
 use App\Http\Controllers\NewsCategoryController;
@@ -20,21 +17,82 @@ use App\Http\Controllers\ProductBrandController;
 use App\Http\Controllers\ProductHighlightController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SessionController;
 use App\Http\Controllers\TestimonialController;
-use App\Models\NewsArticle;
+use App\Models\ProductCategory;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+// Route::get('/', [HomeController::class, 'index']);
+// Route::get('/our-company', [HomeController::class, 'ourCompany']);
+// Route::get('/our-product', [HomeController::class, 'ourProduct']);
+// Route::get('/catalogues', [HomeController::class, 'catalogues']);
+// Route::get('/partnership', [HomeController::class, 'partnership']);
+// Route::get('/news', [HomeController::class, 'news']);
+// Route::get('/contact-us', [HomeController::class, 'contactUs']);
 
-Route::get('/', [HomeController::class, 'index']);
-Route::get('/our-company', [HomeController::class, 'ourCompany']);
-Route::get('/our-product', [HomeController::class, 'ourProduct']);
-Route::get('/catalogues', [HomeController::class, 'catalogues']);
-Route::get('/partnership', [HomeController::class, 'partnership']);
-Route::get('/news', [HomeController::class, 'news']);
-Route::get('/contact-us', [HomeController::class, 'contactUs']);
+Route::get('/', function () {
+    $languagedata = Session::get('languagedata');
+    if(!$languagedata){
+        $languagedata = 'en';
+    }
+
+    return redirect('/'.$languagedata.'\/');
+});
+
+Route::get('/our-company', function() {
+    $languagedata = Session::get('languagedata');
+    if(!$languagedata){
+        $languagedata = 'en';
+    }
+
+    return redirect('/'.$languagedata.'/our-company');
+});
+
+Route::get('/our-product', function() {
+    $languagedata = Session::get('languagedata');
+    if(!$languagedata){
+        $languagedata = 'en';
+    }
+
+    return redirect('/'.$languagedata.'/our-product');
+});
+
+Route::get('/catalogues', function() {
+    $languagedata = Session::get('languagedata');
+    if(!$languagedata){
+        $languagedata = 'en';
+    }
+
+    return redirect('/'.$languagedata.'/catalogues');
+});
+
+Route::get('/partnership', function() {
+    $languagedata = Session::get('languagedata');
+    if(!$languagedata){
+        $languagedata = 'en';
+    }
+
+    return redirect('/'.$languagedata.'/partnership');
+});
+
+Route::get('/news', function() {
+    $languagedata = Session::get('languagedata');
+    if(!$languagedata){
+        $languagedata = 'en';
+    }
+
+    return redirect('/'.$languagedata.'/news');
+});
+
+Route::get('/contact-us', function() {
+    $languagedata = Session::get('languagedata');
+    if(!$languagedata){
+        $languagedata = 'en';
+    }
+
+    return redirect('/'.$languagedata.'/contact-us');
+});
 
 //User Authentication
 Route::get('/admin/login', [AuthController::class, 'login'])->name('login');
@@ -94,7 +152,17 @@ Route::group([
 ], function(){
     Route::get('/', [HomeController::class, 'index']);
     Route::get('/our-company', [HomeController::class, 'ourCompany'])->name('our-company');
-    Route::get('/our-product', [HomeController::class, 'ourProduct'])->name('our-product');
+    
+    Route::get('/our-product/{product_category:slug}', [ProductCategoryController::class, 'show'])->name('our-product');
+
+    // Route::get('/our-product/{product_category:slug}', function(ProductCategory $product_category){
+    //     return view('home.our-product', [
+    //         'name' => $product_category->name_en
+    //     ]);
+    // })->name('our-product');
+
+
+
     Route::get('/catalogues', [HomeController::class, 'catalogues'])->name('catalogues');
     Route::get('/partnership', [HomeController::class, 'partnership'])->name('partnership');
     Route::get('/news', [HomeController::class, 'news'])->name('news');
@@ -110,5 +178,13 @@ Route::group([
 
     Route::get('/contact-us', [HomeController::class, 'contactUs']);
 });
+
+// Route::get('/our-product/{product_category:slug}', function(ProductCategory $product_category){
+//     return view('home.our-product', [
+//         'name' => $product_category->name_en
+//     ]);
+// })->name('our-product');
+
+Route::post('/set_session', [SessionController::class, 'createsession']);
 
 // Route::post('/upload', [NewsArticleController::class, 'uploadimage'])->name('ckeditor.upload');

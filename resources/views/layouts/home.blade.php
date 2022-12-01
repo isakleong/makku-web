@@ -30,9 +30,21 @@
   <link href="/home/assets/css/style.css" rel="stylesheet">
 
   <style>
-    input[type='button'].btn-toggle {
-      background: #6A72A3;
-      color: #fff;
+    .form-select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      border:0px;
+      outline:0px;
+      border-top-style: hidden;
+      border-right-style: hidden;
+      border-left-style: hidden;
+      border-bottom-style: groove;
+      color: #243675;
+    }
+    .form-select:focus {
+      box-shadow: none;
+      outline: none;
     }
   </style>
 
@@ -45,7 +57,7 @@
     <header id="header" class="header fixed-top">
       <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
   
-        <a href="index.html" class="logo d-flex align-items-center">
+        <a href="/" class="logo d-flex align-items-center">
           <img src="/{{$company->logoPrimary}}" alt="">
         </a>
   
@@ -89,20 +101,34 @@
             @endforeach
             {{-- <li id="navbar-title" class="dropdown"><a href="#"><span>EN</span> <i class="bi bi-translate"></i></a>
               <ul>
-                <li><a href="/en/">English</a></li>
-                <li><a href="/id/">Bahasa Indonesia</a></li>
-                
                 <li><a href="/en/{{Route::current()->getName()}}">English</a></li>
                 <li><a href="/id/{{Route::current()->getName()}}">Bahasa Indonesia</a></li>
               </ul>
             </li> --}}
 
-            <form id="selectbox" name="" >
-              <select onchange="javascript:location.href = this.value;">
-                  <option value={{ url('/en') }}>English</option>
-                  <option value={{ url('/id') }}>Indonesia</option>
-              </select>
-            </form>
+            <li id="navbar-title" class="dropdown">
+              <form id="selectbox">
+                {{ csrf_field() }}
+                <input type="hidden" id="uname" name="uname" required/>
+                <select id="languagedata" name="languagedata" class="form-select">
+                    {{-- <option value={{ url("/en/").Route::current()->getName() }}>English</option>
+                    <option value={{ url("/id/").Route::current()->getName() }}>Indonesia</option> --}}
+
+                    @if (session('languagedata') == 'en')
+                      <option value="en" selected>EN</option>
+                    @else
+                      <option value="en">EN</option>
+                    @endif
+
+                    @if (session('languagedata') == 'id')
+                      <option value="id" selected>ID</option>
+                    @else
+                      <option value="id">ID</option>
+                    @endif
+
+                </select>
+              </form>
+            </li>
 
           </ul>
           <i class="bi bi-list mobile-nav-toggle"></i>
@@ -177,34 +203,36 @@
     <script src="/home/assets/vendor/swiper/swiper-bundle.min.js"></script>
     <script src="/home/assets/vendor/php-email-form/validate.js"></script>
     <script src="/lte/assets/extensions/jquery/jquery.min.js"></script>
-    {{-- <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"> --}}
+    <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
-    <!-- Template Main JS File -->
     <script src="/home/assets/js/main.js"></script>
 
-    {{-- <script>
-      $(document).ready(() => {
-        $("input[type='button']").click((event) => {
-          $("input[type='button']").toggleClass("btn-toggle");
-          var inputString = $(".btn-toggle").val();
-          console.log(inputString);
-          $("#language-data").val(inputString);
+    <script type="text/javascript">
+      $(document).ready(function(){
+          $('#languagedata').change(function() {
+            var language_selected = $('#languagedata option:selected').val();
 
-          var val = inputString;
-          $.ajax ({
-            url: "index.php",
-            type: "GET",
-            data: { val : val },
-            success: function(data) {
-                // alert(data);
-                $("#language-data").val(data);
-            }
+            $('#uname').val(language_selected);
+            $.ajax({
+                headers: {
+                  'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                type: 'POST',
+                url: '/set_session',
+                // data: language_selected,
+                data: $("#selectbox").serialize()
+            })
+            .done(function(data){
+                // console.log('/'+data+'/{{Route::current()->getName()}}');
+                window.location.href = '/'+data+'/{{Route::current()->getName()}}';
+            })
+            .fail(function() {
+                alert( "Posting failed." );
+            });
+            return false;
           });
-
-
-        });
       });
-    </script> --}}
+  </script>
 
     @yield('vendorScript')
 </body>

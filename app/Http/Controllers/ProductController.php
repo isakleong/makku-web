@@ -84,7 +84,7 @@ class ProductController extends Controller
 
     public function show(Product $product)
     {
-        //
+
     }
 
     public function edit(Product $product)
@@ -129,6 +129,7 @@ class ProductController extends Controller
             unset($input['image']);
         }
 
+        $product->slug = null;
         $product->update($input);
 
         if($imageDelete != "") {

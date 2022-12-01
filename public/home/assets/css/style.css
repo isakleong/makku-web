@@ -151,7 +151,8 @@ section {
 
 .breadcrumbs h1 {  
   margin: 0;
-  font-weight: 600;
+  font-size: 4em;
+  font-weight: 800;
   letter-spacing: 1px;
   text-transform: uppercase;
   color: #6A72A3;
@@ -334,16 +335,18 @@ section {
 }
 
 .navbar .dropdown ul {
-  display: block;
+  display: none;
   position: absolute;
   left: 0;
-  top: calc(100% + 30px);
-  margin: 0;
+  /* top: calc(100% + 30px); */
+  /* top: 0;
+  margin: 0; */
   padding: 10px 0;
   z-index: 99;
   opacity: 0;
   visibility: hidden;
   background: #d8d6eb;
+  /* background: #ff0; */
   box-shadow: 0px 0px 30px rgba(127, 137, 161, 0.25);
   transition: 0.3s;
   border-radius: 4px;
@@ -359,10 +362,12 @@ section {
   text-transform: none;
   font-weight: 600;
   color: #243675;
+  display: block;
 }
 
 .navbar .dropdown ul a i {
   font-size: 12px;
+  /* display: block; */
 }
 
 .navbar .dropdown ul a:hover,
@@ -375,6 +380,7 @@ section {
   opacity: 1;
   top: 100%;
   visibility: visible;
+  display: block;
 }
 
 .navbar .dropdown .dropdown ul {
@@ -388,6 +394,7 @@ section {
   top: 0;
   left: 100%;
   visibility: visible;
+  display: block;
 }
 
 #navbar-dropdown {
@@ -787,6 +794,58 @@ section {
 
 .news .news-box:hover .news-img img {
   transform: scale(1.1);
+}
+
+/*--------------------------------------------------------------
+# our-product
+--------------------------------------------------------------*/
+.our-product {
+  padding: 60px 0;
+}
+
+.our-product .card-product {
+  background-color: white;
+  border-radius: 6px;
+  border: 2px solid #243675;
+  box-shadow: 0px 2px 22px rgba(0, 0, 0, 0.08);
+  transition: ease-in-out 0.3s;
+}
+
+.our-product .card-product .card-body {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 40px 0;
+}
+
+.our-product .card-product .card-body img {
+  width: 100%;
+  max-height: 236px;
+  object-fit: contain;
+}
+
+.our-product .card-product .card-footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 15px;
+  min-height: 100px;
+}
+
+.our-product .card-product .card-footer p {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  line-height: 24px;
+  max-height: 3em;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  text-align: center;
 }
 
 /*--------------------------------------------------------------
@@ -1727,9 +1786,14 @@ section {
 }
 
 .product .product-content .product-content-img {
-  position: relative;
+  /* position: relative;
   overflow: hidden;
-  padding: 5px;
+  padding: 5px; */
+
+  width: 100%;
+  max-height: 236px;
+  object-fit: contain;
+
 }
 
 .product .product-content .product-content-info {
@@ -1748,6 +1812,56 @@ section {
   transform: scale(1.08);
   box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
 }
+
+/* ALTYA */
+/* .product-highlight {
+  background: #fff;
+  padding: 60px 0;
+}
+
+.product-highlight .card-product {
+  background-color: #6A72A3;
+  border-radius: 6px;
+  box-shadow: 0px 2px 22px rgba(0, 0, 0, 0.08);
+  transition: ease-in-out 0.3s;
+}
+
+.product-highlight .card-product .card-body {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 40px 0;
+}
+
+.product-highlight .card-product .card-body img {
+  width: 100%;
+  max-height: 236px;
+  object-fit: contain;
+}
+
+.product-highlight .card-product .card-footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 15px;
+  min-height: 100px;
+}
+
+.product-highlight .card-product .card-footer h4 {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  line-height: 24px;
+  max-height: 3em;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  text-align: center;
+} */
 
 /*--------------------------------------------------------------
 # Clients

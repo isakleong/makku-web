@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreign('brandID')->references('id')->on('product_brand')->onDelete('restrict');
             $table->string('name_en')->required();
             $table->string('name_id')->required();
+            $table->string('slug')->required();
             $table->string('image')->required();
             $table->string('active', 1)->required();
             $table->timestamps();

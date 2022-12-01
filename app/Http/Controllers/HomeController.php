@@ -124,8 +124,43 @@ class HomeController extends Controller {
         }
     }
 
-    public function ourProduct() {
-        return view('home.our-product');
+    public function ourProduct($locale = 'en', $category) {
+        $availableLanguage = ['en', 'id'];
+
+        if(in_array($locale, $availableLanguage)) {
+            if($locale == "en") {
+                $sectionTitle = 'Partnership / Reseller';
+
+                $menubar = DB::table('menu_bar as b')
+                ->select(DB::raw('b.id, b.title_en as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
+                ->where('b.active', 1)
+                ->orderByRaw('CASE WHEN b.type="parent" THEN 1 WHEN b.type="child" THEN 2 WHEN b.type="sub child" THEN 3 END, b.orderNumber+0')
+                ->get();
+
+                $company = DB::table('company')
+                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->get()->first();
+
+            } elseif($locale == "id") {
+                $sectionTitle = 'Kemitraan';
+
+                $menubar = DB::table('menu_bar as b')
+                ->select(DB::raw('b.id, b.title_id as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
+                ->where('b.active', 1)
+                ->orderByRaw('CASE WHEN b.type="parent" THEN 1 WHEN b.type="child" THEN 2 WHEN b.type="sub child" THEN 3 END, b.orderNumber+0')
+                ->get();
+
+                $company = DB::table('company')
+                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->get()->first();
+            }
+
+            $partnership = Partnership::all()->where('active', 1);
+
+            return view('home.our-product', compact(['sectionTitle', 'menubar', 'company', 'partnership']));
+        } else {
+            abort(404);
+        }
     }
 
     public function catalogues($locale = 'en') {

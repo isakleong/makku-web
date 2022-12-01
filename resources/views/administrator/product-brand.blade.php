@@ -147,6 +147,7 @@
                         <tr>
                             <th>No</th>
                             <th>Name</th>
+                            <th>Slug</th>
                             <th>Active</th>
                             <th>Action</th>
                         </tr>
@@ -159,6 +160,7 @@
                             <tr>
                                 <td>{{$i++}}</td>
                                 <td>{{$item->name}}</td>
+                                <td>{{$item->slug}}</td>
                                 @if ($item->active=='1')
                                     <td><span class="badge bg-success">Active</span></td>
                                 @else

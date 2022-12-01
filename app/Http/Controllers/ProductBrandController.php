@@ -63,6 +63,7 @@ class ProductBrandController extends Controller
 
         $input = $request->all();
 
+        $brand->slug = null;
         $brand->update($input);
 
         return redirect('/admin/product/brand')->withSuccess('Data Updated Successfully!');

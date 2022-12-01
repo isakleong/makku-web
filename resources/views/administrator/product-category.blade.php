@@ -148,6 +148,7 @@
                             <th>No</th>
                             <th>Name - EN</th>
                             <th>Name - ID</th>
+                            <th>Slug</th>
                             <th>Image</th>
                             <th>Active</th>
                             <th>Action</th>
@@ -162,6 +163,7 @@
                                 <td>{{$i++}}</td>
                                 <td>{{$item->name_en}}</td>
                                 <td>{{$item->name_id}}</td>
+                                <td>{{$item->slug}}</td>
                                 <td><img src="/{{$item->image}}" alt="" class="img-fluid" width="100"></td>
                                 @if ($item->active=='1')
                                     <td><span class="badge bg-success">Active</span></td>

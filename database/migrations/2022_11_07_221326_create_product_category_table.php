@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name_en', 100)->required();
             $table->string('name_id', 100)->required();
+            $table->string('slug')->required();
             $table->string('image')->required();
             $table->string('active', 1)->required();
             $table->timestamps();
