@@ -16,7 +16,7 @@
 
       <div class="row align-items-center" data-aos="fade-up" data-aos-delay="100">
           <div class="col-lg-6">
-              <p>{{$company->description}}</p>
+              <p>{!!$company->about!!}</p>
               <hr>
           </div>
           <div class="col-lg-6" data-aos="zoom-out" data-aos-delay="100">

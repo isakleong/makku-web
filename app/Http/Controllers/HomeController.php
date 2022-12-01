@@ -92,7 +92,7 @@ class HomeController extends Controller {
                 ->get();
 
                 $company = DB::table('company')
-                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->select(DB::raw('name, highlight_en as highlight, about_en as about, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
                 ->get()->first();
 
                 $companyImage = DB::table('company_image')
@@ -110,7 +110,7 @@ class HomeController extends Controller {
                 ->get();
 
                 $company = DB::table('company')
-                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->select(DB::raw('name, highlight_id as highlight, about_id as about, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
                 ->get()->first();
 
                 $companyImage = DB::table('company_image')
