@@ -7,13 +7,14 @@
 @section('content')
 <section class="breadcrumbs" data-aos="fade-up" data-aos-delay="100">
     <div class="container">
-        <h1>{{strtoupper($sectionTitle)}}</h1>
+      <ol>
+        <li>{{strtoupper($sectionTitle)}}</li>
+      </ol>
     </div>
 </section>
 
 <section id="about" class="about" data-aos="fade-up" data-aos-delay="100">
     <div class="container">
-
       <div class="row align-items-center" data-aos="fade-up" data-aos-delay="100">
           <div class="col-lg-6">
               <p>{!!$company->about!!}</p>

@@ -83,7 +83,7 @@
                                 <ul>
                                   @foreach ($tempSubChildMenuBar as $itemSubChild)
                                     @if ($itemSubChild->parent == $itemChild->id)
-                                      <li id="navbar-sub-dropdown" style="background-image: url({{$itemSubChild->image}});"><a href={{$itemSubChild->refer}}>{{$itemSubChild->title}}</a></li>
+                                      <li id="navbar-sub-dropdown" style="background-image: url(/{{$itemSubChild->image}});"><a href={{$itemSubChild->refer}}>{{$itemSubChild->title}}</a></li>
                                     @endif
                                   @endforeach
                                 </ul>

@@ -1,13 +1,123 @@
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
+@font-face {
+  font-family: 'Avenir Book';
+  src: url('../font/Avenir-Book.woff2') format('woff2'),
+      url('../font/Avenir-Book.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Avenir Book';
+  src: url('../font/Avenir-BookOblique.woff2') format('woff2'),
+      url('../font/Avenir-BookOblique.woff') format('woff');
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Avenir';
+  src: url('../font/Avenir-Heavy.woff2') format('woff2'),
+      url('../font/Avenir-Heavy.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Avenir';
+  src: url('../font/Avenir-HeavyOblique.woff2') format('woff2'),
+      url('../font/Avenir-HeavyOblique.woff') format('woff');
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Avenir';
+  src: url('../font/Avenir-Black.woff2') format('woff2'),
+      url('../font/Avenir-Black.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Avenir Black Oblique';
+  src: url('../font/Avenir-BlackOblique.woff2') format('woff2'),
+      url('../font/Avenir-BlackOblique.woff') format('woff');
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Avenir';
+  src: url('../font/Avenir-MediumOblique.woff2') format('woff2'),
+      url('../font/Avenir-MediumOblique.woff') format('woff');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Avenir';
+  src: url('../font/Avenir-Oblique.woff2') format('woff2'),
+      url('../font/Avenir-Oblique.woff') format('woff');
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Avenir';
+  src: url('../font/Avenir-LightOblique.woff2') format('woff2'),
+      url('../font/Avenir-LightOblique.woff') format('woff');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Avenir';
+  src: url('../font/Avenir-Roman.woff2') format('woff2'),
+      url('../font/Avenir-Roman.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Avenir';
+  src: url('../font/Avenir-Medium.woff2') format('woff2'),
+      url('../font/Avenir-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Avenir';
+  src: url('../font/Avenir-Light.woff2') format('woff2'),
+      url('../font/Avenir-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   scroll-behavior: smooth;
 }
 
 body {
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Avenir Book';
+  font-style: normal;
   color: #444444;
+  padding-top: 65px; 
 }
 
 a {
@@ -20,13 +130,9 @@ a:hover {
   text-decoration: none;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: "Nunito", sans-serif;
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Avenir Book';
+  font-style: normal;
 }
 
 .wrapper {
@@ -66,10 +172,7 @@ h6 {
 					0 0 0 4px white;
 }
 
-.col-xs-15,
-.col-sm-15,
-.col-md-15,
-.col-lg-15 {
+.col-xs-15, .col-sm-15, .col-md-15, .col-lg-15 {
     position: relative;
     min-height: 1px;
     padding-right: 10px;
@@ -143,16 +246,17 @@ section {
 .breadcrumbs {
   padding: 15px 0;
   min-height: 40px;
-  margin-top: 130px;
+  margin-top: 82px;
   /* background: #012970; */
   color: #6A72A3;
-  
 }
 
 .breadcrumbs h1 {  
   margin: 0;
   font-size: 4em;
-  font-weight: 800;
+  font-family: 'Avenir';
+  font-weight: 900;
+  font-style: normal;
   letter-spacing: 1px;
   text-transform: uppercase;
   color: #6A72A3;
@@ -175,7 +279,13 @@ section {
   list-style: none;
   padding: 0 0 10px 0;
   margin: 0;
-  font-size: 14px;
+  font-size: 4em;
+  font-family: 'Avenir';
+  font-weight: 900;
+  font-style: normal;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #6A72A3;
 }
 
 .breadcrumbs ol a {
@@ -272,7 +382,6 @@ section {
   font-weight: 700;
   letter-spacing: 1px;
   color: #243675;
-  font-family: "Nunito", sans-serif;
   margin-top: 3px;
 }
 
@@ -298,6 +407,25 @@ section {
   position: relative;
 }
 
+.navbar select {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'Avenir Book';
+  font-size: 16px;
+  font-weight: 600;
+  color: #243675;
+  transition: 0.3s;
+}
+
+.navbar select option {
+  font-family: 'Avenir Book';
+  font-size: 16px;
+  font-weight: 600;
+  color: #243675;
+  background: #d8d6eb;
+}
+
 .navbar a,
 .navbar a:focus {
   display: flex;
@@ -305,7 +433,7 @@ section {
   justify-content: space-between;
   /* padding: 10px 0 10px 30px; */
   padding: 10px 10px;
-  font-family: "Nunito", sans-serif;
+  font-family: 'Avenir Book';
   font-size: 16px;
   font-weight: 600;
   color: #243675;
@@ -406,96 +534,6 @@ section {
   background-size: 22px;
 }
 
-#navbar-dropdown-1 {
-  list-style: none;
-  margin-left: 10px;
-  padding-left: 10px;
-  background-repeat: no-repeat;
-  background-position: left center;
-  background-size: 22px;
-  background-image: url(../img/navbar-dropdown-1.png);
-}
-
-#navbar-dropdown-2 {
-  list-style: none;
-  margin-left: 10px;
-  padding-left: 10px;
-  background-repeat: no-repeat;
-  background-position: left center;
-  background-size: 22px;
-  background-image: url(../img/navbar-dropdown-2.png);
-}
-
-#navbar-dropdown-3 {
-  list-style: none;
-  margin-left: 10px;
-  padding-left: 10px;
-  background-repeat: no-repeat;
-  background-position: left center;
-  background-size: 22px;
-  background-image: url(../img/navbar-dropdown-3.png);
-}
-
-#navbar-dropdown-4 {
-  list-style: none;
-  margin-left: 10px;
-  padding-left: 10px;
-  background-repeat: no-repeat;
-  background-position: left center;
-  background-size: 22px;
-  background-image: url(../img/navbar-dropdown-4.png);
-}
-
-#navbar-dropdown-5 {
-  list-style: none;
-  margin-left: 10px;
-  padding-left: 10px;
-  background-repeat: no-repeat;
-  background-position: left center;
-  background-size: 22px;
-  background-image: url(../img/navbar-dropdown-5.png);
-}
-
-#navbar-dropdown-6 {
-  list-style: none;
-  margin-left: 10px;
-  padding-left: 10px;
-  background-repeat: no-repeat;
-  background-position: left center;
-  background-size: 22px;
-  background-image: url(../img/navbar-dropdown-6.png);
-}
-
-#navbar-dropdown-7 {
-  list-style: none;
-  margin-left: 10px;
-  padding-left: 10px;
-  background-repeat: no-repeat;
-  background-position: left center;
-  background-size: 22px;
-  background-image: url(../img/navbar-dropdown-7.png);
-}
-
-#navbar-dropdown-8 {
-  list-style: none;
-  margin-left: 10px;
-  padding-left: 10px;
-  background-repeat: no-repeat;
-  background-position: left center;
-  background-size: 22px;
-  background-image: url(../img/navbar-dropdown-8.png);
-}
-
-#navbar-dropdown-9 {
-  list-style: none;
-  margin-left: 10px;
-  padding-left: 10px;
-  background-repeat: no-repeat;
-  background-position: left center;
-  background-size: 22px;
-  background-image: url(../img/navbar-dropdown-9.png);
-}
-
 #navbar-sub-dropdown {
   list-style: none;
   margin-left: 10px;
@@ -503,26 +541,6 @@ section {
   background-repeat: no-repeat;
   background-position: left center;
   background-size: 22px;
-}
-
-#navbar-sub-dropdown-1 {
-  list-style: none;
-  margin-left: 10px;
-  padding-left: 10px;
-  background-repeat: no-repeat;
-  background-position: left center;
-  background-size: 22px;
-  background-image: url(../img/navbar-sub-dropdown-1.png);
-}
-
-#navbar-sub-dropdown-2 {
-  list-style: none;
-  margin-left: 10px;
-  padding-left: 10px;
-  background-repeat: no-repeat;
-  background-position: left center;
-  background-size: 22px;
-  background-image: url(../img/navbar-sub-dropdown-2.png);
 }
 
 @media (max-width: 1366px) {
@@ -592,6 +610,7 @@ section {
   transition: 0.3s;
 }
 
+.navbar-mobile select,
 .navbar-mobile a,
 .navbar-mobile a:focus {
   padding: 10px 20px;
@@ -667,6 +686,8 @@ section {
   text-align: center;
   margin: 30px 0 0 0;
   font-size: 18px;
+  font-family: 'Avenir Book';
+  font-style: normal;
 }
 
 .hero .hero-img {
@@ -1056,8 +1077,9 @@ section {
 .counts .count-box p {
   padding: 0;
   margin: 0;
-  font-family: "Nunito", sans-serif;
-  font-size: 14px;
+  /* pastacoy */
+  /* font-family: "Nunito", sans-serif;
+  font-size: 14px; */
 }
 
 /*--------------------------------------------------------------
@@ -1369,7 +1391,8 @@ section {
   font-size: 36px;
   color: #444444;
   font-weight: 600;
-  font-family: "Poppins", sans-serif;
+  /* pastacoy */
+  /* font-family: "Poppins", sans-serif; */
 }
 
 .pricing .price sup {
@@ -1413,10 +1436,11 @@ section {
   border-radius: 50px;
   color: #4154f1;
   transition: none;
-  font-size: 16px;
-  font-weight: 400;
-  font-family: "Nunito", sans-serif;
-  font-weight: 600;
+  /* pastacoy */
+  /* font-size: 16px;
+  font-weight: 400; */
+  /* font-family: "Nunito", sans-serif;
+  font-weight: 600; */
   transition: 0.3s;
   border: 1px solid #4154f1;
 }

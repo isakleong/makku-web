@@ -5,68 +5,6 @@
 @php
     
 @endphp
-
-{{-- @section('navbar') --}}
-    <!-- ======= Header ======= -->
-  {{-- <header id="header" class="header fixed-top">
-    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
-
-      <a href="index.html" class="logo d-flex align-items-center">
-        <img src="/{{$company->logoPrimary}}" alt="">
-      </a>
-
-      @php
-        $tempChildMenuBar = $menubar;
-        $tempSubChildMenuBar = $menubar;
-      @endphp
-
-      <nav id="navbar" class="navbar">
-        <ul id="navbar-header">
-          @foreach ($menubar as $item)
-              @if (strtolower($item->type) == 'parent')
-                @if ($item->ChildrenCount > 0)
-                  <li id="navbar-title" class="dropdown"><a href="{{$item->refer}}"><span>{{$item->title}}</span><i class="bi bi-chevron-down"></i></a>
-                    <ul>
-                      @foreach ($tempChildMenuBar as $itemChild)
-                        @if ($itemChild->parent == $item->id)
-                          @if ($itemChild->ChildrenCount == 0)
-                            <li id="navbar-dropdown" style="background-image: url(/{{$itemChild->image}});"><a href={{$itemChild->refer}}>{{$itemChild->title}}</a></li>
-                            <div style="border-bottom: 3px solid white"></div>
-                          @else
-                            <li class="dropdown"><a href="{{$itemChild->refer}}"><span>{{$itemChild->title}}</span> <i class="bi bi-chevron-right"></i></a>
-                              <ul>
-                                @foreach ($tempSubChildMenuBar as $itemSubChild)
-                                  @if ($itemSubChild->parent == $itemChild->id)
-                                    <li id="navbar-sub-dropdown" style="background-image: url({{$itemSubChild->image}});"><a href={{$itemSubChild->refer}}>{{$itemSubChild->title}}</a></li>
-                                  @endif
-                                @endforeach
-                              </ul>
-                            </li>
-                          @endif
-                        @endif
-                      @endforeach
-                    </ul>
-                  </li>
-                @else
-                  <li id="navbar-title"><a class="nav-link" href={{$item->refer}}>{{$item->title}}</a></li>
-                @endif
-
-              @endif
-          @endforeach
-          <li id="navbar-title" class="dropdown"><a href="#"><span>EN</span> <i class="bi bi-translate"></i></a>
-            <ul>
-              <li><a href="/en">English</a></li>
-              <li><a href="/id">Bahasa Indonesia</a></li>
-            </ul>
-          </li>
-        </ul>
-        <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav>
-    </div>
-  </header> --}}
-  <!-- End Header -->
-{{-- @endsection --}}
-
 @section('content')
   <!-- ======= Company Section ======= -->
   <section id="hero" class="hero d-flex align-items-center">
@@ -76,10 +14,10 @@
           <img src="/{{$company->image}}" class="img-fluid" alt="">
         </div>
 
-        <div class="col-lg-12 d-flex flex-column justify-content-center mt-3">
-          <h1 data-aos="fade-up">{{$company->highlight}}</h1>
-          <p data-aos="fade-up" data-aos-delay="400">{!!$company->description!!}</p>
-          <div class="col-lg-12 mt-3" data-aos="fade-in" data-aos-delay="600">
+        <div class="col-lg-12 d-flex flex-column justify-content-center mt-3" data-aos="fade-in" data-aos-delay="400">
+          <h1>{{$company->highlight}}</h1>
+          <p>{!!$company->description!!}</p>
+          <div class="col-lg-12 mt-3">
             <div class="divider div-transparent div-dot"></div>
           </div>
         </div>
