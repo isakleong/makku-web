@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('facebook')->required();
             $table->string('instagram')->required();
             $table->string('whatsapp')->required();
+            $table->string('phone', 20)->required();
             $table->timestamps();
         });
     }

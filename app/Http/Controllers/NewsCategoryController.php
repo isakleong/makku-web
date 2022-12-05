@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\NewsCategory;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Session;
 
 class NewsCategoryController extends Controller
 {
@@ -40,9 +42,46 @@ class NewsCategoryController extends Controller
         return redirect('/admin/news/category')->withSuccess('Data Added Successfully!');
     }
 
-    public function show(NewsCategory $newsCategory)
+    public function show($locale, NewsCategory $news_category)
     {
-        //
+        $availableLanguage = ['en', 'id'];
+
+        if(in_array($locale, $availableLanguage)) {
+            Session::put('languagedata', $locale);
+            
+            if($locale == "en") {
+                $sectionTitle = 'News Category';
+
+                $menubar = DB::table('menu_bar as b')
+                ->select(DB::raw('b.id, b.title_en as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
+                ->where('b.active', 1)
+                ->orderByRaw('CASE WHEN b.type="parent" THEN 1 WHEN b.type="child" THEN 2 WHEN b.type="sub child" THEN 3 END, b.orderNumber+0')
+                ->get();
+
+                $company = DB::table('company')
+                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->get()->first();
+
+                $news_category = $news_category->load('news');
+
+            } elseif($locale == "id") {
+                $sectionTitle = 'Kategori Berita';
+
+                $menubar = DB::table('menu_bar as b')
+                ->select(DB::raw('b.id, b.title_id as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
+                ->where('b.active', 1)
+                ->orderByRaw('CASE WHEN b.type="parent" THEN 1 WHEN b.type="child" THEN 2 WHEN b.type="sub child" THEN 3 END, b.orderNumber+0')
+                ->get();
+
+                $company = DB::table('company')
+                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->get()->first();
+
+                $news_category = $news_category->load('news');
+            }
+
+            return view('home.news-category', compact(['sectionTitle', 'menubar', 'company', 'news_category']));
+        }
     }
 
     public function edit(NewsCategory $category)

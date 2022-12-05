@@ -9,13 +9,20 @@ use App\Models\NewsArticle;
 use App\Models\Partnership;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller {
+
+    public function tesgojek(){
+        return view('home.tesgojek');
+    }
 
     public function index($locale = 'en') {
         $availableLanguage = ['en', 'id'];
 
         if(in_array($locale, $availableLanguage)) {
+            Session::put('languagedata', $locale);
+
             if($locale == "en") {
                 $menubar = DB::table('menu_bar as b')
                 ->select(DB::raw('b.id, b.title_en as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
@@ -82,6 +89,8 @@ class HomeController extends Controller {
         $availableLanguage = ['en', 'id'];
 
         if(in_array($locale, $availableLanguage)) {
+            Session::put('languagedata', $locale);
+
             if($locale == "en") {
                 $sectionTitle = 'Our Company';
 
@@ -128,6 +137,8 @@ class HomeController extends Controller {
         $availableLanguage = ['en', 'id'];
 
         if(in_array($locale, $availableLanguage)) {
+            Session::put('languagedata', $locale);
+
             if($locale == "en") {
                 $sectionTitle = 'Partnership / Reseller';
 
@@ -167,6 +178,8 @@ class HomeController extends Controller {
         $availableLanguage = ['en', 'id'];
 
         if(in_array($locale, $availableLanguage)) {
+            Session::put('languagedata', $locale);
+
             if($locale == "en") {
                 $sectionTitle = 'Catalogue';
 
@@ -213,6 +226,8 @@ class HomeController extends Controller {
         $availableLanguage = ['en', 'id'];
 
         if(in_array($locale, $availableLanguage)) {
+            Session::put('languagedata', $locale);
+
             if($locale == "en") {
                 $sectionTitle = 'Partnership / Reseller';
 
@@ -252,6 +267,8 @@ class HomeController extends Controller {
         $availableLanguage = ['en', 'id'];
 
         if(in_array($locale, $availableLanguage)) {
+            Session::put('languagedata', $locale);
+
             if($locale == "en") {
                 $sectionTitle = 'News';
 
@@ -276,7 +293,7 @@ class HomeController extends Controller {
 
                 $news = DB::table('news_article')
                 ->join('news_category', 'news_category.id', '=', 'news_article.categoryID')
-                ->select(DB::raw('news_article.*, news_category.name_en as category, news_article.image as image, news_article.title_en as title, news_article.slug_en as slug, news_article.content_en as content, news_article.tags_en as tags, news_article.author, news_article.created_at as publishDate'))
+                ->select(DB::raw('news_article.*, news_category.name_en as category, news_article.image as image, news_article.title_en as title, news_article.slug as slug, news_article.content_en as content, news_article.created_at as publishDate'))
                 ->where('news_category.active', 1)
                 ->get();
 
@@ -304,7 +321,7 @@ class HomeController extends Controller {
 
                 $news = DB::table('news_article')
                 ->join('news_category', 'news_category.id', '=', 'news_article.categoryID')
-                ->select(DB::raw('news_article.*, news_category.name_id as category, news_article.image as image, news_article.title_id as title, news_article.slug_id as slug, news_article.content_id as content, news_article.tags_id as tags, news_article.author, news_article.created_at as publishDate'))
+                ->select(DB::raw('news_article.*, news_category.name_id as category, news_article.image as image, news_article.title_id as title, news_article.slug as slug, news_article.content_id as content, news_article.created_at as publishDate'))
                 ->where('news_category.active', 1)
                 ->get();
             }
@@ -320,6 +337,8 @@ class HomeController extends Controller {
         $availableLanguage = ['en', 'id'];
 
         if(in_array($locale, $availableLanguage)) {
+            Session::put('languagedata', $locale);
+
             if($locale == "en") {
                 $sectionTitle = 'News';
 
@@ -371,8 +390,43 @@ class HomeController extends Controller {
         }
     }
 
-    public function contactUs() {
-        return view('home.contact-us');
+    public function contactUs($locale = 'en') {
+        $availableLanguage = ['en', 'id'];
+
+        if(in_array($locale, $availableLanguage)) {
+            Session::put('languagedata', $locale);
+
+            if($locale == "en") {
+                $sectionTitle = 'Contact Us';
+
+                $menubar = DB::table('menu_bar as b')
+                ->select(DB::raw('b.id, b.title_en as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
+                ->where('b.active', 1)
+                ->orderByRaw('CASE WHEN b.type="parent" THEN 1 WHEN b.type="child" THEN 2 WHEN b.type="sub child" THEN 3 END, b.orderNumber+0')
+                ->get();
+
+                $company = DB::table('company')
+                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp, phone'))
+                ->get()->first();
+
+            } elseif($locale == "id") {
+                $sectionTitle = 'Hubungi Kami';
+
+                $menubar = DB::table('menu_bar as b')
+                ->select(DB::raw('b.id, b.title_id as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
+                ->where('b.active', 1)
+                ->orderByRaw('CASE WHEN b.type="parent" THEN 1 WHEN b.type="child" THEN 2 WHEN b.type="sub child" THEN 3 END, b.orderNumber+0')
+                ->get();
+
+                $company = DB::table('company')
+                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp, phone'))
+                ->get()->first();
+            }
+
+            return view('home.contact-us', compact(['sectionTitle', 'menubar', 'company']));
+        } else {
+            abort(404);
+        }
     }
 
 

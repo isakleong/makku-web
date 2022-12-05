@@ -14,9 +14,6 @@
   <link href="/home/assets/img/favicon.png" rel="icon">
   <link href="/home/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
-
   <!-- Vendor CSS Files -->
   <link href="/home/assets/vendor/aos/aos.css" rel="stylesheet">
   <link href="/home/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -28,6 +25,9 @@
 
   <!-- Template Main CSS File -->
   <link href="/home/assets/css/style.css" rel="stylesheet">
+  <link rel="stylesheet" href="/home/assets/css/floating-wpp.min.css">
+
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"/>
 
   <style>
     .form-select {
@@ -36,14 +36,16 @@
       appearance: none;
       border:0px;
       outline:0px;
+      box-shadow: none !important;
       border-top-style: hidden;
       border-right-style: hidden;
       border-left-style: hidden;
       border-bottom-style: groove;
       color: #243675;
     }
+
     .form-select:focus {
-      box-shadow: none;
+      box-shadow: none !important;
       outline: none;
     }
   </style>
@@ -51,8 +53,11 @@
   @yield('vendorCSS')
 </head>
 
-<body class="d-flex flex-column h-100">
+<body class="go-mart food-fmcg">
+{{-- <body class="d-flex flex-column h-100"> --}}
     {{-- @yield('navbar') --}}
+
+    <div class="floating-wpp"></div>
 
     <header id="header" class="header fixed-top">
       <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
@@ -71,19 +76,19 @@
             @foreach ($menubar as $item)
                 @if (strtolower($item->type) == 'parent')
                   @if ($item->ChildrenCount > 0)
-                    <li id="navbar-title" class="dropdown"><a href="{{$item->refer}}"><span>{{$item->title}}</span><i class="bi bi-chevron-down"></i></a>
+                    <li id="navbar-title" class="dropdown"><a href="/{{$item->refer}}"><span>{{$item->title}}</span><i class="bi bi-chevron-down"></i></a>
                       <ul>
                         @foreach ($tempChildMenuBar as $itemChild)
                           @if ($itemChild->parent == $item->id)
                             @if ($itemChild->ChildrenCount == 0)
-                              <li id="navbar-dropdown" style="background-image: url(/{{$itemChild->image}});"><a href={{$itemChild->refer}}>{{$itemChild->title}}</a></li>
+                              <li id="navbar-dropdown" style="background-image: url(/{{$itemChild->image}});"><a href=/{{$itemChild->refer}}>{{$itemChild->title}}</a></li>
                               <div style="border-bottom: 3px solid white"></div>
                             @else
-                              <li class="dropdown"><a href="{{$itemChild->refer}}"><span>{{$itemChild->title}}</span> <i class="bi bi-chevron-right"></i></a>
+                              <li class="dropdown"><a href="/{{$itemChild->refer}}"><span>{{$itemChild->title}}</span> <i class="bi bi-chevron-right"></i></a>
                                 <ul>
                                   @foreach ($tempSubChildMenuBar as $itemSubChild)
                                     @if ($itemSubChild->parent == $itemChild->id)
-                                      <li id="navbar-sub-dropdown" style="background-image: url(/{{$itemSubChild->image}});"><a href={{$itemSubChild->refer}}>{{$itemSubChild->title}}</a></li>
+                                      <li id="navbar-sub-dropdown" style="background-image: url(/{{$itemSubChild->image}});"><a href=/{{$itemSubChild->refer}}>{{$itemSubChild->title}}</a></li>
                                     @endif
                                   @endforeach
                                 </ul>
@@ -94,7 +99,7 @@
                       </ul>
                     </li>
                   @else
-                    <li id="navbar-title"><a class="nav-link" href={{$item->refer}}>{{$item->title}}</a></li>
+                    <li id="navbar-title"><a class="nav-link" href=/{{$item->refer}}>{{$item->title}}</a></li>
                   @endif
   
                 @endif
@@ -110,7 +115,8 @@
               <form id="selectbox">
                 {{ csrf_field() }}
                 <input type="hidden" id="uname" name="uname" required/>
-                <select id="languagedata" name="languagedata" class="form-select">
+                <label class="wrap">
+                  <select id="languagedata" name="languagedata" class="form-select dropdown">
                     {{-- <option value={{ url("/en/").Route::current()->getName() }}>English</option>
                     <option value={{ url("/id/").Route::current()->getName() }}>Indonesia</option> --}}
 
@@ -126,7 +132,8 @@
                       <option value="id">ID</option>
                     @endif
 
-                </select>
+                  </select>
+                </label>
               </form>
             </li>
 
@@ -136,7 +143,7 @@
       </div>
     </header>
 
-    <main id="main">
+    <main class="component-wrapper" id="main">
         @yield('content')
     </main>
 
@@ -204,8 +211,8 @@
     <script src="/home/assets/vendor/php-email-form/validate.js"></script>
     <script src="/lte/assets/extensions/jquery/jquery.min.js"></script>
     <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-
     <script src="/home/assets/js/main.js"></script>
+    <script src="/home/assets/js/floating-wpp.min.js"></script>
 
     <script type="text/javascript">
       $(document).ready(function(){
@@ -224,7 +231,21 @@
             })
             .done(function(data){
                 // console.log('/'+data+'/{{Route::current()->getName()}}');
-                window.location.href = '/'+data+'/{{Route::current()->getName()}}';
+                // window.location.href = '/'+data+'/{{Route::current()->getName()}}/';
+
+                if('{{ Route::current()->getName() }}' == ''){
+                  var urlCurrent = '{{ url()->full() }}';
+                  if(data == 'en') {
+                    var urlParam = urlCurrent.replace(/\bid\b/g, data);
+                  } else if(data == 'id') {
+                    var urlParam = urlCurrent.replace(/\ben\b/g, data);
+                  }
+
+                  window.location.href = urlParam;
+                } else {
+                  var urlParam = '/'+data+'/{{Route::current()->getName()}}/';
+                  window.location.href = urlParam;
+                }
             })
             .fail(function() {
                 alert( "Posting failed." );
@@ -232,6 +253,22 @@
             return false;
           });
       });
+  </script>
+
+  <script>
+    $(function () {
+      $('.floating-wpp').floatingWhatsApp({
+        phone: '+6281908900124',
+        popupMessage: 'Apa yang bisa kami bantu?',
+        showPopup: true,
+        message: 'Saya ingin membeli barang di Makku Frozen',
+        headerTitle: 'Hai!',
+        zindex: 40,
+        size: '60px',
+        position: 'left',
+        showOnIE: true
+      });
+    });
   </script>
 
     @yield('vendorScript')

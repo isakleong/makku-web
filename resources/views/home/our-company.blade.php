@@ -7,9 +7,11 @@
 @section('content')
 <section class="breadcrumbs" data-aos="fade-up" data-aos-delay="100">
     <div class="container">
-      <ol>
-        <li>{{strtoupper($sectionTitle)}}</li>
-      </ol>
+      <div class="row">
+        <div class="col-12">
+          <h1 class="display-5">{{strtoupper($sectionTitle)}}</h1>
+        </div>
+      </div>
     </div>
 </section>
 
@@ -23,7 +25,7 @@
           <div class="col-lg-6" data-aos="zoom-out" data-aos-delay="100">
             @foreach ($companyImage as $item)
 
-              <div class="col-lg-10 mb-4 pt-lg-0">
+              <div class="col-lg-10 mb-3 pt-lg-0">
                 <img src="/{{$item->image}}" class="img-fluid" alt="">
               </div>
               

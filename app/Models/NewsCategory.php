@@ -6,7 +6,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class NewsCategory extends Model
+class   NewsCategory extends Model
 {
     use HasFactory, Sluggable;
 
@@ -26,5 +26,9 @@ class NewsCategory extends Model
                 'source' => 'name_id'
             ]
         ];
+    }
+
+    public function news(){
+        return $this->hasMany(NewsArticle::class, 'categoryID', 'id');
     }
 }

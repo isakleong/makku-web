@@ -2,9 +2,6 @@
 
 @section('title') {{$company->name}} @endsection
 
-@php
-    
-@endphp
 @section('content')
   <!-- ======= Company Section ======= -->
   <section id="hero" class="hero d-flex align-items-center">
@@ -32,30 +29,26 @@
           <header class="section-header">
             <p>{{$productHighlight[0]->sectionTitle}}</p>
           </header>
-  
-          <div class="row gy-4">
 
-            @php
-              $delay = 100
-            @endphp
-
-            @foreach ($productHighlight as $item)
-              <div class="col-md-15 col-sm-3 col-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{$delay}}">
-                <div class="product-content">
-                  <div class="product-content-img">
-                    <img src="/{{$item->image}}" class="img-fluid" alt="">
-                  </div>
-                  <div class="product-content-info">
-                    <h4>{{$item->name}}</h4>
+          <div class="container-fluid">
+            <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
+              @php
+                $delay = 100
+              @endphp
+              @foreach ($productHighlight as $item)
+                <div class="col" data-aos="zoom-in" data-aos-delay="{{$delay}}">
+                  <div class="product-content p-3 border h-100">
+                    <img class="img-fluid" src="/{{$item->image}}" alt="">
+                    <p>{{$item->name}}</p>
                   </div>
                 </div>
-              </div>
-
-              @php
-                $delay+=100;
-              @endphp
-            @endforeach
+                @php
+                  $delay+=100;
+                @endphp
+              @endforeach
+            </div>
           </div>
+
           <div class="col-lg-12 d-flex flex-column justify-content-center mt-3" data-aos="fade-in" data-aos-delay="600">
             <div class="divider div-transparent div-dot"></div>
           </div>

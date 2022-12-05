@@ -45,7 +45,8 @@ class CompanyController extends Controller
             'email' => 'required',
             'facebook' => 'required',
             'instagram' => 'required',
-            'whatsapp' => 'required'
+            'whatsapp' => 'required',
+            'phone' => 'required'
         ]);
 
         $input = $request->all();
@@ -104,7 +105,8 @@ class CompanyController extends Controller
             'email' => 'required',
             'facebook' => 'required',
             'instagram' => 'required',
-            'whatsapp' => 'required'
+            'whatsapp' => 'required',
+            'phone' => 'required'
         ]);
 
         $input = $request->all();

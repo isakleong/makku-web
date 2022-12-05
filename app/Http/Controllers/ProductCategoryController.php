@@ -6,6 +6,7 @@ use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Session;
 
 class ProductCategoryController extends Controller
 {
@@ -57,6 +58,8 @@ class ProductCategoryController extends Controller
         $availableLanguage = ['en', 'id'];
 
         if(in_array($locale, $availableLanguage)) {
+            Session::put('languagedata', $locale);
+
             if($locale == "en") {
                 $sectionTitle = 'News';
 

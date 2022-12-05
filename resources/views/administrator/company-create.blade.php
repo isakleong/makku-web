@@ -321,6 +321,17 @@
                                                     @enderror
                                                 </div>
 
+                                                <div class="col-12 mt-1">
+                                                    <div class="form-group">
+                                                        <label for="phone">Phone</label>
+                                                        <input type="text" id="phone" class="form-control"
+                                                            name="phone" placeholder="Phone" required value="{{old('phone')}}">
+                                                    </div>
+                                                    @error('phone')
+                                                        <p style="color: red">{{$message}}</p>
+                                                    @enderror
+                                                </div>
+
                                                 <div class="col-12 d-flex justify-content-end mt-3">
                                                     <button type="submit" class="btn btn-primary me-1 mb-1 show_confirm">Add</button>
                                                     <button type="reset"

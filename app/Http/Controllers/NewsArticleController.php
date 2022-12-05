@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\NewsArticle;
-use App\Http\Controllers\Controller;
 use App\Models\NewsCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Session;
 
 class NewsArticleController extends Controller
 {
@@ -41,6 +42,49 @@ class NewsArticleController extends Controller
         $article = NewsArticle::all();
 
         return view('administrator.news-article', compact('article'));
+    }
+
+    public function home($locale = 'en')
+    {
+        $availableLanguage = ['en', 'id'];
+
+        if(in_array($locale, $availableLanguage)) {
+            Session::put('languagedata', $locale);
+
+            if($locale == "en") {
+                $sectionTitle = 'News';
+
+                $menubar = DB::table('menu_bar as b')
+                ->select(DB::raw('b.id, b.title_en as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
+                ->where('b.active', 1)
+                ->orderByRaw('CASE WHEN b.type="parent" THEN 1 WHEN b.type="child" THEN 2 WHEN b.type="sub child" THEN 3 END, b.orderNumber+0')
+                ->get();
+
+                $company = DB::table('company')
+                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->get()->first();
+
+                $news = NewsArticle::with('category')->filterEN(request(['search']))->latest()->paginate(6);
+                // $news = NewsArticle::filterEN(request(['search']))->latest()->get();
+
+            } elseif($locale == "id") {
+                $sectionTitle = 'Berita';
+
+                $menubar = DB::table('menu_bar as b')
+                ->select(DB::raw('b.id, b.title_id as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
+                ->where('b.active', 1)
+                ->orderByRaw('CASE WHEN b.type="parent" THEN 1 WHEN b.type="child" THEN 2 WHEN b.type="sub child" THEN 3 END, b.orderNumber+0')
+                ->get();
+
+                $company = DB::table('company')
+                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->get()->first();
+
+                $news = NewsArticle::with('category')->filterID(request(['search']))->latest()->paginate(6);
+                // $news = NewsArticle::filterID(request(['search']))->latest()->get();
+            }
+        }
+        return view('home.news', compact(['sectionTitle', 'menubar', 'company', 'news']));
     }
 
     public function create()
@@ -77,11 +121,13 @@ class NewsArticleController extends Controller
         return redirect('/admin/news/article')->withSuccess('Data Added Successfully!');
     }
 
-    public function show($locale, $slug)
+    public function show($locale, NewsCategory $news_category, NewsArticle $news_article)
     {   
         $availableLanguage = ['en', 'id'];
 
         if(in_array($locale, $availableLanguage)) {
+            Session::put('languagedata', $locale);
+            
             if($locale == "en") {
                 $sectionTitle = 'News';
 
@@ -95,11 +141,17 @@ class NewsArticleController extends Controller
                 ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
                 ->get()->first();
 
-                $article = DB::table('news_article')
-                ->join('news_category', 'news_category.id', '=', 'news_article.categoryID')
-                ->select(DB::raw('news_article.*, news_category.name_en as category, news_article.image as image, news_article.title_en as title, news_article.slug_en as slug, news_article.content_en as content, news_article.tags_en as tags, news_article.author, news_article.created_at as publishDate'))
-                ->where('news_article.slug_en', $slug)
-                ->get();
+                // $article = DB::table('news_article')
+                // ->join('news_category', 'news_category.id', '=', 'news_article.categoryID')
+                // ->select(DB::raw('news_article.*, news_category.name_en as category, news_article.image as image, news_article.title_en as title, news_article.slug_en as slug, news_article.content_en as content, news_article.tags_en as tags, news_article.author, news_article.created_at as publishDate'))
+                // ->where('news_article.slug_en', $slug)
+                // ->get();
+
+                $news_article = $news_article->load('category');
+
+                
+
+                // $news_category = $news_category->load('news');
 
             } elseif($locale == "id") {
                 $sectionTitle = 'Berita';
@@ -114,15 +166,18 @@ class NewsArticleController extends Controller
                 ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
                 ->get()->first();
 
-                $article = DB::table('news_article')
-                ->join('news_category', 'news_category.id', '=', 'news_article.categoryID')
-                ->select(DB::raw('news_article.*, news_category.name_id as category, news_article.image as image, news_article.title_id as title, news_article.slug_id as slug, news_article.content_id as content, news_article.tags_id as tags, news_article.author, news_article.created_at as publishDate'))
-                ->where('news_article.slug_id', $slug)
-                ->get();
+                // $article = DB::table('news_article')
+                // ->join('news_category', 'news_category.id', '=', 'news_article.categoryID')
+                // ->select(DB::raw('news_article.*, news_category.name_id as category, news_article.image as image, news_article.title_id as title, news_article.slug_id as slug, news_article.content_id as content, news_article.tags_id as tags, news_article.author, news_article.created_at as publishDate'))
+                // ->where('news_article.slug_id', $slug)
+                // ->get();
+
+                $news_article = $news_article->load('category');
+                // $news_category = $news_category->load('news');
             }
 
             // dd($article);
-            return view('home.news-detail', compact(['sectionTitle', 'menubar', 'company', 'article']));
+            return view('home.news-detail', compact(['sectionTitle', 'menubar', 'company', 'news_category', 'news_article']));
         }  
     }
 

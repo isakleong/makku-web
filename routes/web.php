@@ -19,6 +19,8 @@ use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\TestimonialController;
+use App\Models\NewsArticle;
+use App\Models\NewsCategory;
 use App\Models\ProductCategory;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -36,7 +38,6 @@ Route::get('/', function () {
     if(!$languagedata){
         $languagedata = 'en';
     }
-
     return redirect('/'.$languagedata.'\/');
 });
 
@@ -45,8 +46,7 @@ Route::get('/our-company', function() {
     if(!$languagedata){
         $languagedata = 'en';
     }
-
-    return redirect('/'.$languagedata.'/our-company');
+    return redirect('/'.$languagedata.'/our-company'.'\/');
 });
 
 Route::get('/our-product', function() {
@@ -54,17 +54,15 @@ Route::get('/our-product', function() {
     if(!$languagedata){
         $languagedata = 'en';
     }
-
-    return redirect('/'.$languagedata.'/our-product');
+    return redirect('/'.$languagedata.'/our-product'.'\/');
 });
 
 Route::get('/catalogues', function() {
-    $languagedata = Session::get('languagedata');
+    $languagedata = Session::get('languagedata'.'\/');
     if(!$languagedata){
         $languagedata = 'en';
     }
-
-    return redirect('/'.$languagedata.'/catalogues');
+    return redirect('/'.$languagedata.'/catalogues'.'\/');
 });
 
 Route::get('/partnership', function() {
@@ -72,8 +70,7 @@ Route::get('/partnership', function() {
     if(!$languagedata){
         $languagedata = 'en';
     }
-
-    return redirect('/'.$languagedata.'/partnership');
+    return redirect('/'.$languagedata.'/partnership'.'\/');
 });
 
 Route::get('/news', function() {
@@ -81,8 +78,7 @@ Route::get('/news', function() {
     if(!$languagedata){
         $languagedata = 'en';
     }
-
-    return redirect('/'.$languagedata.'/news');
+    return redirect('/'.$languagedata.'/news'.'\/');
 });
 
 Route::get('/contact-us', function() {
@@ -90,8 +86,31 @@ Route::get('/contact-us', function() {
     if(!$languagedata){
         $languagedata = 'en';
     }
-
     return redirect('/'.$languagedata.'/contact-us');
+});
+
+Route::get('/news/{news_category:slug}', function(NewsCategory $news_category) {
+    $languagedata = Session::get('languagedata');
+    if(!$languagedata){
+        $languagedata = 'en';
+    }
+    return redirect('/'.$languagedata.'/news'.'/'.$news_category->slug.'\/');
+});
+
+Route::get('/news/{news_category:slug}/{news_article:slug}', function(NewsCategory $news_category, NewsArticle $news_article) {
+    $languagedata = Session::get('languagedata');
+    if(!$languagedata){
+        $languagedata = 'en';
+    }
+    return redirect('/'.$languagedata.'/news'.'/'.$news_category->slug.'/'.$news_article->slug.'\/');
+});
+
+Route::get('/our-product/{product_category:slug}', function(ProductCategory $product_category) {
+    $languagedata = Session::get('languagedata');
+    if(!$languagedata){
+        $languagedata = 'en';
+    }
+    return redirect('/'.$languagedata.'/our-product'.'/'.$product_category->slug.'\/');
 });
 
 //User Authentication
@@ -152,39 +171,34 @@ Route::group([
 ], function(){
     Route::get('/', [HomeController::class, 'index']);
     Route::get('/our-company', [HomeController::class, 'ourCompany'])->name('our-company');
-    
-    Route::get('/our-product/{product_category:slug}', [ProductCategoryController::class, 'show'])->name('our-product');
-
-    // Route::get('/our-product/{product_category:slug}', function(ProductCategory $product_category){
-    //     return view('home.our-product', [
-    //         'name' => $product_category->name_en
-    //     ]);
-    // })->name('our-product');
-
-
-
+    Route::get('/our-product/{product_category:slug}', [ProductCategoryController::class, 'show']);
     Route::get('/catalogues', [HomeController::class, 'catalogues'])->name('catalogues');
     Route::get('/partnership', [HomeController::class, 'partnership'])->name('partnership');
-    Route::get('/news', [HomeController::class, 'news'])->name('news');
-    // Route::get('/news/{category}/{slug}', function($category, $slug) {
-    //     return view('home.news-detail');
-    // });
-    // Route::get('/news/{category}/{slug}', [HomeController::class, 'newsDetail']);
-
-    Route::get('/news/{slug}', [NewsArticleController::class, 'show']);
     
-    // Route::get('/news/{article:slug_en}', [NewsArticleController::class, 'show']);
-    // Route::get('/news/{article:slug_id}', [NewsArticleController::class, 'show']);
+    // ORI
+    // Route::get('/news', [HomeController::class, 'news'])->name('news');
+    // Route::get('/news/{slug}', [NewsArticleController::class, 'show']);
+    // END OF ORI
+
+    Route::bind('news_category', function($slug){
+        return NewsCategory::whereSlug($slug)->first();
+    });
+    Route::bind('news_article', function($slug){
+        return NewsArticle::whereSlug($slug)->first();
+    });
+
+    Route::get('/news', [NewsArticleController::class, 'home']);
+    Route::get('/news/{news_category:slug}', [NewsCategoryController::class, 'show']);
+    Route::get('/news/{news_category:slug}/{news_article:slug}', [NewsArticleController::class, 'show']);
+
+    // Route::get('/news/{news_category:slug}/{news_article:slug}', function(NewsCategory $news_category, NewsArticle $news_article){
+        
+    // })->name('wjwjwjw');
+    
+
 
     Route::get('/contact-us', [HomeController::class, 'contactUs']);
 });
 
-// Route::get('/our-product/{product_category:slug}', function(ProductCategory $product_category){
-//     return view('home.our-product', [
-//         'name' => $product_category->name_en
-//     ]);
-// })->name('our-product');
-
 Route::post('/set_session', [SessionController::class, 'createsession']);
 
-// Route::post('/upload', [NewsArticleController::class, 'uploadimage'])->name('ckeditor.upload');

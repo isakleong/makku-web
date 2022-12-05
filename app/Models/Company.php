@@ -26,6 +26,7 @@ class Company extends Model
         'email',
         'facebook',
         'instagram',
-        'whatsapp'
+        'whatsapp',
+        'phone'
     ];
 }

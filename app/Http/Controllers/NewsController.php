@@ -8,6 +8,7 @@ use App\Models\NewsArticle;
 use App\Models\NewsCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class NewsController extends Controller
 {
@@ -59,6 +60,8 @@ class NewsController extends Controller
         $availableLanguage = ['en', 'id'];
 
         if(in_array($locale, $availableLanguage)) {
+            Session::put('languagedata', $locale);
+
             if($locale == "en") {
                 $sectionTitle = 'News';
 
