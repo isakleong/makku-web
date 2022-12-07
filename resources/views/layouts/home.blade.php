@@ -36,7 +36,6 @@
       appearance: none;
       border:0px;
       outline:0px;
-      box-shadow: none !important;
       border-top-style: hidden;
       border-right-style: hidden;
       border-left-style: hidden;
@@ -45,7 +44,7 @@
     }
 
     .form-select:focus {
-      box-shadow: none !important;
+      box-shadow: none;
       outline: none;
     }
   </style>
@@ -115,7 +114,6 @@
               <form id="selectbox">
                 {{ csrf_field() }}
                 <input type="hidden" id="uname" name="uname" required/>
-                <label class="wrap">
                   <select id="languagedata" name="languagedata" class="form-select dropdown">
                     {{-- <option value={{ url("/en/").Route::current()->getName() }}>English</option>
                     <option value={{ url("/id/").Route::current()->getName() }}>Indonesia</option> --}}
@@ -133,7 +131,6 @@
                     @endif
 
                   </select>
-                </label>
               </form>
             </li>
 
