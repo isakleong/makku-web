@@ -1,3 +1,5 @@
+{{ Session::forget('selectedMenuBarType'); }}
+
 @extends('layouts.app')
 
 @section('title', 'Makku Frozen Food - Menu Bar')
@@ -141,8 +143,9 @@
                         <div class="card">
                             <div class="card-content">
                                 <div class="card-body">
-                                    <form action="{{ route('menubar.update', $menubar->id) }}" method="POST" class="form form-vertical" enctype="multipart/form-data">
+                                    <form action="{{ route('menubar.update', $menubar->id) }}" id="selectbox" method="POST" class="form form-vertical" enctype="multipart/form-data">
                                         @csrf
+                                        {{ csrf_field() }}
                                         @method('PUT')
                                         <div class="form-body">
                                             <div class="row">
@@ -178,10 +181,11 @@
                                                     @enderror
                                                 </div>
 
-                                                <div class="col-12 mt-1">
+                                                <div class="col-6 mt-1">
                                                     <div class="form-group">
+                                                        <input type="hidden" id="uname" name="uname" required/>
                                                         <label for="type">Type</label>
-                                                        <select class="choices form-select" id="type"  name="type">
+                                                        <select class="form-select dropdown" id="type"  name="type">
                                                             @if (strtolower($menubar->type) == 'parent')
                                                                 <option value="parent" selected>Parent</option>
                                                             @else
@@ -206,17 +210,53 @@
                                                     @enderror
                                                 </div>
 
-                                                <div class="col-12 mt-1">
+                                                @if (strtolower($menubar->type) == 'parent')
+                                                    <div id="parent-dropdown" class="col-6 mt-1" style="visibility: hidden;">
+                                                @else
+                                                    <div id="parent-dropdown" class="col-6 mt-1">
+                                                @endif
                                                     <div class="form-group">
+                                                        <input type="hidden" id="parentData" name="parentData" required value="{{ $parent }}"/>
                                                         <label for="parent">Parent</label>
                                                         <select class="choices form-select" id="parent"  name="parent">
-                                                            <option value="" selected>No Parent</option>
+                                                            {{-- <option value="" selected>No Parent</option> --}}
                                                             @foreach($parent as $item)
-                                                                {{-- <option value="{{ $item->id }}">{{ $item->title_en }}</option> --}}
-                                                                @if (strtolower($item->id) == $menubar->parent)
-                                                                    <option value="{{ $item->id }}" selected>{{$item->title_en}}</option>
+                                                                @if (session('selectedMenuBarType') == 'child')
+                                                                    @if ($item->type == 'parent')
+                                                                        @if (strtolower($item->id) == $menubar->parent)
+                                                                            <option value="{{ $item->id }}" selected>{{$item->title_en}}</option>
+                                                                        @else
+                                                                            <option value="{{ $item->id }}">{{$item->title_en}}</option>
+                                                                        @endif
+                                                                    @endif
+                                                                @elseif (session('selectedMenuBarType') == 'sub child')
+                                                                    @if ($item->type == 'child')
+                                                                        @if (strtolower($item->id) == $menubar->parent)
+                                                                            <option value="{{ $item->id }}" selected>{{$item->title_en}}</option>
+                                                                        @else
+                                                                            <option value="{{ $item->id }}">{{$item->title_en}}</option>
+                                                                        @endif
+                                                                    @endif
+
                                                                 @else
-                                                                <option value="{{ $item->id }}">{{$item->title_en}}</option>
+                                                                    {{-- first load --}}
+                                                                    @if ($menubar->type == 'child')
+                                                                        @if ($item->type == 'parent')
+                                                                            @if (strtolower($item->id) == $menubar->parent)
+                                                                                <option value="{{ $item->id }}" selected>{{$item->title_en}}</option>
+                                                                            @else
+                                                                                <option value="{{ $item->id }}">{{$item->title_en}}</option>
+                                                                            @endif
+                                                                        @endif
+                                                                    @elseif ($menubar->type == 'sub child')
+                                                                        @if ($item->type == 'child')
+                                                                            @if (strtolower($item->id) == $menubar->parent)
+                                                                                <option value="{{ $item->id }}" selected>{{$item->title_en}}</option>
+                                                                            @else
+                                                                                <option value="{{ $item->id }}">{{$item->title_en}}</option>
+                                                                            @endif
+                                                                        @endif
+                                                                    @endif
                                                                 @endif
                                                             @endforeach
                                                         </select>
@@ -291,6 +331,55 @@
 @section('vendorScript')
 
 <script src="/vendor/sweetalert/sweetalert.all.js"></script>
+<script src="/lte/assets/extensions/jquery/jquery.min.js"></script>
+<script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#type').change(function() {
+            var typeSelected = $('#type option:selected').val();
+            var parentData = $('#parentData').val();
+            
+            if(typeSelected == 'parent') {
+                $('#parent-dropdown').css("visibility", "hidden");
+            } else {
+                $('#parent-dropdown').css("visibility", "visible");
+            }
+            
+            $('#uname').val(parentData);
+            console.log($("#selectbox").serialize());
+            $.ajax({
+                headers: {
+                  'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                type: 'PUT',
+                url: '/set_type',
+                data: $("#selectbox").serialize()
+            })
+            .done(function(data){
+                console.log(data);
+                var parentData = jQuery.parseJSON($('#parentData').val());
+                
+                $('#parent').empty();
+                for(var i in parentData) {
+                    if(data == 'child') {
+                        if(parentData[i].type == 'parent') {
+                            $('#parent').append('<option value = '+parentData[i].id+'>'+parentData[i].title_en+'</option>');
+                        }
+                    } else if(data == 'sub child') {
+                        if(parentData[i].type == 'child') {
+                            $('#parent').append('<option value = '+parentData[i].id+'>'+parentData[i].title_en+'</option>');
+                        }
+                    }
+                }
+            })
+            .fail(function() {
+                alert( "Posting failed." );
+            });
+            return false;
+        });
+    });
+</script>
 
 <script>
     $('.show_confirm').click(function(event) {

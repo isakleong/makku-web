@@ -1,3 +1,5 @@
+{{ Session::forget('selectedMenuBarType'); }}
+
 @extends('layouts.app')
 
 @section('title', 'Makku Frozen Food - Menu Bar')
@@ -181,12 +183,12 @@
                                                 <div class="col-6 mt-1">
                                                     <div class="form-group">
                                                         <input type="hidden" id="uname" name="uname" required/>
-                                                            <label for="type">Type</label>
-                                                            <select class="form-select dropdown" id="type"  name="type">
-                                                                <option value="parent">Parent</option>
-                                                                <option value="child">Child</option>
-                                                                <option value="sub child">Sub Child</option>
-                                                            </select>
+                                                        <label for="type">Type</label>
+                                                        <select class="form-select dropdown" id="type"  name="type">
+                                                            <option value="parent">Parent</option>
+                                                            <option value="child">Child</option>
+                                                            <option value="sub child">Sub Child</option>
+                                                        </select>
                                                     </div>
                                                     @error('type')
                                                         <p style="color: red">{{$message}}</p>
@@ -198,7 +200,7 @@
                                                         <input type="hidden" id="parentData" name="parentData" required value="{{ $parent }}"/>
                                                         <label for="parent">Parent</label>
                                                         <select class="choices form-select" id="parent" name="parent">
-                                                            <option value="" selected>No Parent</option>
+                                                            {{-- <option value="" selected>No Parent</option> --}}
                                                             @foreach($parent as $item)
                                                                 @if (session('selectedMenuBarType') == 'child')
                                                                     @if ($item->type == 'parent')

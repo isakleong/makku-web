@@ -203,4 +203,5 @@ Route::group([
 //AJAX Controller
 Route::post('/set_session', [SessionController::class, 'createsession']);
 Route::post('/set_type', [SessionController::class, 'getSelectedType']);
+Route::put('/set_type', [SessionController::class, 'getSelectedType']);
 
