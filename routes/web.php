@@ -200,5 +200,7 @@ Route::group([
     Route::get('/contact-us', [HomeController::class, 'contactUs']);
 });
 
+//AJAX Controller
 Route::post('/set_session', [SessionController::class, 'createsession']);
+Route::post('/set_type', [SessionController::class, 'getSelectedType']);
 

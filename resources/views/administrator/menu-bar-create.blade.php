@@ -141,8 +141,9 @@
                         <div class="card">
                             <div class="card-content">
                                 <div class="card-body">
-                                    <form action="{{ route('menubar.store') }}" method="POST" class="form form-vertical" enctype="multipart/form-data">
+                                    <form action="{{ route('menubar.store') }}" id="selectbox" method="POST" class="form form-vertical" enctype="multipart/form-data">
                                         @csrf
+                                        {{ csrf_field() }}
                                         <div class="form-body">
                                             <div class="row">
                                                 <div class="col-12">
@@ -177,27 +178,37 @@
                                                     @enderror
                                                 </div>
 
-                                                <div class="col-12 mt-1">
+                                                <div class="col-6 mt-1">
                                                     <div class="form-group">
-                                                        <label for="type">Type</label>
-                                                        <select class="choices form-select" id="type"  name="type">
+                                                        <input type="hidden" id="uname" name="uname" required/>
+                                                            <label for="type">Type</label>
+                                                            <select class="form-select dropdown" id="type"  name="type">
                                                                 <option value="parent">Parent</option>
                                                                 <option value="child">Child</option>
                                                                 <option value="sub child">Sub Child</option>
-                                                        </select>
+                                                            </select>
                                                     </div>
                                                     @error('type')
                                                         <p style="color: red">{{$message}}</p>
                                                     @enderror
                                                 </div>
 
-                                                <div class="col-12 mt-1">
+                                                <div id="parent-dropdown" class="col-6 mt-1" style="visibility: hidden;">
                                                     <div class="form-group">
+                                                        <input type="hidden" id="parentData" name="parentData" required value="{{ $parent }}"/>
                                                         <label for="parent">Parent</label>
-                                                        <select class="choices form-select" id="parent"  name="parent">
+                                                        <select class="choices form-select" id="parent" name="parent">
                                                             <option value="" selected>No Parent</option>
                                                             @foreach($parent as $item)
-                                                                <option value="{{ $item->id }}">{{ $item->title_en }}</option>
+                                                                @if (session('selectedMenuBarType') == 'child')
+                                                                    @if ($item->type == 'parent')
+                                                                        <option value="{{ $item->id }}">{{ $item->title_en }}</option>  
+                                                                    @endif
+                                                                @elseif (session('selectedMenuBarType') == 'sub child')
+                                                                    @if ($item->type == 'child')
+                                                                        <option value="{{ $item->id }}">{{ $item->title_en }}</option>  
+                                                                    @endif
+                                                                @endif
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -261,9 +272,57 @@
 @section('vendorScript')
 
 <script src="/vendor/sweetalert/sweetalert.all.js"></script>
+<script src="/lte/assets/extensions/jquery/jquery.min.js"></script>
+<script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#type').change(function() {
+            var typeSelected = $('#type option:selected').val();
+            var parentData = $('#parentData').val();
+            
+            if(typeSelected == 'parent') {
+                $('#parent-dropdown').css("visibility", "hidden");
+            } else {
+                $('#parent-dropdown').css("visibility", "visible");
+            }
+            
+            $('#uname').val(parentData);
+            console.log($("#selectbox").serialize());
+            $.ajax({
+                headers: {
+                  'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                type: 'POST',
+                url: '/set_type',
+                data: $("#selectbox").serialize()
+            })
+            .done(function(data){
+                console.log(data);
+                var parentData = jQuery.parseJSON($('#parentData').val());
+                
+                $('#parent').empty();
+                for(var i in parentData) {
+                    if(data == 'child') {
+                        if(parentData[i].type == 'parent') {
+                            $('#parent').append('<option value = '+parentData[i].id+'>'+parentData[i].title_en+'</option>');
+                        }
+                    } else if(data == 'sub child') {
+                        if(parentData[i].type == 'child') {
+                            $('#parent').append('<option value = '+parentData[i].id+'>'+parentData[i].title_en+'</option>');
+                        }
+                    }
+                }
+            })
+            .fail(function() {
+                alert( "Posting failed." );
+            });
+            return false;
+        });
+    });
+</script>
 
 <script>
-
     $('.show_confirm').click(function(event) {
         var form =  $(this).closest("form");
         var name = $(this).data("name");

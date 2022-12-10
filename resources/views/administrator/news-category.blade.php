@@ -169,8 +169,8 @@
                                     <td><span class="badge bg-danger">Inactive</span></td>
                                 @endif
                                 <td>
-                                    <a href="{{ route('news.category.edit', $item->id) }}" class="btn icon btn-sm btn-primary d-inline" data-bs-toggle="tooltip" title="Edit"><i class="bi bi-pencil"></i></a>
-                                    <form action="{{ route('news.category.destroy', $item->id) }}" method="POST" class="d-inline" data-bs-toggle="tooltip" title="Delete">
+                                    <a href="{{ route('news.category.edit', $item->id) }}" class="btn icon btn-sm btn-primary d-inline-block m-1" data-bs-toggle="tooltip" title="Edit"><i class="bi bi-pencil"></i></a>
+                                    <form action="{{ route('news.category.destroy', $item->id) }}" method="POST" class="d-inline-block m-1" data-bs-toggle="tooltip" title="Delete">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn icon btn-sm btn-danger show_confirm"><i class="bi bi-x"></i></button>
