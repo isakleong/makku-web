@@ -25,14 +25,7 @@ use App\Models\ProductCategory;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
-// Route::get('/', [HomeController::class, 'index']);
-// Route::get('/our-company', [HomeController::class, 'ourCompany']);
-// Route::get('/our-product', [HomeController::class, 'ourProduct']);
-// Route::get('/catalogues', [HomeController::class, 'catalogues']);
-// Route::get('/partnership', [HomeController::class, 'partnership']);
-// Route::get('/news', [HomeController::class, 'news']);
-// Route::get('/contact-us', [HomeController::class, 'contactUs']);
-
+//Handling if loaded without locale prefix
 Route::get('/', function () {
     $languagedata = Session::get('languagedata');
     if(!$languagedata){
@@ -58,9 +51,9 @@ Route::get('/our-product', function() {
 });
 
 Route::get('/catalogues', function() {
-    $languagedata = Session::get('languagedata'.'\/');
+    $languagedata = Session::get('languagedata');
     if(!$languagedata){
-        $languagedata = 'en';
+        $languagedata = 'id';
     }
     return redirect('/'.$languagedata.'/catalogues'.'\/');
 });
@@ -112,59 +105,48 @@ Route::get('/our-product/{product_category:slug}', function(ProductCategory $pro
     }
     return redirect('/'.$languagedata.'/our-product'.'/'.$product_category->slug.'\/');
 });
+//End of Handling if loaded without locale prefix
 
 //User Authentication
 Route::get('/admin/login', [AuthController::class, 'login'])->name('login');
 Route::post('/admin/login', [AuthController::class, 'authenticate']);
 Route::get('/admin/logout', [AuthController::class, 'logout']);
+//End of User Authentication
 
 
-//Dashboard
+//Admin panel
 Route::get('/admin', [DashboardController::class, 'index'])->middleware('auth');
 Route::get('/admin/dashboard', [DashboardController::class, 'index'])->middleware('auth');
-// Route::get('/admin/master-menu-bar', [MenuBarController::class])->middleware('auth');
-// Route::get('/admin/master/menu-bar/{id}/edit', [MenuBarController::class, 'edit'])->middleware('auth');
-
-//Resources
-// Route::resource('/admin/languages', LanguageController::class)->middleware('auth');
-// Route::resource('/admin/product-category', ProductCategoryController::class)->middleware('auth');
-
 Route::resource('/admin/master/menubar', MenuBarController::class)->middleware('auth');
 Route::resource('/admin/master/producthighlight', ProductHighlightController::class)->middleware('auth');
 Route::resource('/admin/master/keyfeature', KeyFeatureController::class)->middleware('auth');
-// Route::resource('/admin/master/company', CompanyController::class)->middleware('auth');
-// Route::resource('/admin/master/company/image', CompanyImageController::class)->middleware('auth');
-
 Route::prefix('admin')->group(static function() {
     Route::middleware('auth')->group(static function () {
         Route::resource('master/companyimage', CompanyImageController::class);
     });
 });
-
 Route::prefix('admin')->group(static function() {
     Route::middleware('auth')->group(static function () {
         Route::resource('master/company', CompanyController::class);
     });
 });
-
 Route::resource('/admin/partnership', PartnershipController::class)->middleware('auth');
 Route::resource('/admin/testimonial', TestimonialController::class)->middleware('auth');
-
 Route::resource('/admin/product/category', ProductCategoryController::class, ["as"=>"product"])->middleware('auth');
 Route::resource('/admin/product/catalogue', CatalogueController::class)->middleware('auth');
 Route::resource('/admin/product/brand', ProductBrandController::class)->middleware('auth');
 Route::resource('/admin/product', ProductController::class)->middleware('auth');
-
 Route::resource('/admin/news/category', NewsCategoryController::class, ["as"=>"news"])->middleware('auth');
 Route::resource('/admin/news/tag', NewsTagController::class)->middleware('auth');
 Route::resource('/admin/news/article', NewsArticleController::class)->middleware('auth');
 Route::resource('/admin/news', NewsController::class)->middleware('auth');
-
 Route::group(['prefix' => 'admin', 'as' =>'admin.'], function(){
     Route::post('images', [\App\Http\Controllers\ImageController::class, 'store'])->middleware('auth')->name('images.store');
 });
 Route::post('/admin/upload', 'ImageController@upload')->name('admin.upload');
+//End of Admin Panel
 
+//Homepage
 Route::group([
     'prefix' => '{locale}',
     'where' => ['locale' => '[a-zA-Z]{2}'],
@@ -174,34 +156,22 @@ Route::group([
     Route::get('/our-product/{product_category:slug}', [ProductCategoryController::class, 'show']);
     Route::get('/catalogues', [HomeController::class, 'catalogues'])->name('catalogues');
     Route::get('/partnership', [HomeController::class, 'partnership'])->name('partnership');
-    
-    // ORI
-    // Route::get('/news', [HomeController::class, 'news'])->name('news');
-    // Route::get('/news/{slug}', [NewsArticleController::class, 'show']);
-    // END OF ORI
-
     Route::bind('news_category', function($slug){
         return NewsCategory::whereSlug($slug)->first();
     });
     Route::bind('news_article', function($slug){
         return NewsArticle::whereSlug($slug)->first();
     });
-
     Route::get('/news', [NewsArticleController::class, 'home']);
     Route::get('/news/{news_category:slug}', [NewsCategoryController::class, 'show']);
     Route::get('/news/{news_category:slug}/{news_article:slug}', [NewsArticleController::class, 'show']);
-
-    // Route::get('/news/{news_category:slug}/{news_article:slug}', function(NewsCategory $news_category, NewsArticle $news_article){
-        
-    // })->name('wjwjwjw');
-    
-
-
     Route::get('/contact-us', [HomeController::class, 'contactUs']);
 });
+//End of Homepage
 
 //AJAX Controller
 Route::post('/set_session', [SessionController::class, 'createsession']);
 Route::post('/set_type', [SessionController::class, 'getSelectedType']);
 Route::put('/set_type', [SessionController::class, 'getSelectedType']);
+//End of AJAX Controller
 

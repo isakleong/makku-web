@@ -68,10 +68,17 @@ class ProductController extends Controller
         $input = $request->all();
 
         if($image = $request->file('image')) {
+            //commented because never trust client side inputs
+            // $destinationPath = 'image/upload/';
+            // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
+            // $image->move($destinationPath, $imageName);
+
             $destinationPath = 'image/upload/';
-            $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-            $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
+            $generatedID = hexdec(uniqid());
+            $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
+
             $input['image'] = $destinationPath.$imageName;
         } else {
             unset($input['image']);
@@ -120,10 +127,17 @@ class ProductController extends Controller
         if($image = $request->file('image')) {
             $imageDelete = public_path()."/".$product->image;
 
+            //commented because never trust client side inputs
+            // $destinationPath = 'image/upload/';
+            // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
+            // $image->move($destinationPath, $imageName);
+
             $destinationPath = 'image/upload/';
-            $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-            $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
+            $generatedID = hexdec(uniqid());
+            $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
+
             $input['image'] = $destinationPath.$imageName;
         } else {
             unset($input['image']);

@@ -238,6 +238,16 @@
     });
 </script>
 
+<script>
+    @if($message = session('error'))
+        Swal.fire(
+            'Data with the same Order Number already exists!',
+            'The existing data is <b>{{ $message }}</b>',
+            'error'
+        )
+    @endif
+</script>
+
 {{-- <script>
     //message with toastr
     @if(session()->has('success'))

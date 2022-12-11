@@ -6,6 +6,7 @@ use App\Models\MenuBar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class MenuBarController extends Controller
 {
@@ -35,28 +36,57 @@ class MenuBarController extends Controller
             'image' => 'image',
         ]);
 
-        if(!$request->has('active')) {
-            $request->merge(['active'=>'0']);
+        $menubar = MenuBar::where([
+            'active' => 1,
+            'type' => $request->type,
+            'parent' => $request->parent,
+            'orderNumber' => $request->orderNumber
+        ])->get();
+
+        $cntData = $menubar->count();
+        if($cntData == 0) {
+            if(!$request->has('active')) {
+                $request->merge(['active'=>'0']);
+            } else {
+                $request->merge(['active'=>'1']);
+            }
+    
+            $input = $request->all();
+    
+            if($image = $request->file('image')) {
+                //commented because never trust client side inputs
+                // $destinationPath = 'image/upload/';
+                // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
+                // $image->move($destinationPath, $imageName);
+
+                $destinationPath = 'image/upload/';
+                $generatedID = hexdec(uniqid());
+                $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
+                $image->move($destinationPath, $imageName);
+    
+                $input['image'] = $destinationPath.$imageName;
+            } else {
+                unset($input['image']);
+            }
+    
+            MenuBar::create($input);
+    
+            return redirect('/admin/master/menubar')->withSuccess('Data Added Successfully!');
         } else {
-            $request->merge(['active'=>'1']);
+            $dataExist = "";
+            $i = 0;
+            foreach($menubar as $item) {
+                if($i == $cntData-1) {
+                    $dataExist.=$item->title_en;
+                } else {
+                    $dataExist.=$item->title_en.", ";
+                }
+                $i++;
+            }
+            // Alert::toast('You\'ve Successfully Registered', 'success');
+            return redirect('/admin/master/menubar')->with('error', $dataExist);
         }
-
-        $input = $request->all();
-
-        if($image = $request->file('image')) {
-            $destinationPath = 'image/upload/';
-            $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-            $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
-            $image->move($destinationPath, $imageName);
-
-            $input['image'] = $destinationPath.$imageName;
-        } else {
-            unset($input['image']);
-        }
-
-        MenuBar::create($input);
-
-        return redirect('/admin/master/menubar')->withSuccess('Data Added Successfully!');
     }
 
     public function show(MenuBar $menuBar)
@@ -103,10 +133,17 @@ class MenuBarController extends Controller
         if($image = $request->file('image')) {
             $imageDelete = public_path()."/".$menubar->image;
 
+            //commented because never trust client side inputs
+            // $destinationPath = 'image/upload/';
+            // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
+            // $image->move($destinationPath, $imageName);
+
             $destinationPath = 'image/upload/';
-            $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-            $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
+            $generatedID = hexdec(uniqid());
+            $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
+
             $input['image'] = $destinationPath.$imageName;
         } else {
             unset($input['image']);

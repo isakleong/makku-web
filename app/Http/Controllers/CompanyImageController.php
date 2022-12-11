@@ -31,10 +31,17 @@ class CompanyImageController extends Controller
         $input = $request->all();
 
         if($image = $request->file('image')) {
+            //commented because never trust client side inputs
+            // $destinationPath = 'image/upload/';
+            // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
+            // $image->move($destinationPath, $imageName);
+
             $destinationPath = 'image/upload/';
-            $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-            $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
+            $generatedID = hexdec(uniqid());
+            $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
+
             $input['image'] = $destinationPath.$imageName;
         }
 
@@ -68,10 +75,17 @@ class CompanyImageController extends Controller
         if($image = $request->file('image')) {
             $imageDelete = public_path()."/".$companyimage->image;
 
+            //commented because never trust client side inputs
+            // $destinationPath = 'image/upload/';
+            // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
+            // $image->move($destinationPath, $imageName);
+
             $destinationPath = 'image/upload/';
-            $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-            $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
+            $generatedID = hexdec(uniqid());
+            $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
+
             $input['image'] = $destinationPath.$imageName;
         } else {
             unset($input['image']);
