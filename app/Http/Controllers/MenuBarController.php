@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use RealRashid\SweetAlert\Facades\Alert;
+use Intervention\Image\Facades\Image;
 
 class MenuBarController extends Controller
 {
@@ -63,7 +64,10 @@ class MenuBarController extends Controller
                 $destinationPath = 'image/upload/';
                 $generatedID = hexdec(uniqid());
                 $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
-                $image->move($destinationPath, $imageName);
+                // $image->move($destinationPath, $imageName);
+                Image::make($image)->resize(200, 200, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($destinationPath.$imageName);
     
                 $input['image'] = $destinationPath.$imageName;
             } else {
@@ -142,7 +146,10 @@ class MenuBarController extends Controller
             $destinationPath = 'image/upload/';
             $generatedID = hexdec(uniqid());
             $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
-            $image->move($destinationPath, $imageName);
+            // $image->move($destinationPath, $imageName);
+            Image::make($image)->resize(200, 200, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save($destinationPath.$imageName);
 
             $input['image'] = $destinationPath.$imageName;
         } else {

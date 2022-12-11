@@ -6,6 +6,7 @@ use App\Models\CompanyImage;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Intervention\Image\Facades\Image;
 
 class CompanyImageController extends Controller
 {
@@ -28,26 +29,38 @@ class CompanyImageController extends Controller
             'orderNumber' => 'required'
         ]);
 
-        $input = $request->all();
+        $companyImage = CompanyImage::where([
+            'orderNumber' => $request->orderNumber
+        ])->get();
 
-        if($image = $request->file('image')) {
-            //commented because never trust client side inputs
-            // $destinationPath = 'image/upload/';
-            // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-            // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
-            // $image->move($destinationPath, $imageName);
+        $cntData = $companyImage->count();
+        if($cntData == 0) {
+            $input = $request->all();
 
-            $destinationPath = 'image/upload/';
-            $generatedID = hexdec(uniqid());
-            $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
-            $image->move($destinationPath, $imageName);
+            if($image = $request->file('image')) {
+                //commented because never trust client side inputs
+                // $destinationPath = 'image/upload/';
+                // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
+                // $image->move($destinationPath, $imageName);
 
-            $input['image'] = $destinationPath.$imageName;
+                $destinationPath = 'image/upload/';
+                $generatedID = hexdec(uniqid());
+                $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
+                // $image->move($destinationPath, $imageName);
+                Image::make($image)->resize(1200, 630, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($destinationPath.$imageName);
+
+                $input['image'] = $destinationPath.$imageName;
+            }
+
+            CompanyImage::create($input);
+
+            return redirect('/admin/master/company')->withSuccess('Data Added Successfully!');
+        } else {
+            return redirect('/admin/master/company')->with('error', 'Data with the same Order Number already exists!');
         }
-
-        CompanyImage::create($input);
-
-        return redirect('/admin/master/company')->withSuccess('Data Added Successfully!');
     }
 
     public function show(CompanyImage $companyImage)
@@ -84,7 +97,10 @@ class CompanyImageController extends Controller
             $destinationPath = 'image/upload/';
             $generatedID = hexdec(uniqid());
             $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
-            $image->move($destinationPath, $imageName);
+            // $image->move($destinationPath, $imageName);
+            Image::make($image)->resize(1200, 630, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save($destinationPath.$imageName);
 
             $input['image'] = $destinationPath.$imageName;
         } else {

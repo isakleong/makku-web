@@ -37,10 +37,19 @@ class CatalogueController extends Controller
         $input = $request->all();
 
         if($image = $request->file('file')) {
+            //commented because never trust client side inputs
             $destinationPath = 'file/upload/';
             $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
             $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
+
+            // $destinationPath = 'file/upload/';
+            // $generatedID = hexdec(uniqid());
+            // $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
+            // // $image->move($destinationPath, $imageName);
+            // Image::make($image)->resize(800, 600, function ($constraint) {
+            //     $constraint->aspectRatio();
+            // })->save($destinationPath.$imageName);
             
             $input['file'] = $destinationPath.$imageName;
         } else {

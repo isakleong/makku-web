@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\KeyFeature;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Intervention\Image\Facades\Image;
 
 class KeyFeatureController extends Controller
 {
@@ -50,11 +51,14 @@ class KeyFeatureController extends Controller
                 // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
                 // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
                 // $image->move($destinationPath, $imageName);
-                
+
                 $destinationPath = 'image/upload/';
                 $generatedID = hexdec(uniqid());
                 $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
-                $image->move($destinationPath, $imageName);
+                // $image->move($destinationPath, $imageName);
+                Image::make($image)->resize(250, 250, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($destinationPath.$imageName);
 
                 $input['image'] = $destinationPath.$imageName;
             } else {
@@ -125,7 +129,10 @@ class KeyFeatureController extends Controller
             $destinationPath = 'image/upload/';
             $generatedID = hexdec(uniqid());
             $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
-            $image->move($destinationPath, $imageName);
+            // $image->move($destinationPath, $imageName);
+            Image::make($image)->resize(250, 250, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save($destinationPath.$imageName);
 
             $input['image'] = $destinationPath.$imageName;
         } else {

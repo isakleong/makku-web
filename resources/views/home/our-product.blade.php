@@ -6,9 +6,9 @@
 <section class="breadcrumbs" data-aos="fade-up" data-aos-delay="100">
     <div class="container">
         @if (strtolower(Session::get('languagedata')) == 'id')
-          <h1><img class="img-fluid" src="/{{$product_category->image}}" width="150">{{strtoupper($product_category->name_id)}}</h1>
+          <h1><img class="img-fluid me-3 mb-3" src="/{{$product_category->image}}" width="250">{{strtoupper($product_category->name_id)}}</h1>
         @else
-          <h1><img class="img-fluid" src="/{{$product_category->image}}" width="150">{{strtoupper($product_category->name_en)}}</h1>
+          <h1><img class="img-fluid me-3 mb-3" src="/{{$product_category->image}}" width="250">{{strtoupper($product_category->name_en)}}</h1>
         @endif
     </div>
 </section>

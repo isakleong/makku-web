@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ProductHighlight;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Intervention\Image\Facades\Image;
 
 class ProductHighlightController extends Controller
 {
@@ -54,7 +55,10 @@ class ProductHighlightController extends Controller
                 $destinationPath = 'image/upload/';
                 $generatedID = hexdec(uniqid());
                 $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
-                $image->move($destinationPath, $imageName);
+                // $image->move($destinationPath, $imageName);
+                Image::make($image)->resize(800, 800, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($destinationPath.$imageName);
 
                 $input['image'] = $destinationPath.$imageName;
             }
@@ -119,7 +123,10 @@ class ProductHighlightController extends Controller
             $destinationPath = 'image/upload/';
             $generatedID = hexdec(uniqid());
             $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
-            $image->move($destinationPath, $imageName);
+            // $image->move($destinationPath, $imageName);
+            Image::make($image)->resize(800, 800, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save($destinationPath.$imageName);
 
             $input['image'] = $destinationPath.$imageName;            
         } else {

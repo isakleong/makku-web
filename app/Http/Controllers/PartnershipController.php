@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Partnership;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Intervention\Image\Facades\Image;
 
 class PartnershipController extends Controller
 {
@@ -135,7 +136,10 @@ class PartnershipController extends Controller
             $destinationPath = 'image/upload/';
             $generatedID = hexdec(uniqid());
             $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
-            $image->move($destinationPath, $imageName);
+            // $image->move($destinationPath, $imageName);
+            Image::make($image)->resize(800, 600, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save($destinationPath.$imageName);
 
             $input['image'] = $destinationPath.$imageName;
         } else {
@@ -155,7 +159,10 @@ class PartnershipController extends Controller
             $destinationPath = 'image/upload/';
             $generatedID = hexdec(uniqid());
             $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
-            $image->move($destinationPath, $imageName);
+            // $image->move($destinationPath, $imageName);
+            Image::make($image)->resize(250, 250, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save($destinationPath.$imageName);
 
             $input['logo'] = $destinationPath.$imageName;
         } else {
@@ -168,7 +175,7 @@ class PartnershipController extends Controller
             File::delete($imageDelete);
         }
         if($logoDelete != "") {
-            File::delete($imageDelete);
+            File::delete($logoDelete);
         }
 
         return redirect('/admin/partnership')->withSuccess('Data Updated Successfully!');

@@ -52,7 +52,7 @@
     <div class="container">
       <div class="row">
         @foreach ($partnership as $item)
-          <div class="col-md-6 mb-4">
+          <div class="col-md-6 mb-4 d-flex align-items-stretch">
             <div class="icon-box">
               <div class="row align-items-center">
                 <div class="col-4">
@@ -62,9 +62,22 @@
               <div class="row align-items-center">
                 <div class="col-md-6">
                   <h4>{{$item->name}}</h4>
-                  <i class="bi-instagram"></i><p>{{$item->instagram}}</p>
-                  <i class="bi-whatsapp"></i><p>{{$item->whatsapp}}</p>
-                  <i class="bi-shop"></i><p>{{$item->address}}</p>
+                  @if ($item->instagram != "")
+                    <i class="bi-instagram"></i><p>{{$item->instagram}}</p>    
+                  @endif
+
+                  @if ($item->whatsapp != "")
+                    <i class="bi-whatsapp"></i><p>{{$item->whatsapp}}</p>
+                  @endif
+
+                  @if ($item->address != "")
+                    <i class="bi-shop"></i><p>{{$item->address}}</p>
+                  @endif
+
+                  @if ($item->phoneNo != "")
+                    <i class="bi-telephone"></i><p>{{$item->phoneNo}}</p>
+                  @endif
+                  
                 </div>
                 <div class="col-md-6">
                   <img class="img-fluid" src="/{{$item->image}}">

@@ -145,7 +145,6 @@
                 @else
                     <div class="buttons">
                         <a class="btn btn-outline-primary disabled" onclick="return false;" style="cursor: not-allowed; pointer-events: all !important;">Add Data</a>
-                        <a href="/admin/master/company/image" class="btn btn-outline-primary">Manage Image</a>
                     </div>
                 @endif
             </div>
@@ -281,6 +280,16 @@
             registerDeleteItemHandlers();
         });
     });
+</script>
+
+<script>
+    @if($message = session('error'))
+        Swal.fire(
+            '{{ $message }}',
+            '',
+            'error'
+        )
+    @endif
 </script>
 
 @endsection
