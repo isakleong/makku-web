@@ -3,25 +3,12 @@
 @section('title', 'Makku Frozen Food - News Article')
 
 @section('vendorCSS')
-{{-- <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet"> --}}
-{{-- <link rel="stylesheet" href="/lte/assets/extensions/quill/quill.snow.css"> --}}
-{{-- <link rel="stylesheet" href="/lte/assets/extensions/quill/quill.bubble.css"> --}}
-
-{{-- <link rel="stylesheet" href="/lte/assets/css/pages/summernote.css">
-<link rel="stylesheet" href="/lte/assets/extensions/summernote/summernote-lite.css"> --}}
-
-{{-- <link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.0/dist/trix.css">
-<script type="text/javascript" src="https://unpkg.com/trix@2.0.0/dist/trix.umd.min.js"></script> --}}
-
-<script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
-<script src="https://cdn.ckeditor.com/ckeditor5/35.3.2/classic/ckeditor.js"></script>
-
-{{-- <script src="https://cdn.ckeditor.com/4.12.1/standard/ckeditor.js"></script> --}}
+<link rel="stylesheet" href="/lte/assets/css/pages/summernote.css">
+<link rel="stylesheet" href="/lte/assets/extensions/summernote/summernote-lite.css">
 
 <style>
     .note-editable { background-color: #f2f7ff !important; color: black !important; };
 </style>
-
 @endsection
 
 @section('navbar')
@@ -223,72 +210,14 @@
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
                                                         <label for="content_en">Content - EN</label>
-                                                        <textarea class="form-control" id="content_en" name="content_en" rows="3"></textarea>
-                                                        @error('content_en')
-                                                            <p style="color: red">{{$message}}</p>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-12 mt-1">
-                                                    <div class="form-group">
-                                                        <label for="content_id">Content - ID</label>
-                                                        <textarea class="form-control" id="content_id" name="content_id" rows="3"></textarea>
-                                                        @error('content_id')
-                                                            <p style="color: red">{{$message}}</p>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-
-                                                {{-- <textarea name="editor1"></textarea> --}}
-
-                                                {{-- <div class="col-12 mt-1">
-                                                    <div class="form-group">
-                                                        <label for="slug">Content - ID</label>
-                                                        <textarea class="form-control" id="content_id" name="content_id" rows="3"></textarea>
-                                                        @error('content_id')
-                                                            <p style="color: red">{{$message}}</p>
-                                                        @enderror
-                                                    </div>
-                                                </div> --}}
-
-                                                {{-- <div class="col-12 mt-1">
-                                                    <div class="form-group">
-                                                        <label for="content_en">Content - EN</label>
-                                                        <input id="content_en" type="hidden" name="content_en">
-                                                        <trix-editor input="content_en"></trix-editor>
-                                                        @error('content_en')
-                                                            <p style="color: red">{{$message}}</p>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-12 mt-1">
-                                                    <div class="form-group">
-                                                        <label for="content_id">Content - EN</label>
-                                                        <input id="content_id" type="hidden" name="content_id">
-                                                        <trix-editor input="content_id" x-data="{
-                                                            
-                                                        }">
-
-                                                        </trix-editor>
-                                                        @error('content_id')
-                                                            <p style="color: red">{{$message}}</p>
-                                                        @enderror
-                                                    </div>
-                                                </div> --}}
-
-                                                {{-- <div class="col-12 mt-1">
-                                                    <div class="form-group">
-                                                        <label for="content_en">Content - EN</label>
                                                         <textarea class="form-control" id="content_en" name="content_en" rows="3" style="display: none;"></textarea>
                                                         @error('content_en')
                                                             <p style="color: red">{{$message}}</p>
                                                         @enderror
                                                     </div>
-                                                </div> --}}
+                                                </div>
 
-                                                {{-- <div class="col-12 mt-1">
+                                                <div class="col-12 mt-1">
                                                     <div class="form-group">
                                                         <label for="content_id">Content - ID</label>
                                                         <textarea class="form-control" id="content_id" name="content_id" rows="3" style="display: none;" required value="{{old('content_id')}}"></textarea>
@@ -296,12 +225,12 @@
                                                             <p style="color: red">{{$message}}</p>
                                                         @enderror
                                                     </div>
-                                                </div> --}}
+                                                </div>
 
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
                                                         <div class="mb-3">
-                                                            <label for="image">Cosver Image</label>
+                                                            <label for="image">Cover Image</label>
                                                             <img class="img-preview img-fluid mb-3 mt-3 col-4">
                                                             <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image" accept="image/*" onchange="previewImage()">
                                                         </div>
@@ -335,12 +264,11 @@
 
 <script src="/vendor/sweetalert/sweetalert.all.js"></script>
 
-{{-- uncomment --}}
 <script src="/lte/assets/extensions/jquery/jquery.min.js"></script>
-{{-- <script src="/lte/assets/extensions/summernote/summernote-lite.min.js"></script>
-<script src="/lte/assets/js/pages/summernote.js"></script> --}}
+<script src="/lte/assets/extensions/summernote/summernote-lite.min.js"></script>
+<script src="/lte/assets/js/pages/summernote.js"></script>
 
-{{-- <script>
+<script>
     $(document).ready(function(){
         $('#content_en').summernote({
             spellCheck: false,
@@ -368,7 +296,7 @@
             ],
         });
     });
-</script> --}}
+</script>
 
 <script>
 
@@ -396,7 +324,7 @@
 
         if((!$("#title_id").val()) ){
             Swal.fire({
-                title: 'Please fill ouddfsdft Title field first',
+                title: 'Please fill out Title field first',
                 icon: 'warning',
                 showDenyButton: false,
                 confirmButtonText: 'OK'
@@ -407,109 +335,6 @@
             $("#slug").val(slug);
         }
     }
-</script>
-
-{{-- <script type="text/javascript">
-    CKEDITOR.replace('editor1', {
-        filebrowserUploadUrl: "{{route('admin.upload', ['_token' => csrf_token() ])}}",
-        filebrowserUploadMethod: 'form'
-    });
-</script> --}}
-
-
-<script>
-    class MyUploadAdapter {
-        constructor( loader ) {
-            this.loader = loader;
-        }
-
-        // Starts the upload process.
-        upload() {
-            return this.loader.file
-                .then( file => new Promise( ( resolve, reject ) => {
-                    this._initRequest();
-                    this._initListeners( resolve, reject, file );
-                    this._sendRequest( file );
-                } ) );
-        }
-
-        // Aborts the upload process.
-        abort() {
-            if ( this.xhr ) {
-                this.xhr.abort();
-            }
-        }
-
-        // Initializes the XMLHttpRequest object using the URL passed to the constructor.
-        _initRequest() {
-            const xhr = this.xhr = new XMLHttpRequest();
-
-            xhr.open( 'POST', '{{ route('admin.images.store') }}', true );
-            xhr.setRequestHeader('x-csrf-token', '{{ csrf_token() }}');
-            xhr.responseType = 'json';
-        }
-
-        // Initializes XMLHttpRequest listeners.
-        _initListeners( resolve, reject, file ) {
-            const xhr = this.xhr;
-            const loader = this.loader;
-            const genericErrorText = `Couldn't upload file: ${ file.name }.`;
-
-            xhr.addEventListener( 'error', () => reject( genericErrorText ) );
-            xhr.addEventListener( 'abort', () => reject() );
-            xhr.addEventListener( 'load', () => {
-                const response = xhr.response;
-                if ( !response || response.error ) {
-                    return reject( response && response.error ? response.error.message : genericErrorText );
-                }
-
-                resolve( {
-                    default: response.url
-                } );
-            } );
-
-            if ( xhr.upload ) {
-                xhr.upload.addEventListener( 'progress', evt => {
-                    if ( evt.lengthComputable ) {
-                        loader.uploadTotal = evt.total;
-                        loader.uploaded = evt.loaded;
-                    }
-                } );
-            }
-        }
-
-        // Prepares the data and sends the request.
-        _sendRequest( file ) {
-            const data = new FormData();
-            data.append( 'upload', file );
-            this.xhr.send( data );
-        }
-    }
-
-    function SimpleUploadAdapterPlugin( editor ) {
-        editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader ) => {
-            // Configure the URL to the upload script in your back-end here!
-            return new MyUploadAdapter( loader );
-        };
-    }
-
-
-    ClassicEditor
-        .create( document.querySelector( '#content_en' ), {
-            extraPlugins: [ SimpleUploadAdapterPlugin ]
-        })
-        .catch( error => {
-            console.error( error );
-    });
-
-    ClassicEditor
-        .create( document.querySelector( '#content_id' ), {
-            extraPlugins: [ SimpleUploadAdapterPlugin ]
-        })
-        .catch( error => {
-            console.error( error );
-    });
-
 </script>
 
 @endsection

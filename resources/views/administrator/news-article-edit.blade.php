@@ -233,7 +233,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-12 mt-1">
+                                                {{-- <div class="col-12 mt-1">
                                                     <div class="form-group">
                                                         <label for="tags_en">Tags - EN (Optional)</label>
                                                         <input type="text" id="tags_en" class="form-control"
@@ -247,9 +247,9 @@
                                                         <input type="text" id="tags_id" class="form-control"
                                                             name="tags_id" placeholder="Tags (Indonesia)" value="{{$article->tags_id}}">
                                                     </div>
-                                                </div>
+                                                </div> --}}
 
-                                                <div class="col-12 mt-1">
+                                                {{-- <div class="col-12 mt-1">
                                                     <div class="form-group">
                                                         <label for="author">Author</label>
                                                         <input type="text" id="author" class="form-control"
@@ -258,7 +258,7 @@
                                                     @error('author')
                                                         <p style="color: red">{{$message}}</p>
                                                     @enderror
-                                                </div>
+                                                </div> --}}
 
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
@@ -318,7 +318,35 @@
                 ['insert', ['link', 'picture', 'video']],
                 ['view', ['fullscreen', 'codeview']],
             ],
+            callbacks: {
+                // onImageUpload: function(files, editor, welEditable) {
+                //     sendFile(files[0], editor, welEditable);
+                // },
+                onMediaDelete : function(target) {
+                    alert(target[0].src);
+                    // deleteFile(target[0].src);
+                }
+            }
         });
+
+        function sendFile(file, editor, welEditable) {
+            data = new FormData();
+            data.append("file", file);
+            $.ajax({
+                data: data,
+                type: "POST",
+                headers: {
+                  'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                url: '{{ route('admin.images.store') }}',
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(url) {
+                    editor.insertImage(welEditable, url);
+                }
+            });
+        }
 
         $('#content_id').summernote({
             spellCheck: false,
