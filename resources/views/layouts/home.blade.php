@@ -51,7 +51,7 @@
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"/>
 
   <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KRTK7GZC8H"></script>
+  {{-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-KRTK7GZC8H"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -59,7 +59,17 @@
 
     // gtag('config', 'G-KRTK7GZC8H');
     gtag('config', 'GA_TRACKING_ID', { 'optimize_id': 'OPT-WP2W8Z7'});
-  </script>
+  </script> --}}
+
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PDLK4SF7D8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-PDLK4SF7D8');
+</script>
 
   <style>
     .form-select {
