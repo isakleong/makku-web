@@ -2,6 +2,27 @@
 <html lang="en" class="h-100">
 
 <head>
+  <!-- anti-flicker snippet (recommended)  -->
+  {{-- <style>.async-hide { opacity: 0 !important} </style>
+  <script>
+    (function(a,s,y,n,c,h,i,d,e) {
+      s.className+=' '+y;h.start=1*new Date;
+      h.end=i=function(){
+        s.className=s.className.replace(RegExp(' ?'+y),'')
+      };
+      (a[n]=a[n]||[]).hide=h;
+      setTimeout(function(){
+        i();
+        h.end=null
+      },c);
+        h.timeout=c;
+    })(window,document.documentElement,'async-hide','dataLayer',4000,{
+      'OPT-WP2W8Z7':true
+    });
+  </script> --}}
+  
+  {{-- <script src="https://www.googleoptimize.com/optimize.js?id=OPT-WP2W8Z7"></script> --}}
+
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
@@ -28,6 +49,17 @@
   <link rel="stylesheet" href="/home/assets/css/floating-wpp.min.css">
 
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"/>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KRTK7GZC8H"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    // gtag('config', 'G-KRTK7GZC8H');
+    gtag('config', 'GA_TRACKING_ID', { 'optimize_id': 'OPT-WP2W8Z7'});
+  </script>
 
   <style>
     .form-select {
