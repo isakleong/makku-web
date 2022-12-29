@@ -1,42 +1,111 @@
-var optionsProfileVisit = {
-  annotations: {
-    position: "back",
-  },
-  dataLabels: {
-    enabled: false,
-  },
-  chart: {
-    type: "bar",
-    height: 300,
-  },
-  fill: {
-    opacity: 1,
-  },
-  plotOptions: {},
-  series: [
-    {
-      name: "sales",
-      data: [9, 20, 30, 20, 10, 20, 30, 20, 10, 20, 30, 20],
+function initMostViewsByPage(objData, objCategory) {
+  var optionsMostViews = {
+    annotations: {
+      position: "back",
     },
-  ],
-  colors: "#435ebe",
-  xaxis: {
-    categories: [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
+    dataLabels: {
+      enabled: false,
+    },
+    chart: {
+      id: "mostViewsByPage",
+      type: "bar",
+      height: 350,
+    },
+    fill: {
+      opacity: 1,
+    },
+    plotOptions: {
+      bar: {
+        borderRadius: 16,
+      }
+    },
+    series: [
+      {
+        name: "views",
+        data: objData,
+      },
     ],
-  },
+    colors: "#435ebe",
+    xaxis: {
+      categories: objCategory,
+    },
+  }
+
+  var chartMostViews = new ApexCharts(
+    document.querySelector("#chart-most-views"),
+    optionsMostViews
+  );
+
+  chartMostViews.render();
 }
+
+function initTotalVisitorsByDate(objData, objCategory) {
+  var optionsTotalVisitors = {
+    annotations: {
+      position: "back",
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    chart: {
+      id: "totalVisitorsByDate",
+      type: "bar",
+      height: 350,
+    },
+    fill: {
+      opacity: 1,
+    },
+    plotOptions: {
+      bar: {
+        borderRadius: 16,
+      }
+    },
+    series: [
+      {
+        name: "views",
+        data: objData,
+      },
+    ],
+    colors: "#435ebe",
+    xaxis: {
+      categories: objCategory,
+    },
+  }
+
+  var chartTotalVisitors = new ApexCharts(
+    document.querySelector("#chart-total-visitors"),
+    optionsTotalVisitors
+  );
+
+  chartTotalVisitors.render();
+}
+
+
+function filterDataMostViewsByPage(objData, objCategory) {
+  ApexCharts.exec('mostViewsByPage', 'updateOptions', {
+    xaxis: {
+      categories: objCategory
+    }
+  }, false, true);
+
+  ApexCharts.exec('mostViewsByPage', 'updateSeries', [{
+    data: objData
+  }], true);
+}
+
+function filterDataTotalVisitorsByDate(objData, objCategory) {
+  ApexCharts.exec('totalVisitorsByDate', 'updateOptions', {
+    xaxis: {
+      categories: objCategory
+    }
+  }, false, true);
+
+  ApexCharts.exec('totalVisitorsByDate', 'updateSeries', [{
+    data: objData
+  }], true);
+}
+
+
 let optionsVisitorsProfile = {
   series: [70, 30],
   labels: ["Male", "Female"],
@@ -130,10 +199,7 @@ let optionsIndonesia = {
   colors: ["#dc3545"],
 }
 
-var chartProfileVisit = new ApexCharts(
-  document.querySelector("#chart-profile-visit"),
-  optionsProfileVisit
-)
+
 var chartVisitorsProfile = new ApexCharts(
   document.getElementById("chart-visitors-profile"),
   optionsVisitorsProfile
@@ -154,5 +220,4 @@ var chartIndonesia = new ApexCharts(
 chartIndonesia.render()
 chartAmerica.render()
 chartEurope.render()
-chartProfileVisit.render()
-chartVisitorsProfile.render()
+// chartVisitorsProfile.render()

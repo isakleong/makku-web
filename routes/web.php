@@ -141,8 +141,12 @@ Route::resource('/admin/news/tag', NewsTagController::class)->middleware('auth')
 Route::resource('/admin/news/article', NewsArticleController::class)->middleware('auth');
 Route::resource('/admin/news', NewsController::class)->middleware('auth');
 Route::group(['prefix' => 'admin', 'as' =>'admin.'], function(){
+    //spatie laravel image (successfully tested on CKEditor) --> not used anymore, because already using Summernote with image upload handler
     Route::post('images', [\App\Http\Controllers\ImageController::class, 'store'])->middleware('auth')->name('images.store');
-    Route::post('dashboardxx', [\App\Http\Controllers\DashboardController::class, 'ga4_mostViewsByPage'])->middleware('auth')->name('dashboard.filterMostViewsByPage');
+
+    //dashboard admin controller (google analytic handler)
+    Route::post('dashboard/most-views', [\App\Http\Controllers\DashboardController::class, 'ga4_mostViewsByPage'])->middleware('auth')->name('dashboard.filterMostViewsByPage');
+    Route::post('dashboard/total-users', [\App\Http\Controllers\DashboardController::class, 'ga4_totalUsersByDate'])->middleware('auth')->name('dashboard.filterTotalUsersByDate');
 });
 Route::post('/admin/upload', 'ImageController@upload')->name('admin.upload');
 //End of Admin Panel

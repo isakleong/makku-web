@@ -184,19 +184,21 @@
                     </div>
                 </div>
             </div>
+
+            {{-- Most Views By Page --}}
             <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
                             <form id="mostViewsByPageForm">
                                 <div class="row">
-                                    <div class="col-6">
+                                    <div class="col-6 mb-1">
                                         <h4>Most Views by Page</h4>
                                     </div>
                                     {{ csrf_field() }}
-                                    <div class="col-2">
+                                    <div class="col-lg-2 mb-1">
                                         <div class="form-floating">
-                                            <select class="form-select" name="days" id="floatingSelect" aria-label="Floating label select example">
+                                            <select class="form-select" name="days" id="floatingSelect">
                                             <option value="today" selected>Today</option>
                                             <option value="yesterday">Yesterday</option>
                                             <option value="thisweek">This week</option>
@@ -210,13 +212,13 @@
                                             <label for="floatingSelect">Range</label>
                                         </div>
                                     </div>
-                                    <div class="col-2">
+                                    <div class="col-lg-2 mb-1">
                                         <div class="form-floating">
                                             <input type="text" name="count" class="form-control" id="floatingCount" placeholder="Count" value="10">
                                             <label for="floatingCount">Count</label>
                                         </div>
                                     </div>
-                                    <div class="col-2">
+                                    <div class="col-lg-2 mb-1">
                                         <button class='btn btn-outline-primary' id="applyFilterMostViews">Apply Filter</button>
                                     </div>
                                 </div>
@@ -224,14 +226,61 @@
                         </div>
 
                         <div class="card-body text-center">
-                            <div id="loader" style='display: none;'>
+                            <div id="loaderMostViews" style='display: none;'>
                                 <img src="/lte/assets/images/svg-loaders/audio.svg" class="me-4" style="width: 4rem;" alt="audio"/>
                             </div>
-                            <div id="chart-profile-visit"></div>
+                            <div id="chart-most-views"></div>
                         </div>
                     </div>
                 </div>
             </div>
+            {{-- End of Most Views By Page --}}
+
+            {{-- Total Visitors By Date --}}
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <form id="totalVisitorsByDateForm">
+                                <div class="row">
+                                    <div class="col-8 mb-1">
+                                        <h4>Total Visitors by Date</h4>
+                                    </div>
+                                    {{ csrf_field() }}
+                                    <div class="col-lg-2 mb-1">
+                                        <div class="form-floating">
+                                            <select class="form-select" name="days" id="floatingSelect">
+                                            <option value="today" selected>Today</option>
+                                            <option value="yesterday">Yesterday</option>
+                                            <option value="thisweek">This week</option>
+                                            <option value="thismonth">This month</option>
+                                            <option value="thisyear">This year</option>
+                                            <option value="lastweek">Last week</option>
+                                            <option value="lastmonth">Last month</option>
+                                            <option value="lastyear">Last year</option>
+
+                                            </select>
+                                            <label for="floatingSelect">Range</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 mb-1">
+                                        <button class='btn btn-outline-primary' id="applyFilterTotalVisitors">Apply Filter</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="card-body text-center">
+                            <div id="loaderTotalVisitors" style='display: none;'>
+                                <img src="/lte/assets/images/svg-loaders/audio.svg" class="me-4" style="width: 4rem;" alt="audio"/>
+                            </div>
+                            <div id="chart-total-visitors"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{-- End of Total Visitors By Date --}}
+
             <div class="row">
                 <div class="col-12 col-xl-4">
                     <div class="card">
@@ -358,28 +407,71 @@
 
 <script>
     $(document).ready(function(){
-        $("#loader").hide();
+        $("#loaderMostViews").hide();
+        $("#loaderTotalVisitors").hide();
+
+        //Init Graphic Data
+        $.ajax({
+            beforeSend: function(){
+                $("#loaderMostViews").show();
+            },
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            type: 'POST',
+            url: '{{ route('admin.dashboard.filterMostViewsByPage') }}',
+            data: $("#mostViewsByPageForm").serialize()
+        })
+        .done(function(data){
+            var objData = [], objCategory = [];
+            var lenData = 0;
+            var obj = jQuery.parseJSON(data);
+            $.each(obj, function(key,value) {
+                lenData++;
+                objData.push(value.screenPageViews);
+                objCategory.push(value.pageTitle);
+            });
+            initMostViewsByPage(objData, objCategory);
+            $("#loaderMostViews").hide();
+        })
+        .fail(function() {
+            alert( "Posting failed." );
+        });
+
+        $.ajax({
+            beforeSend: function(){
+                $("#loaderTotalVisitors").show();
+            },
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            type: 'POST',
+            url: '{{ route('admin.dashboard.filterTotalUsersByDate') }}',
+            data: $("#totalVisitorsByDateForm").serialize()
+        })
+        .done(function(data){
+            var objData = [], objCategory = [];
+            var lenData = 0;
+            var obj = jQuery.parseJSON(data);
+            $.each(obj, function(key,value) {
+                lenData++;
+                objData.push(value.screenPageViews);
+                objCategory.push(value.pageTitle);
+            });
+            initTotalVisitorsByDate(objData, objCategory);
+            $("#loaderTotalVisitors").hide();
+        })
+        .fail(function() {
+            alert( "Posting failed." );
+        });
+        //End of Init Graphic Data
+
+        //Filter Handler
         $("#applyFilterMostViews").click(function(e){
             e.preventDefault();
-            // $.ajax({
-            //     data: $("#mostViewsByPageForm").serialize(),
-            //     type: "POST",
-            //     headers: {
-            //       'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            //     },
-            //     url: '{{ route('admin.dashboard.filterMostViewsByPage') }}',
-            //     cache: false,
-            //     contentType: false,
-            //     processData: false,
-            //     success: function(url) {
-            //         console.log(url);
-            //     }
-            // });
-
             $.ajax({
                 beforeSend: function(){
-                    // Show image container
-                    $("#loader").show();
+                    $("#loaderMostViews").show();
                 },
                 headers: {
                   'X-CSRF-TOKEN': '{{ csrf_token() }}'
@@ -389,22 +481,70 @@
                 data: $("#mostViewsByPageForm").serialize()
             })
             .done(function(data){
-                var prop;
-                var propCount = 0;
+                console.log(data);
+                // var data = '[{"pageTitle":"Makku Frozen Food","screenPageViews":"2"},{"pageTitle":"Makku Frozen Food - Our Company","screenPageViews":"2"}]';
+                var objData = [], objCategory = [];
 
-                for (prop in data) {
-                    propCount++;
-                }
-                console.log(propCount);
-                
-                $("#loader").hide();
+                var lenData = 0;
+                var obj = jQuery.parseJSON(data);
+                $.each(obj, function(key,value) {
+                    lenData++;
+                    // alert(value.screenPageViews);
+                    objData.push(value.screenPageViews);
+                    objCategory.push(value.pageTitle);
+                });
+                console.log(lenData);
+                filterDataMostViewsByPage(objData, objCategory);
+                $("#loaderMostViews").hide();
             })
             .fail(function() {
                 alert( "Posting failed." );
             });
-
-
         });
+
+        $("#applyFilterTotalVisitors").click(function(e){
+            e.preventDefault();
+            $.ajax({
+                beforeSend: function(){
+                    $("#loaderTotalVisitors").show();
+                },
+                headers: {
+                  'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                type: 'POST',
+                url: '{{ route('admin.dashboard.filterTotalUsersByDate') }}',
+                data: $("#totalVisitorsByDateForm").serialize()
+            })
+            .done(function(data){
+                console.log(data);
+                var objData = [], objCategory = [];
+
+                var lenData = 0;
+                var obj = jQuery.parseJSON(data);
+                $.each(obj, function(key,value) {
+                    lenData++;
+                    objData.push(value.totalUsers);
+                    
+                    var tempDate = value.date;
+                    var year = tempDate.substring(0, 4);
+                    var month = tempDate.substring(4, 6);
+                    var day = tempDate.substring(6, 8);
+                    var strDate = day+"-"+month+"-"+year;
+
+                    objCategory.push(strDate);
+                });
+                console.log(lenData);
+                filterDataTotalVisitorsByDate(objData, objCategory);
+                $("#loaderTotalVisitors").hide();
+            })
+            .fail(function() {
+                alert( "Posting failed." );
+            });
+        });
+        //End of Filter Handler
+
+        
+
     });
 </script>
 
