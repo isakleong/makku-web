@@ -142,6 +142,7 @@ Route::resource('/admin/news/article', NewsArticleController::class)->middleware
 Route::resource('/admin/news', NewsController::class)->middleware('auth');
 Route::group(['prefix' => 'admin', 'as' =>'admin.'], function(){
     Route::post('images', [\App\Http\Controllers\ImageController::class, 'store'])->middleware('auth')->name('images.store');
+    Route::post('dashboardxx', [\App\Http\Controllers\DashboardController::class, 'ga4_mostViewsByPage'])->middleware('auth')->name('dashboard.filterMostViewsByPage');
 });
 Route::post('/admin/upload', 'ImageController@upload')->name('admin.upload');
 //End of Admin Panel

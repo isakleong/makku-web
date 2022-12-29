@@ -61,15 +61,16 @@
     gtag('config', 'GA_TRACKING_ID', { 'optimize_id': 'OPT-WP2W8Z7'});
   </script> --}}
 
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-PDLK4SF7D8"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'G-PDLK4SF7D8');
-</script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KRTK7GZC8H"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-KRTK7GZC8H');
+  </script>
 
   <style>
     .form-select {

@@ -130,9 +130,9 @@
 
 <div class="page-content">
     <section class="row">
-        <div class="col-12 col-lg-9">
+        <div class="col-12 col-lg-12">
             <div class="row">
-                <div class="col-6 col-lg-3 col-md-6">
+                <div class="col-4 col-lg-4 col-md-4">
                     <div class="card">
                         <div class="card-body px-4 py-4-5">
                             <div class="row">
@@ -142,31 +142,14 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                    <h6 class="text-muted font-semibold">Profile Views</h6>
+                                    <h6 class="text-muted font-semibold">Views</h6>
                                     <h6 class="font-extrabold mb-0">112.000</h6>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-6 col-lg-3 col-md-6">
-                    <div class="card">
-                        <div class="card-body px-4 py-4-5">
-                            <div class="row">
-                                <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
-                                    <div class="stats-icon blue mb-2">
-                                        <i class="iconly-boldProfile"></i>
-                                    </div>
-                                </div>
-                                <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                    <h6 class="text-muted font-semibold">Followers</h6>
-                                    <h6 class="font-extrabold mb-0">183.000</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6 col-lg-3 col-md-6">
+                <div class="col-4 col-lg-4 col-md-4">
                     <div class="card">
                         <div class="card-body px-4 py-4-5">
                             <div class="row">
@@ -176,14 +159,14 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                    <h6 class="text-muted font-semibold">Following</h6>
+                                    <h6 class="text-muted font-semibold">Visitors</h6>
                                     <h6 class="font-extrabold mb-0">80.000</h6>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-6 col-lg-3 col-md-6">
+                <div class="col-4 col-lg-4 col-md-4">
                     <div class="card">
                         <div class="card-body px-4 py-4-5">
                             <div class="row">
@@ -193,7 +176,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                    <h6 class="text-muted font-semibold">Saved Post</h6>
+                                    <h6 class="text-muted font-semibold">Average Session</h6>
                                     <h6 class="font-extrabold mb-0">112</h6>
                                 </div>
                             </div>
@@ -205,9 +188,45 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Profile Visit</h4>
+                            <form id="mostViewsByPageForm">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <h4>Most Views by Page</h4>
+                                    </div>
+                                    {{ csrf_field() }}
+                                    <div class="col-2">
+                                        <div class="form-floating">
+                                            <select class="form-select" name="days" id="floatingSelect" aria-label="Floating label select example">
+                                            <option value="today" selected>Today</option>
+                                            <option value="yesterday">Yesterday</option>
+                                            <option value="thisweek">This week</option>
+                                            <option value="thismonth">This month</option>
+                                            <option value="thisyear">This year</option>
+                                            <option value="lastweek">Last week</option>
+                                            <option value="lastmonth">Last month</option>
+                                            <option value="lastyear">Last year</option>
+
+                                            </select>
+                                            <label for="floatingSelect">Range</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="form-floating">
+                                            <input type="text" name="count" class="form-control" id="floatingCount" placeholder="Count" value="10">
+                                            <label for="floatingCount">Count</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <button class='btn btn-outline-primary' id="applyFilterMostViews">Apply Filter</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
-                        <div class="card-body">
+
+                        <div class="card-body text-center">
+                            <div id="loader" style='display: none;'>
+                                <img src="/lte/assets/images/svg-loaders/audio.svg" class="me-4" style="width: 4rem;" alt="audio"/>
+                            </div>
                             <div id="chart-profile-visit"></div>
                         </div>
                     </div>
@@ -327,73 +346,66 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 col-lg-3">
-            <div class="card">
-                <div class="card-body py-4 px-4">
-                    <div class="d-flex align-items-center">
-                        <div class="avatar avatar-xl">
-                            <img src="/lte/assets/images/faces/1.jpg" alt="Face 1">
-                        </div>
-                        <div class="ms-3 name">
-                            <h5 class="font-bold">{{ Auth::user()->name }}</h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-header">
-                    <h4>Recent Messages</h4>
-                </div>
-                <div class="card-content pb-4">
-                    <div class="recent-message d-flex px-4 py-3">
-                        <div class="avatar avatar-lg">
-                            <img src="/lte/assets/images/faces/4.jpg">
-                        </div>
-                        <div class="name ms-4">
-                            <h5 class="mb-1">Hank Schrader</h5>
-                            <h6 class="text-muted mb-0">@johnducky</h6>
-                        </div>
-                    </div>
-                    <div class="recent-message d-flex px-4 py-3">
-                        <div class="avatar avatar-lg">
-                            <img src="/lte/assets/images/faces/5.jpg">
-                        </div>
-                        <div class="name ms-4">
-                            <h5 class="mb-1">Dean Winchester</h5>
-                            <h6 class="text-muted mb-0">@imdean</h6>
-                        </div>
-                    </div>
-                    <div class="recent-message d-flex px-4 py-3">
-                        <div class="avatar avatar-lg">
-                            <img src="/lte/assets/images/faces/1.jpg">
-                        </div>
-                        <div class="name ms-4">
-                            <h5 class="mb-1">John Dodol</h5>
-                            <h6 class="text-muted mb-0">@dodoljohn</h6>
-                        </div>
-                    </div>
-                    <div class="px-4">
-                        <button class='btn btn-block btn-xl btn-outline-primary font-bold mt-3'>Start Conversation</button>
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-header">
-                    <h4>Visitors Profile</h4>
-                </div>
-                <div class="card-body">
-                    <div id="chart-visitors-profile"></div>
-                </div>
-            </div>
-        </div>
     </section>
 </div>
 
 @endsection
 
 @section('vendorScript')
-
+<script src="/lte/assets/extensions/jquery/jquery.min.js"></script>
 <script src="/lte/assets/extensions/apexcharts/apexcharts.min.js"></script>
 <script src="/lte/assets/js/pages/dashboard.js"></script>
+
+<script>
+    $(document).ready(function(){
+        $("#loader").hide();
+        $("#applyFilterMostViews").click(function(e){
+            e.preventDefault();
+            // $.ajax({
+            //     data: $("#mostViewsByPageForm").serialize(),
+            //     type: "POST",
+            //     headers: {
+            //       'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            //     },
+            //     url: '{{ route('admin.dashboard.filterMostViewsByPage') }}',
+            //     cache: false,
+            //     contentType: false,
+            //     processData: false,
+            //     success: function(url) {
+            //         console.log(url);
+            //     }
+            // });
+
+            $.ajax({
+                beforeSend: function(){
+                    // Show image container
+                    $("#loader").show();
+                },
+                headers: {
+                  'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                type: 'POST',
+                url: '{{ route('admin.dashboard.filterMostViewsByPage') }}',
+                data: $("#mostViewsByPageForm").serialize()
+            })
+            .done(function(data){
+                var prop;
+                var propCount = 0;
+
+                for (prop in data) {
+                    propCount++;
+                }
+                console.log(propCount);
+                
+                $("#loader").hide();
+            })
+            .fail(function() {
+                alert( "Posting failed." );
+            });
+
+
+        });
+    });
+</script>
 
 @endsection
