@@ -141,10 +141,10 @@
                                     <div class="col-lg-12 mb-1">
                                         <div class="form-floating">
                                             <select class="form-select" name="days" id="rangeSumViews">
-                                                <option value="today" selected>Today</option>
+                                                <option value="today">Today</option>
                                                 <option value="yesterday">Yesterday</option>
                                                 <option value="thisweek">This week</option>
-                                                <option value="thismonth">This month</option>
+                                                <option value="thismonth" selected selected>This month</option>
                                                 <option value="thisyear">This year</option>
                                                 <option value="lastweek">Last week</option>
                                                 <option value="lastmonth">Last month</option>
@@ -185,10 +185,10 @@
                                     <div class="col-lg-12 mb-1">
                                         <div class="form-floating">
                                             <select class="form-select" name="days" id="rangeSumVisitors">
-                                                <option value="today" selected>Today</option>
+                                                <option value="today">Today</option>
                                                 <option value="yesterday">Yesterday</option>
                                                 <option value="thisweek">This week</option>
-                                                <option value="thismonth">This month</option>
+                                                <option value="thismonth" selected selected>This month</option>
                                                 <option value="thisyear">This year</option>
                                                 <option value="lastweek">Last week</option>
                                                 <option value="lastmonth">Last month</option>
@@ -229,10 +229,10 @@
                                     <div class="col-lg-12 mb-1">
                                         <div class="form-floating">
                                             <select class="form-select" name="days" id="rangeSumReturningVisitors">
-                                                <option value="today" selected>Today</option>
+                                                <option value="today">Today</option>
                                                 <option value="yesterday">Yesterday</option>
                                                 <option value="thisweek">This week</option>
-                                                <option value="thismonth">This month</option>
+                                                <option value="thismonth" selected>This month</option>
                                                 <option value="thisyear">This year</option>
                                                 <option value="lastweek">Last week</option>
                                                 <option value="lastmonth">Last month</option>
@@ -273,10 +273,10 @@
                                     <div class="col-lg-12 mb-1">
                                         <div class="form-floating">
                                             <select class="form-select" name="days" id="rangeSumAvgSessions">
-                                                <option value="today" selected>Today</option>
+                                                <option value="today">Today</option>
                                                 <option value="yesterday">Yesterday</option>
                                                 <option value="thisweek">This week</option>
-                                                <option value="thismonth">This month</option>
+                                                <option value="thismonth" selected>This month</option>
                                                 <option value="thisyear">This year</option>
                                                 <option value="lastweek">Last week</option>
                                                 <option value="lastmonth">Last month</option>
@@ -291,7 +291,7 @@
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
-                                    <h6 class="text-muted font-semibold">Average Sessions</h6>
+                                    <h6 class="text-muted font-semibold">Average Sessions (seconds)</h6>
                                     <div id="loaderSumAvgSessions" style='display: none;'>
                                         <img src="/lte/assets/images/svg-loaders/circles.svg" class="me-4" style="width: 3rem;" alt="audio"/>
                                     </div>
@@ -326,10 +326,10 @@
                                     <div class="col-lg-2 mb-1">
                                         <div class="form-floating">
                                             <select class="form-select" name="days" id="rangeMostViewsByPage">
-                                            <option value="today" selected>Today</option>
+                                            <option value="today">Today</option>
                                             <option value="yesterday">Yesterday</option>
                                             <option value="thisweek">This week</option>
-                                            <option value="thismonth">This month</option>
+                                            <option value="thismonth" selected>This month</option>
                                             <option value="thisyear">This year</option>
                                             <option value="lastweek">Last week</option>
                                             <option value="lastmonth">Last month</option>
@@ -377,10 +377,10 @@
                                     <div class="col-lg-2 mb-1">
                                         <div class="form-floating">
                                             <select class="form-select" name="days" id="rangeTotalVisitorsByDate">
-                                            <option value="today" selected>Today</option>
+                                            <option value="today">Today</option>
                                             <option value="yesterday">Yesterday</option>
                                             <option value="thisweek">This week</option>
-                                            <option value="thismonth">This month</option>
+                                            <option value="thismonth" selected>This month</option>
                                             <option value="thisyear">This year</option>
                                             <option value="lastweek">Last week</option>
                                             <option value="lastmonth">Last month</option>

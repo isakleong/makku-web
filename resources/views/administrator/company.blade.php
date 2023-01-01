@@ -243,13 +243,13 @@
 
 <script>
     $(document).ready(function () {
-        $('#table1').DataTable( {
+        var table1 = $('#table1').DataTable({
             responsive: true
-        } );
+        });
 
-        $('#table2').DataTable( {
+        var table2 = $('#table2').DataTable({
             responsive: true
-        } );
+        });
 
         const registerDeleteItemHandlers = () => {
             $('.show_confirm').click(function(event) {
@@ -275,8 +275,21 @@
 
         registerDeleteItemHandlers();
 
-        $("#table1")
-            .on("draw.dt", function () {
+        $("#table1").on("draw.dt", function () {
+            registerDeleteItemHandlers();
+        });
+
+        $("#table2").on("draw.dt", function () {
+            registerDeleteItemHandlers();
+        });
+
+        table1.on( 'responsive-display', function ( e, datatable, row, showHide, update ) {
+            // console.log('Details for row '+row.index()+' '+(showHide ? 'shown' : 'hidden'));
+            registerDeleteItemHandlers();
+        });
+
+        table2.on( 'responsive-display', function ( e, datatable, row, showHide, update ) {
+            // console.log('Details for row '+row.index()+' '+(showHide ? 'shown' : 'hidden'));
             registerDeleteItemHandlers();
         });
     });

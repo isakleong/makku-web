@@ -198,9 +198,9 @@
 
 <script>
     $(document).ready(function () {
-        $('#table1').DataTable( {
+        var table = $('#table1').DataTable({
             responsive: true
-        } );
+        });
 
         const registerDeleteItemHandlers = () => {
             $('.show_confirm').click(function(event) {
@@ -226,8 +226,12 @@
 
         registerDeleteItemHandlers();
 
-        $("#table1")
-            .on("draw.dt", function () {
+        $("#table1").on("draw.dt", function () {
+            registerDeleteItemHandlers();
+        });
+
+        table.on( 'responsive-display', function ( e, datatable, row, showHide, update ) {
+            // console.log('Details for row '+row.index()+' '+(showHide ? 'shown' : 'hidden'));
             registerDeleteItemHandlers();
         });
     });

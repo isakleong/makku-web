@@ -142,7 +142,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <table class="table table-striped" id="table1" style="width: 100%">
+                <table class="table table-striped dt-responsive" id="table1" style="width: 100%">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -195,15 +195,17 @@
 
 <script>
     $(document).ready(function () {
-        $('#table1').DataTable( {
+        var table = $('#table1').DataTable({
             responsive: true
-        } );
+        });
 
         const registerDeleteItemHandlers = () => {
             $('.show_confirm').click(function(event) {
+                event.preventDefault();
+
                 var form =  $(this).closest("form");
                 var name = $(this).data("name");
-                event.preventDefault();
+                
                 Swal.fire({
                 title: 'Delete the data?',
                 text: "If you delete this, it will be gone forever.",
@@ -223,8 +225,12 @@
 
         registerDeleteItemHandlers();
 
-        $("#table1")
-            .on("draw.dt", function () {
+        $("#table1").on("draw.dt", function () {
+            registerDeleteItemHandlers();
+        });
+
+        table.on( 'responsive-display', function ( e, datatable, row, showHide, update ) {
+            // console.log('Details for row '+row.index()+' '+(showHide ? 'shown' : 'hidden'));
             registerDeleteItemHandlers();
         });
     });
