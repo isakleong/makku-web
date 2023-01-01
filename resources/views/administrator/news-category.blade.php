@@ -59,9 +59,9 @@
                 <li class="submenu-item active">
                     <a href="/admin/news/category">Category</a>
                 </li>
-                <li class="submenu-item ">
+                {{-- <li class="submenu-item ">
                     <a href="/admin/news/tag">Tag</a>
-                </li>
+                </li> --}}
                 <li class="submenu-item ">
                     <a href="/admin/news/article">Article</a>
                 </li>
