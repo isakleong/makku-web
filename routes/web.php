@@ -145,7 +145,10 @@ Route::group(['prefix' => 'admin', 'as' =>'admin.'], function(){
     Route::post('images', [\App\Http\Controllers\ImageController::class, 'store'])->middleware('auth')->name('images.store');
 
     //dashboard admin controller (google analytic handler)
-    Route::post('dashboard/sum-views', [\App\Http\Controllers\DashboardController::class, 'ga4_totalUsers'])->middleware('auth')->name('dashboard.filterSumViews');
+    Route::post('dashboard/sum-views', [\App\Http\Controllers\DashboardController::class, 'ga4_totalViews'])->middleware('auth')->name('dashboard.filterSumViews');
+    Route::post('dashboard/sum-visitors', [\App\Http\Controllers\DashboardController::class, 'ga4_totalUsers'])->middleware('auth')->name('dashboard.filterSumVisitors');
+    Route::post('dashboard/sum-returning-visitors', [\App\Http\Controllers\DashboardController::class, 'ga4_totalNewAndReturningUsers'])->middleware('auth')->name('dashboard.filterSumReturningVisitors');
+    Route::post('dashboard/sum-avg-sessions', [\App\Http\Controllers\DashboardController::class, 'ga4_averageSessionDuration'])->middleware('auth')->name('dashboard.filterSumAvgSessions');
     
 
     Route::post('dashboard/most-views', [\App\Http\Controllers\DashboardController::class, 'ga4_mostViewsByPage'])->middleware('auth')->name('dashboard.filterMostViewsByPage');
