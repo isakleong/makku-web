@@ -145,6 +145,9 @@ Route::group(['prefix' => 'admin', 'as' =>'admin.'], function(){
     Route::post('images', [\App\Http\Controllers\ImageController::class, 'store'])->middleware('auth')->name('images.store');
 
     //dashboard admin controller (google analytic handler)
+    Route::post('dashboard/sum-views', [\App\Http\Controllers\DashboardController::class, 'ga4_totalUsers'])->middleware('auth')->name('dashboard.filterSumViews');
+    
+
     Route::post('dashboard/most-views', [\App\Http\Controllers\DashboardController::class, 'ga4_mostViewsByPage'])->middleware('auth')->name('dashboard.filterMostViewsByPage');
     Route::post('dashboard/total-users', [\App\Http\Controllers\DashboardController::class, 'ga4_totalUsersByDate'])->middleware('auth')->name('dashboard.filterTotalUsersByDate');
 });

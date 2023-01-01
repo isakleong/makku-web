@@ -132,8 +132,34 @@
     <section class="row">
         <div class="col-12 col-lg-12">
             <div class="row">
-                <div class="col-4 col-lg-4 col-md-4">
+                <div class="col-lg-4 col-md-4">
                     <div class="card">
+                        <div class="card-header">
+                            <form id="sumViewsForm">
+                                <div class="row">
+                                    {{ csrf_field() }}
+                                    <div class="col-lg-12 mb-1">
+                                        <div class="form-floating">
+                                            <select class="form-select" name="days" id="floatingSelect">
+                                            <option value="today" selected>Today</option>
+                                            <option value="yesterday">Yesterday</option>
+                                            <option value="thisweek">This week</option>
+                                            <option value="thismonth">This month</option>
+                                            <option value="thisyear">This year</option>
+                                            <option value="lastweek">Last week</option>
+                                            <option value="lastmonth">Last month</option>
+                                            <option value="lastyear">Last year</option>
+
+                                            </select>
+                                            <label for="floatingSelect">Range</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 mb-1" style="display: none;">
+                                        <button class='btn btn-outline-primary' id="applyFilterSumViews">Apply Filter</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                         <div class="card-body px-4 py-4-5">
                             <div class="row">
                                 <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
@@ -141,15 +167,22 @@
                                         <i class="iconly-boldShow"></i>
                                     </div>
                                 </div>
+
                                 <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
                                     <h6 class="text-muted font-semibold">Views</h6>
-                                    <h6 class="font-extrabold mb-0">112.000</h6>
+                                    <div id="loaderSumViews" style='display: none;'>
+                                        <img src="/lte/assets/images/svg-loaders/circles.svg" class="me-4" style="width: 3rem;" alt="audio"/>
+                                    </div>
+                                    <h6 id="sumViewsData" class="font-extrabold mb-0"></h6>
                                 </div>
+
+                               
+
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-4 col-lg-4 col-md-4">
+                <div class="col-lg-4 col-md-4">
                     <div class="card">
                         <div class="card-body px-4 py-4-5">
                             <div class="row">
@@ -166,7 +199,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-4 col-lg-4 col-md-4">
+                <div class="col-lg-4 col-md-4">
                     <div class="card">
                         <div class="card-body px-4 py-4-5">
                             <div class="row">
@@ -407,9 +440,35 @@
 
 <script>
     $(document).ready(function(){
+        $("#loaderSumViews").hide();
+        $("#sumViewsData").hide();
+
         $("#loaderMostViews").hide();
         $("#loaderTotalVisitors").hide();
 
+        //Init Card Data
+        $.ajax({
+            beforeSend: function(){
+                $("#loaderSumViews").show();
+            },
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            type: 'POST',
+            url: '{{ route('admin.dashboard.filterSumViews') }}',
+            data: $("#sumViewsForm").serialize()
+        })
+        .done(function(data){
+            console.log(data);
+            $("#loaderSumViews").hide();
+
+            $("#sumViewsData").show();
+            $("h6#sumViewsData").text(data);
+        })
+        .fail(function() {
+            alert( "Posting failed." );
+        });
+        
         //Init Graphic Data
         $.ajax({
             beforeSend: function(){
@@ -451,12 +510,20 @@
         })
         .done(function(data){
             var objData = [], objCategory = [];
+
             var lenData = 0;
             var obj = jQuery.parseJSON(data);
             $.each(obj, function(key,value) {
                 lenData++;
-                objData.push(value.screenPageViews);
-                objCategory.push(value.pageTitle);
+                objData.push(value.totalUsers);
+                
+                var tempDate = value.date;
+                var year = tempDate.substring(0, 4);
+                var month = tempDate.substring(4, 6);
+                var day = tempDate.substring(6, 8);
+                var strDate = day+"-"+month+"-"+year;
+
+                objCategory.push(strDate);
             });
             initTotalVisitorsByDate(objData, objCategory);
             $("#loaderTotalVisitors").hide();
@@ -481,7 +548,6 @@
                 data: $("#mostViewsByPageForm").serialize()
             })
             .done(function(data){
-                console.log(data);
                 // var data = '[{"pageTitle":"Makku Frozen Food","screenPageViews":"2"},{"pageTitle":"Makku Frozen Food - Our Company","screenPageViews":"2"}]';
                 var objData = [], objCategory = [];
 
@@ -493,7 +559,6 @@
                     objData.push(value.screenPageViews);
                     objCategory.push(value.pageTitle);
                 });
-                console.log(lenData);
                 filterDataMostViewsByPage(objData, objCategory);
                 $("#loaderMostViews").hide();
             })
@@ -516,7 +581,6 @@
                 data: $("#totalVisitorsByDateForm").serialize()
             })
             .done(function(data){
-                console.log(data);
                 var objData = [], objCategory = [];
 
                 var lenData = 0;
@@ -533,7 +597,6 @@
 
                     objCategory.push(strDate);
                 });
-                console.log(lenData);
                 filterDataTotalVisitorsByDate(objData, objCategory);
                 $("#loaderTotalVisitors").hide();
             })
