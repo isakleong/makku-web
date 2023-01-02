@@ -20,6 +20,7 @@ class ProductController extends Controller
                 "product.id",
                 "product.name_en",
                 "product.name_id",
+                "product.slug",
                 "product.image",
                 "product.active",
                 "product_category.name_en as categoryName",
