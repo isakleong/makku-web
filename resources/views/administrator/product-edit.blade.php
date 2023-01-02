@@ -2,6 +2,10 @@
 
 @section('title', 'Makku Frozen Food - Product')
 
+@section('vendorCSS')
+    <link rel="stylesheet" href="/lte/assets/extensions/choices.js/public/assets/styles/choices.css">
+@endsection
+
 @section('navbar')
 <div class="sidebar-menu">
     <ul class="menu">
@@ -250,6 +254,9 @@
 @endsection
 
 @section('vendorScript')
+
+<script src="/lte/assets/extensions/choices.js/public/assets/scripts/choices.js"></script>
+<script src="/lte/assets/js/pages/form-element-select.js"></script>
 
 <script src="/vendor/sweetalert/sweetalert.all.js"></script>
 
