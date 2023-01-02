@@ -148,8 +148,6 @@
                             <th>No</th>
                             <th>Title - EN</th>
                             <th>Title - ID</th>
-                            <th>Tags - EN</th>
-                            <th>Tags - ID</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -162,8 +160,6 @@
                                 <td>{{$i++}}</td>
                                 <td>{{$item->title_en}}</td>
                                 <td>{{$item->title_id}}</td>
-                                <td>{{$item->tags_en}}</td>
-                                <td>{{$item->tags_id}}</td>
                                 <td>
                                     <a href="{{ route('article.edit', $item->id) }}" class="btn icon btn-sm btn-primary d-inline-block m-1" data-bs-toggle="tooltip" title="Edit"><i class="bi bi-pencil"></i></a>
                                     <form action="{{ route('article.destroy', $item->id) }}" method="POST" class="d-inline-block m-1" data-bs-toggle="tooltip" title="Delete">
