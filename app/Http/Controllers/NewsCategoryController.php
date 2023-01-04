@@ -6,6 +6,7 @@ use App\Models\NewsCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Support\Facades\Session;
 
 class NewsCategoryController extends Controller
@@ -36,6 +37,15 @@ class NewsCategoryController extends Controller
         }
 
         $input = $request->all();
+
+        //custom slug handler (indonesia or english)
+        if($request->slug == 'id') {
+            $slug = SlugService::createSlug(NewsCategory::class, 'slug', $input['name_id']);
+            $input['slug'] = $slug;
+        } else {
+            $slug = SlugService::createSlug(NewsCategory::class, 'slug', $input['name_en']);
+            $input['slug'] = $slug;
+        }
 
         NewsCategory::create($input);
 
@@ -105,6 +115,8 @@ class NewsCategoryController extends Controller
         $input = $request->all();
 
         $category->slug = null;
+        $slug = SlugService::createSlug(NewsCategory::class, 'slug', $input['slug']);
+        $input['slug'] = $slug;
         $category->update($input);
 
         return redirect('/admin/news/category')->withSuccess('Data Updated Successfully!');

@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
+//use Spatie\MediaLibrary\HasMedia;
+//use Spatie\MediaLibrary\InteractsWithMedia;
 
-class NewsArticle extends Model implements HasMedia
+class NewsArticle extends Model //implements HasMedia
 {
-    use HasFactory, InteractsWithMedia;
+    use HasFactory, Sluggable; //, InteractsWithMedia;
 
     protected $table = 'news_article';
     
@@ -26,6 +27,15 @@ class NewsArticle extends Model implements HasMedia
         'publish_date',
         'image'
     ];
+
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'title_id'
+            ]
+        ];
+    }
 
     //to search news data - en
     public function scopeFilterEN($query, array $filters) {

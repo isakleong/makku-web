@@ -196,11 +196,11 @@
                                                     @enderror
                                                 </div>
 
-                                                <div class="col-12 mt-1">
+                                                {{-- <div class="col-12 mt-1">
                                                     <div class="form-group">
                                                         <button type="button" class="btn btn-primary" onclick="generateSlug()">Generate Slug</button>
                                                     </div>
-                                                </div>
+                                                </div> --}}
 
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
@@ -323,7 +323,7 @@
                 //     sendFile(files[0], editor, welEditable);
                 // },
                 onMediaDelete : function(target) {
-                    alert(target[0].src);
+                    // alert(target[0].src);
                     // deleteFile(target[0].src);
                 }
             }
@@ -382,11 +382,11 @@
     });
 </script>
 
-<script>
+{{-- <script>
     function generateSlug(){
-        var title = $("#name_id").val();
+        var title = $("#title_id").val();
 
-        if((!$("#name_id").val()) ){
+        if((!$("#title_id").val()) ){
             Swal.fire({
                 title: 'Please fill out Title field first',
                 icon: 'warning',
@@ -399,6 +399,6 @@
             $("#slug").val(slug);
         }
     }
-</script>
+</script> --}}
 
 @endsection

@@ -7,6 +7,7 @@ use App\Models\NewsCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Cviebrock\EloquentSluggable\Services\SlugService;
 use Exception;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
@@ -102,7 +103,6 @@ class NewsArticleController extends Controller
             'categoryID' => 'required',
             'title_en' => 'required',
             'title_id' => 'required',
-            'slug' => 'required',
             'content_en' => 'required',
             'content_id' => 'required',
             'image' => 'required',
@@ -122,7 +122,7 @@ class NewsArticleController extends Controller
                 list($type, $data) = explode(';', $data);
                 list(, $data)      = explode(',', $data);
                 $imageData = base64_decode($data);
-                $image_name= "/image/upload/" . time().$item.'.png';
+                $image_name= "/image/upload/"."en-".time().$item.'.png';
                 $path = public_path() . $image_name;
                 // file_put_contents($path, $imageData);
                 Image::make($imageData)->resize(1200, 630, function ($constraint) {
@@ -149,9 +149,13 @@ class NewsArticleController extends Controller
                 list($type, $data) = explode(';', $data);
                 list(, $data)      = explode(',', $data);
                 $imageData = base64_decode($data);
-                $image_name= "/image/upload/" . time().$item.'.png';
+                $image_name= "/image/upload/"."id-".time().$item.'.png';
                 $path = public_path() . $image_name;
-                file_put_contents($path, $imageData);
+                // file_put_contents($path, $imageData);
+
+                Image::make($imageData)->resize(1200, 630, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($path);
                 
                 $image->removeAttribute('src');
                 $image->setAttribute('src', $image_name);
@@ -164,11 +168,29 @@ class NewsArticleController extends Controller
         //end of summernote image upload handling
 
         if($image = $request->file('image')) {
+            // $destinationPath = 'image/upload/';
+            // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
+            // $image->move($destinationPath, $imageName);
+            // $input['image'] = $destinationPath.$imageName;
+
             $destinationPath = 'image/upload/';
-            $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-            $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
-            $image->move($destinationPath, $imageName);
+            $generatedID = hexdec(uniqid());
+            $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
+            Image::make($image)->resize(1200, 630, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save($destinationPath.$imageName);
+
             $input['image'] = $destinationPath.$imageName;
+        }
+
+        //custom slug handler (indonesia or english)
+        if($request->slug == 'id') {
+            $slug = SlugService::createSlug(NewsArticle::class, 'slug', $input['title_id']);
+            $input['slug'] = $slug;
+        } else {
+            $slug = SlugService::createSlug(NewsArticle::class, 'slug', $input['title_en']);
+            $input['slug'] = $slug;
         }
 
         NewsArticle::create($input);
@@ -292,9 +314,13 @@ class NewsArticleController extends Controller
                 list($type, $data) = explode(';', $data);
                 list(, $data)      = explode(',', $data);
                 $imageData = base64_decode($data);
-                $image_name= "/image/upload/" . time().$item.'.png';
+                $image_name= "/image/upload/"."en-".time().$item.'.png';
                 $path = public_path() . $image_name;
-                file_put_contents($path, $imageData);
+                // file_put_contents($path, $imageData);
+
+                Image::make($imageData)->resize(1200, 630, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($path);
                 
                 $image->removeAttribute('src');
                 $image->setAttribute('src', $image_name);
@@ -316,9 +342,13 @@ class NewsArticleController extends Controller
                 list($type, $data) = explode(';', $data);
                 list(, $data)      = explode(',', $data);
                 $imageData = base64_decode($data);
-                $image_name= "/image/upload/" . time().$item.'.png';
+                $image_name= "/image/upload/"."id-".time().$item.'.png';
                 $path = public_path() . $image_name;
-                file_put_contents($path, $imageData);
+                // file_put_contents($path, $imageData);
+
+                Image::make($imageData)->resize(1200, 630, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($path);
                 
                 $image->removeAttribute('src');
                 $image->setAttribute('src', $image_name);
@@ -393,6 +423,9 @@ class NewsArticleController extends Controller
             unset($input['image']);
         }
 
+        $article->slug = null;
+        $slug = SlugService::createSlug(NewsArticle::class, 'slug', $input['slug']);
+        $input['slug'] = $slug;
         $article->update($input);
 
         if($imageDelete != "") {
@@ -404,7 +437,39 @@ class NewsArticleController extends Controller
 
     public function destroy(NewsArticle $article)
     {
+        //summernote image delete handling
+        $existContent_en = $article->content_en;
+        $domExistContent_en = new \DOMDocument();
+        @$domExistContent_en->loadHtml($existContent_en, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $domExistContent_en->preserveWhiteSpace = false;
+        $existImage  = $domExistContent_en->getElementsByTagName("img");
+        $arrExistImage = array();
+        for($i = 0; $i < $existImage->length; $i++) {
+            $arrExistImage[] = $existImage[$i]->getAttribute("src");
+        }
+        foreach($arrExistImage as $deleteFile) {
+            File::delete(public_path()."/".$deleteFile);
+        }
+
+        $existContent_id = $article->content_id;
+        $domExistContent_id = new \DOMDocument();
+        @$domExistContent_id->loadHtml($existContent_id, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $domExistContent_id->preserveWhiteSpace = false;
+        $existImage  = $domExistContent_id->getElementsByTagName("img");
+        $arrExistImage = array();
+        for($i = 0; $i < $existImage->length; $i++) {
+            $arrExistImage[] = $existImage[$i]->getAttribute("src");
+        }
+        foreach($arrExistImage as $deleteFile) {
+            File::delete(public_path()."/".$deleteFile);
+        }
+        //end of summernote image delete handling
+
+        $imageDelete = public_path()."/".$article->image;
+        
         $article->delete();
+
+        File::delete($imageDelete);
 
         return redirect('/admin/news/article')->withSuccess('Data Deleted Successfully!');
     }

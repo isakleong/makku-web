@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\ProductBrand;
 use App\Models\ProductCategory;
+use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -89,6 +90,15 @@ class ProductController extends Controller
             unset($input['image']);
         }
 
+        //custom slug handler (indonesia or english)
+        if($request->slug == 'id') {
+            $slug = SlugService::createSlug(Product::class, 'slug', $input['name_id']);
+            $input['slug'] = $slug;
+        } else {
+            $slug = SlugService::createSlug(Product::class, 'slug', $input['name_en']);
+            $input['slug'] = $slug;
+        }
+
         Product::create($input);
 
         return redirect('/admin/product')->withSuccess('Data Added Successfully!');
@@ -152,6 +162,8 @@ class ProductController extends Controller
         }
 
         $product->slug = null;
+        $slug = SlugService::createSlug(Product::class, 'slug', $input['slug']);
+        $input['slug'] = $slug;
         $product->update($input);
 
         if($imageDelete != "") {

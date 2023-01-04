@@ -192,11 +192,28 @@
 
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
-                                                        <button type="button" class="btn btn-primary" onclick="generateSlug()">Generate Slug</button>
+                                                        <label for="slug">Slug</label>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="slug" id="slug_en" value="en"/>
+                                                            <label class="form-check-label" for="slug_en">English</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="slug" id="slug_id" value="id" checked/>
+                                                            <label class="form-check-label" for="slug_id">Indonesia</label>
+                                                        </div>                                                        
                                                     </div>
+                                                    {{-- @error('slugData')
+                                                        <p style="color: red">{{$message}}</p>
+                                                    @enderror --}}
                                                 </div>
 
-                                                <div class="col-12 mt-1">
+                                                {{-- <div class="col-12 mt-1">
+                                                    <div class="form-group">
+                                                        <button type="button" class="btn btn-primary" onclick="generateSlug()">Generate Slug</button>
+                                                    </div>
+                                                </div> --}}
+
+                                                {{-- <div class="col-12 mt-1">
                                                     <div class="form-group">
                                                         <label for="slug">Slug</label>
                                                         <input type="text" id="slug" class="form-control"
@@ -205,7 +222,7 @@
                                                     @error('slug')
                                                         <p style="color: red">{{$message}}</p>
                                                     @enderror
-                                                </div>
+                                                </div> --}}
 
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
@@ -318,23 +335,51 @@
     });
 </script>
 
-<script>
+{{-- <script>
     function generateSlug(){
-        var title = $("#title_id").val();
+        var slugData = "";
 
-        if((!$("#title_id").val()) ){
-            Swal.fire({
-                title: 'Please fill out Title field first',
-                icon: 'warning',
-                showDenyButton: false,
-                confirmButtonText: 'OK'
-            });
+        var slugOption = document.getElementsByName('slugOption');
+        for(i = 0; i < slugOption.length; i++) {
+            if(slugOption[i].checked) {
+                slugData = slugOption[i].value;
+            }
+        }
+
+        if(slugData == 'en') {
+            var title = $("#title_en").val();
+
+            if((!$("#title_en").val()) ){
+                $("#slug").val('');
+                Swal.fire({
+                    title: 'Please fill out Title field first',
+                    icon: 'warning',
+                    showDenyButton: false,
+                    confirmButtonText: 'OK'
+                });
+            } else {
+                var slug = title.trim().toLowerCase().replace(/\d+|^\s+|\s+$/g,"").replace(/\s+/g, "-").replace(/[^\w\-]+/g, "").replace(/\-\-+/g, "-").replace(/^-+/, "").replace(/-+$/, "");
+
+                $("#slug").val(slug);
+            }
         } else {
-            var slug = title.trim().toLowerCase().replace(/\d+|^\s+|\s+$/g,"").replace(/\s+/g, "-").replace(/[^\w\-]+/g, "").replace(/\-\-+/g, "-").replace(/^-+/, "").replace(/-+$/, "");
+            var title = $("#title_id").val();
 
-            $("#slug").val(slug);
+            if((!$("#title_id").val()) ){
+                $("#slug").val('');
+                Swal.fire({
+                    title: 'Please fill out Title field first',
+                    icon: 'warning',
+                    showDenyButton: false,
+                    confirmButtonText: 'OK'
+                });
+            } else {
+                var slug = title.trim().toLowerCase().replace(/\d+|^\s+|\s+$/g,"").replace(/\s+/g, "-").replace(/[^\w\-]+/g, "").replace(/\-\-+/g, "-").replace(/^-+/, "").replace(/-+$/, "");
+
+                $("#slug").val(slug);
+            }
         }
     }
-</script>
+</script> --}}
 
 @endsection

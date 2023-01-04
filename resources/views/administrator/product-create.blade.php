@@ -159,6 +159,7 @@
                                                         <p style="color: red">{{$message}}</p>
                                                     @enderror
                                                 </div>
+
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
                                                         <label for="name_id">Name - ID</label>
@@ -168,6 +169,23 @@
                                                     @error('name_id')
                                                         <p style="color: red">{{$message}}</p>
                                                     @enderror
+                                                </div>
+
+                                                <div class="col-12 mt-1">
+                                                    <div class="form-group">
+                                                        <label for="slug">Slug</label>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="slug" id="slug_en" value="en" checked/>
+                                                            <label class="form-check-label" for="slug_en">English</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="slug" id="slug_id" value="id"/>
+                                                            <label class="form-check-label" for="slug_id">Indonesia</label>
+                                                        </div>                                                        
+                                                    </div>
+                                                    {{-- @error('slugData')
+                                                        <p style="color: red">{{$message}}</p>
+                                                    @enderror --}}
                                                 </div>
 
                                                 <div class="col-12 mt-1">
