@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ProductBrand;
 use App\Models\ProductCategory;
+use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
 
 class ProductBrandController extends Controller
@@ -64,6 +65,8 @@ class ProductBrandController extends Controller
         $input = $request->all();
 
         $brand->slug = null;
+        $slug = SlugService::createSlug(ProductCategory::class, 'slug', $input['slug']);
+        $input['slug'] = $slug;
         $brand->update($input);
 
         return redirect('/admin/product/brand')->withSuccess('Data Updated Successfully!');

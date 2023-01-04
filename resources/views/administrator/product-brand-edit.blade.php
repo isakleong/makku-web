@@ -157,6 +157,17 @@
                                                     @enderror
                                                 </div>
 
+                                                <div class="col-12 mt-1">
+                                                    <div class="form-group">
+                                                        <label for="slug">Slug</label>
+                                                        <input type="text" id="slug" class="form-control"
+                                                            name="slug" placeholder="Slug" value="{{$brand->slug}}">
+                                                    </div>
+                                                    @error('slug')
+                                                        <p style="color: red">{{$message}}</p>
+                                                    @enderror
+                                                </div>
+
                                                 <div class="col-12 mt-3">
                                                     <div class="form-group">
                                                         <div class="form-check form-switch">

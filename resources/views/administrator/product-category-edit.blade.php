@@ -156,6 +156,7 @@
                                                         <p style="color: red">{{$message}}</p>
                                                     @enderror
                                                 </div>
+
                                                 <div class="col-12 mt-1">
                                                     <div class="form-group">
                                                         <label for="name_id">Name - ID</label>
@@ -163,6 +164,17 @@
                                                             name="name_id" placeholder="Name (Indonesia)" value="{{$category->name_id}}">
                                                     </div>
                                                     @error('name_id')
+                                                        <p style="color: red">{{$message}}</p>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="col-12 mt-1">
+                                                    <div class="form-group">
+                                                        <label for="slug">Slug</label>
+                                                        <input type="text" id="slug" class="form-control"
+                                                            name="slug" placeholder="Slug" value="{{$category->slug}}">
+                                                    </div>
+                                                    @error('slug')
                                                         <p style="color: red">{{$message}}</p>
                                                     @enderror
                                                 </div>

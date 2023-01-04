@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
 use Intervention\Image\Facades\Image;
+use \Cviebrock\EloquentSluggable\Services\SlugService;
 
 class ProductCategoryController extends Controller
 {
@@ -57,6 +58,15 @@ class ProductCategoryController extends Controller
             $input['image'] = $destinationPath.$imageName;
         } else {
             unset($input['image']);
+        }
+
+        //custom slug handler (indonesia or english)
+        if($request->slug == 'id') {
+            $slug = SlugService::createSlug(ProductCategory::class, 'slug', $input['name_id']);
+            $input['slug'] = $slug;
+        } else {
+            $slug = SlugService::createSlug(ProductCategory::class, 'slug', $input['name_en']);
+            $input['slug'] = $slug;
         }
 
         ProductCategory::create($input);
@@ -148,6 +158,8 @@ class ProductCategoryController extends Controller
         }
 
         $category->slug = null;
+        $slug = SlugService::createSlug(ProductCategory::class, 'slug', $input['slug']);
+        $input['slug'] = $slug;
         $category->update($input);
 
         if($imageDelete != "") {
