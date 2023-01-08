@@ -63,14 +63,14 @@
 
 
   <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KRTK7GZC8H"></script>
+  {{-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-KRTK7GZC8H"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
 
     gtag('config', 'G-KRTK7GZC8H');
-  </script>
+  </script> --}}
 
   <style>
     .form-select {
@@ -98,9 +98,6 @@
 <body class="go-mart food-fmcg">
 {{-- <body class="d-flex flex-column h-100"> --}}
     {{-- @yield('navbar') --}}
-
-    <div class="floating-wpp"></div>
-
     <header id="header" class="header fixed-top">
       <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
   
@@ -239,6 +236,9 @@
         </div>
     </footer>
     
+    <div class="floating-wpp" id="whatsappButton">
+    </div>
+
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
     <!-- Vendor JS Files -->
@@ -298,14 +298,15 @@
   <script>
     $(function () {
       $('.floating-wpp').floatingWhatsApp({
-        phone: '+6281908900124',
+        // phone: '+6281908900124',
+        phone: {{$company->phone}},
         popupMessage: 'Apa yang bisa kami bantu?',
         showPopup: true,
         message: 'Saya ingin membeli barang di Makku Frozen',
         headerTitle: 'Hai!',
         zindex: 40,
         size: '60px',
-        position: 'left',
+        position: 'right',
         showOnIE: true
       });
     });

@@ -311,6 +311,20 @@ section {
   transition: all 0.4s;
 }
 
+.back-to-top {
+  position: fixed;
+  visibility: hidden;
+  opacity: 0;
+  right: 15px;
+  bottom: 15px;
+  z-index: 99999;
+  background: #8894f6;
+  width: 40px;
+  height: 40px;
+  border-radius: 5px;
+  transition: all 0.4s;
+}
+
 .back-to-top i {
   font-size: 24px;
   color: #fff;

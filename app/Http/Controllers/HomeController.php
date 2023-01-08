@@ -31,7 +31,7 @@ class HomeController extends Controller {
                 ->get();
 
                 $company = DB::table('company')
-                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp, phone'))
                 ->get()->first();
 
                 $productHighlight = DB::table('product_highlight as tbl_product')
@@ -53,7 +53,7 @@ class HomeController extends Controller {
 
             } elseif($locale == "id") {
                 $company = DB::table('company')
-                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp. phone'))
                 ->get()->first();
 
                 $menubar = DB::table('menu_bar as b')
@@ -101,7 +101,7 @@ class HomeController extends Controller {
                 ->get();
 
                 $company = DB::table('company')
-                ->select(DB::raw('name, highlight_en as highlight, about_en as about, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->select(DB::raw('name, highlight_en as highlight, about_en as about, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp, phone'))
                 ->get()->first();
 
                 $companyImage = DB::table('company_image')
@@ -119,7 +119,7 @@ class HomeController extends Controller {
                 ->get();
 
                 $company = DB::table('company')
-                ->select(DB::raw('name, highlight_id as highlight, about_id as about, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->select(DB::raw('name, highlight_id as highlight, about_id as about, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp, phone'))
                 ->get()->first();
 
                 $companyImage = DB::table('company_image')
@@ -149,7 +149,7 @@ class HomeController extends Controller {
                 ->get();
 
                 $company = DB::table('company')
-                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp, phone'))
                 ->get()->first();
 
             } elseif($locale == "id") {
@@ -162,7 +162,7 @@ class HomeController extends Controller {
                 ->get();
 
                 $company = DB::table('company')
-                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp, phone'))
                 ->get()->first();
             }
 
@@ -190,7 +190,7 @@ class HomeController extends Controller {
                 ->get();
 
                 $company = DB::table('company')
-                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp, phone'))
                 ->get()->first();
 
                 $catalogue = DB::table('catalogue')
@@ -208,7 +208,7 @@ class HomeController extends Controller {
                 ->get();
 
                 $company = DB::table('company')
-                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp, phone'))
                 ->get()->first();
 
                 $catalogue = DB::table('catalogue')
@@ -238,7 +238,7 @@ class HomeController extends Controller {
                 ->get();
 
                 $company = DB::table('company')
-                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp, phone'))
                 ->get()->first();
 
             } elseif($locale == "id") {
@@ -251,7 +251,7 @@ class HomeController extends Controller {
                 ->get();
 
                 $company = DB::table('company')
-                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp, phone'))
                 ->get()->first();
             }
 
@@ -279,7 +279,7 @@ class HomeController extends Controller {
                 ->get();
 
                 $company = DB::table('company')
-                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp', 'phone'))
                 ->get()->first();
 
                 // $news = DB::table('news')
@@ -307,7 +307,7 @@ class HomeController extends Controller {
                 ->get();
 
                 $company = DB::table('company')
-                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp', 'phone'))
                 ->get()->first();
 
                 // $news = DB::table('news')
@@ -349,7 +349,7 @@ class HomeController extends Controller {
                 ->get();
 
                 $company = DB::table('company')
-                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp, phone'))
                 ->get()->first();
 
                 $news = DB::table('news')
@@ -371,7 +371,7 @@ class HomeController extends Controller {
                 ->get();
 
                 $company = DB::table('company')
-                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp', 'phone'))
                 ->get()->first();
 
                 $news = DB::table('news')

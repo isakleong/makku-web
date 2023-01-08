@@ -91,7 +91,7 @@ class ProductCategoryController extends Controller
                 ->get();
 
                 $company = DB::table('company')
-                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp, phone'))
                 ->get()->first();
 
             } elseif($locale == "id") {
@@ -104,7 +104,7 @@ class ProductCategoryController extends Controller
                 ->get();
 
                 $company = DB::table('company')
-                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp, phone'))
                 ->get()->first();
             }
 
