@@ -199,45 +199,232 @@
                             <div class="modal-body">
                                 @if ((str_contains(Route::currentRouteName(), 'product.catalogue')  == true))
                                     <p>Berfungsi untuk mengatur data katalog produk.</p>
-                                    <p>
-                                        <b>Struktur Data</b><br>
-                                        1. Name - EN<br>
-                                        --> Nama katalog (English). <br><br>
-                                        2. Name - ID<br>
-                                        --> Nama katalog (Indonesian). <br><br>
-                                        3. File<br>
-                                        --> File katalog (berupa file / gambar).<br><br>
-                                        4. Active<br>
-                                        --> Indikator data aktif / tidak. Jika tidak aktif, maka data akan disembunyikan dari User.<br><br>
-                                    </p>
+                                    <strong>Struktur Data</strong>
+                                    <ul>
+                                        <li>Name - EN</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Nama katalog (English).</p>
+                                        <li>Name - ID</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Nama katalog (Bahasa Indonesia).</p>
+                                        <li>File</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> File katalog (bisa berupa file / gambar).</p>
+                                        <li>Active</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Indikator data aktif / tidak. Jika tidak aktif, maka data akan disembunyikan dari User.</p>
+                                    </ul>
                                 @elseif ((str_contains(Route::currentRouteName(), 'product.category')  == true))
                                     <p>Berfungsi untuk mengatur data kategori produk. Misalnya, Olahan Seafood, Sosis, Nugget, Dry, dll.</p>
-                                    <p>
-                                        <b>Struktur Data</b><br>
-                                        1. Name - EN<br>
-                                        --> Nama kategori produk (English). <br><br>
-                                        2. Name - ID<br>
-                                        --> Nama kategori produk (Indonesian). <br><br>
-                                        3. Slug<br>
-                                        --> Berperan penting untuk SEO (Search Engine Optimization). Saat menambahkan data, Slug di-generate oleh sistem secara otomatis. Admin dapat memilih Slug di-generate menggunakan Bahasa Indonesia atau English. Jika memilih Bahasa Indonesia, maka Slug akan di-generate berdasarkan data Name-ID, dan sebaliknya.<br><br>Saat mengedit data, Slug dapat diedit secara manual.<br><br>
-                                        4. Image<br>
-                                        --> Gambar kategori produk.<br><br> 
-                                        5. Active<br>
-                                        --> Indikator data aktif / tidak. Jika tidak aktif, maka data akan disembunyikan dari User.<br><br>
-                                    </p>
+                                    <strong>Struktur Data</strong>
+                                    <ul>
+                                        <li>Name - EN</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Nama kategori produk (English).</p>
+                                        <li>Name - ID</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Nama kategori produk (Bahasa Indonesia).</p>
+                                        <li>Slug</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Slug di-generate secara otomatis oleh sistem. Saat menambahkan data, Admin dapat memilih apakah Slug di-generate menggunakan Bahasa Indonesia / English. Jika memilih Bahasa Indonesia, maka Slug di-generate berdasarkan data Name-ID, dan sebaliknya. Slug juga bisa di-edit secara manual.</p>
+                                        <li>Active</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Indikator data aktif / tidak. Jika tidak aktif, maka data akan disembunyikan dari User.</p>
+                                    </ul>
+                                @elseif ((str_contains(Route::currentRouteName(), 'product.brand')  == true))
+                                    <p>Berfungsi untuk mengatur data brand (merk) produk.</p>
+                                    <strong>Struktur Data</strong>
+                                    <ul>
+                                        <li>Name</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Nama brand / merk.</p>
+                                        <li>Slug</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Slug di-generate secara otomatis oleh sistem berdasarkan data Name. Slug juga bisa di-edit secara manual.</p>
+                                        <li>Active</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Indikator data aktif / tidak. Jika tidak aktif, maka data akan disembunyikan dari User.</p>
+                                    </ul>
+                                @elseif ((str_contains(Route::currentRouteName(), 'product.item')  == true))
+                                    <p>Berfungsi untuk mengatur data produk.</p>
+                                    <strong>Struktur Data</strong>
+                                    <ul>
+                                        <li>Name - EN</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Nama produk (English).</p>
+                                        <li>Name - ID</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Nama produk (Bahasa Indonesia).</p>
+                                        <li>Slug</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Slug di-generate secara otomatis oleh sistem. Saat menambahkan data, Admin dapat memilih apakah Slug di-generate menggunakan Bahasa Indonesia / English. Jika memilih Bahasa Indonesia, maka Slug di-generate berdasarkan data Name-EN, dan sebaliknya. Slug juga bisa di-edit secara manual.</p>
+                                        <li>Image</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Gambar produk.</p>
+                                        <li>Category</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Kategori produk.</p>
+                                        <li>Brand</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Brand produk.</p>
+                                        <li>Active</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Indikator data aktif / tidak. Jika tidak aktif, maka data akan disembunyikan dari User.</p>
+                                    </ul>
+                                @elseif ((str_contains(Route::currentRouteName(), 'news.category')  == true))
+                                    <p>Berfungsi untuk mengatur data kategori berita.</p>
+                                    <strong>Struktur Data</strong>
+                                    <ul>
+                                        <li>Name - EN</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Nama kategori berita (English).</p>
+                                        <li>Name - ID</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Nama kategori berita (Bahasa Indonesia).</p>
+                                        <li>Slug</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Slug di-generate secara otomatis oleh sistem. Saat menambahkan data, Admin dapat memilih apakah Slug di-generate menggunakan Bahasa Indonesia / English. Jika memilih Bahasa Indonesia, maka Slug di-generate berdasarkan data Name-EN, dan sebaliknya. Slug juga bisa di-edit secara manual.</p>
+                                        <li>Active</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Indikator data aktif / tidak. Jika tidak aktif, maka data akan disembunyikan dari User.</p>
+                                    </ul>
+                                @elseif ((str_contains(Route::currentRouteName(), 'news.article')  == true))
+                                    <p>Berfungsi untuk mengatur data artikel (konten berita).</p>
+                                    <strong>Struktur Data</strong>
+                                    <ul>
+                                        <li>Title - EN</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Judul artikel (English).</p>
+                                        <li>Title - ID</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Judul artikel (Bahasa Indonesia).</p>
+                                        <li>Content - EN</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Konten artikel (English).</p>
+                                        <li>Slug</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Slug di-generate secara otomatis oleh sistem. Saat menambahkan data, Admin dapat memilih apakah Slug di-generate menggunakan Bahasa Indonesia / English. Jika memilih Bahasa Indonesia, maka Slug di-generate berdasarkan data Title-EN, dan sebaliknya. Slug juga bisa di-edit secara manual.</p>
+                                        <li>Content - EN</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Konten artikel (English).</p>
+                                        <li>Content - ID</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Konten artikel (Bahasa Indonesia).</p>
+                                        <li>Cover Image</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Gambar cover artikel.</p>
+                                        <li>Active</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Indikator data aktif / tidak. Jika tidak aktif, maka data akan disembunyikan dari User.</p>
+                                    </ul>
+                                @elseif ((str_contains(Route::currentRouteName(), 'testimonial')  == true))
+                                    <p>Berfungsi untuk mengatur data testimoni.</p>
+                                    <strong>Struktur Data</strong>
+                                    <ul>
+                                        <li>Content - EN</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Isi testimoni (English).</p>
+                                        <li>Content - ID</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Isi testimoni (Bahasa Indonesia).</p>
+                                        <li>Author</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Pemberi testimoni.</p>
+                                        <li>Active</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Indikator data aktif / tidak. Jika tidak aktif, maka data akan disembunyikan dari User.</p>
+                                    </ul>
+                                @elseif ((str_contains(Route::currentRouteName(), 'partnership')  == true))
+                                    <p>Berfungsi untuk mengatur data kemitraan (partnership).</p>
+                                    <strong>Struktur Data</strong>
+                                    <ul>
+                                        <li>Name</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Nama mitra.</p>
+                                        <li>Image</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Foto mitra.</p>
+                                        <li>Logo</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Logo mitra.</p>
+                                        <li>Address</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Alamat mitra.</p>
+                                        <li>Instagram</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Instagram mitra.</p>
+                                        <li>Facebook</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Facebook mitra.</p>
+                                        <li>Whatsapp</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Whatsapp mitra.</p>
+                                        <li>Phone</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Nomor telepon mitra.</p>
+                                        <li>Active</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Indikator data aktif / tidak. Jika tidak aktif, maka data akan disembunyikan dari User.</p>
+                                    </ul>
+                                @elseif ((str_contains(Route::currentRouteName(), 'master.menubar')  == true))
+                                    <p>Berfungsi untuk mengatur data kemitraan (partnership).</p>
+                                    <strong>Struktur Data</strong>
+                                    <ul>
+                                        <li>Name - EN</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Nama menu (English).</p>
+                                        <li>Name - ID</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Nama menu (Bahasa Indonesia).</p>
+                                        <li>Refer</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> URL path.</p>
+                                        <li>Type</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Tipe menu (Parent / Child / Sub Child).</p>
+                                        <li>Parent</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Menu parent (Khusus Child / Sub Child).</p>
+                                        <li>Image</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Icon menu.</p>
+                                        <li>Order Number</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Urutan menu.</p>
+                                        <li>Active</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Indikator data aktif / tidak. Jika tidak aktif, maka data akan disembunyikan dari User.</p>
+                                    </ul>
+                                @elseif ((str_contains(Route::currentRouteName(), 'master.producthighlight')  == true))
+                                    <p>Berfungsi untuk mengatur data highlight produk.</p>
+                                    <strong>Struktur Data</strong>
+                                    <ul>
+                                        <li>Name - EN</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Nama produk (English).</p>
+                                        <li>Name - ID</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Nama produk (Bahasa Indonesia).</p>
+                                        <li>Image</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Gambar produk.</p>
+                                        <li>Order Number</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Urutan produk.</p>
+                                        <li>Active</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Indikator data aktif / tidak. Jika tidak aktif, maka data akan disembunyikan dari User.</p>
+                                    </ul>
+                                @elseif ((str_contains(Route::currentRouteName(), 'master.keyfeature')  == true))
+                                    <p>Berfungsi untuk mengatur data key feature (value perusahaan).</p>
+                                    <strong>Struktur Data</strong>
+                                    <ul>
+                                        <li>Name - EN</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Nama value (English).</p>
+                                        <li>Name - ID</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Nama value (Bahasa Indonesia).</p>
+                                        <li>Image</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Icon value.</p>
+                                        <li>Order Number</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Urutan value.</p>
+                                        <li>Active</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Indikator data aktif / tidak. Jika tidak aktif, maka data akan disembunyikan dari User.</p>
+                                    </ul>
+                                @elseif ((str_contains(Route::currentRouteName(), 'master.company')  == true))
+                                    <p>Berfungsi untuk mengatur data master perusahaan.</p>
+                                    <strong>Struktur Data</strong>
+                                    <ul>
+                                        <li>Name</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Nama perusahaan.</p>
+                                        <li>Address</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Alamat.</p>
+                                        <li>Highlight - EN</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Company highlight (English). Ditampilkan di Homepage.</p>
+                                        <li>Highlight - ID</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Company highlight (Bahasa Indonesia). Ditampilkan di Homepage.</p>
+                                        <li>Description - EN</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Company highlight description (English). Ditampilkan di Homepage.</p>
+                                        <li>Description - ID</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Company highlight description (Bahasa Indonesia). Ditampilkan di Homepage.</p>
+                                        <li>About - EN</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Penjelasan tentang perusahaan (English). Ditampilkan di halaman Our-Company.</p>
+                                        <li>About - ID</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Penjelasan tentang perusahaan (Bahasa Indonesia). Ditampilkan di halaman Our-Company.</p>
+                                        <li>Highlight Image</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Gambar company highlight.</p>
+                                        <li>Logo Primary</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Logo utama.</p>
+                                        <li>Logo Sekunder</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Logo sekunder.</p>
+                                        <li>Email</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Email perusahaan.</p>
+                                        <li>Facebook</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Facebook perusahaan.</p>
+                                        <li>Instagram</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Instagram perusahaan.</p>
+                                        <li>Whatsapp</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Link chat whatsapp perusahaan.</p>
+                                        <li>Phone</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Nomor whatsapp perusahaan.</p>
+                                    </ul>
+
                                 @endif
 
                                 
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-light-secondary"
+                                {{-- <button type="button" class="btn btn-light-secondary"
                                     data-bs-dismiss="modal">
                                     <i class="bx bx-x d-block d-sm-none"></i>
                                     <span class="d-none d-sm-block">Close</span>
-                                </button>
+                                </button> --}}
                                 <button type="button" class="btn btn-primary ml-1" data-bs-dismiss="modal">
                                     <i class="bx bx-check d-block d-sm-none"></i>
-                                    <span class="d-none d-sm-block">Accept</span>
+                                    <span class="d-none d-sm-block">OK</span>
                                 </button>
                             </div>
                         </div>
