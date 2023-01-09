@@ -177,8 +177,8 @@
                                     <td><span class="badge bg-danger">Inactive</span></td>
                                 @endif
                                 <td>
-                                    <a href="{{ route('partnership.edit', $item->id) }}" class="btn icon btn-sm btn-primary d-inline-block m-1" data-bs-toggle="tooltip" title="Edit"><i class="bi bi-pencil"></i></a>
-                                    <form action="{{ route('partnership.destroy', $item->id) }}" method="POST" class="d-inline-block m-1" data-bs-toggle="tooltip" title="Delete">
+                                    <a href="{{ route('admin.partnership.edit', $item->id) }}" class="btn icon btn-sm btn-primary d-inline-block m-1" data-bs-toggle="tooltip" title="Edit"><i class="bi bi-pencil"></i></a>
+                                    <form action="{{ route('admin.partnership.destroy', $item->id) }}" method="POST" class="d-inline-block m-1" data-bs-toggle="tooltip" title="Delete">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn icon btn-sm btn-danger show_confirm"><i class="bi bi-x"></i></button>

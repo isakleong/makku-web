@@ -6,117 +6,6 @@
 <link rel="stylesheet" type="text/css" href="/vendor/datatable/css/datatables.min.css"/>
 @endsection
 
-@section('navbar')
-<div class="sidebar-menu">
-    <ul class="menu">
-        <li class="sidebar-title">Menu</li>
-        
-        <li
-            class="sidebar-item ">
-            <a href="/admin/dashboard" class='sidebar-link'>
-                <i class="bi bi-grid-fill"></i>
-                <span>Dashboard</span>
-            </a>
-        </li>
-
-        <li
-            class="sidebar-item ">
-            <a href="/" target="_blank" class='sidebar-link'>
-                <i class="bi bi-globe"></i>
-                <span>Go To Website</span>
-            </a>
-        </li>
-
-        <li
-            class="sidebar-item  has-sub active">
-            <a href="" class='sidebar-link'>
-                <i class="bi bi-basket-fill"></i>
-                <span>Product</span>
-            </a>
-            <ul class="submenu active">
-                <li class="submenu-item ">
-                    <a href="/admin/product/catalogue">Catalogue</a>
-                </li>
-                <li class="submenu-item">
-                    <a href="/admin/product/category">Category</a>
-                </li>
-                <li class="submenu-item active">
-                    <a href="/admin/product/brand">Brand</a>
-                </li>
-                <li class="submenu-item ">
-                    <a href="/admin/product">Item</a>
-                </li>
-            </ul>
-        </li>
-
-        <li
-            class="sidebar-item  has-sub">
-            <a href="" class='sidebar-link'>
-                <i class="bi bi-newspaper"></i>
-                <span>News</span>
-            </a>
-            <ul class="submenu ">
-                <li class="submenu-item ">
-                    <a href="/admin/news/category">Category</a>
-                </li>
-                {{-- <li class="submenu-item ">
-                    <a href="/admin/news/tag">Tag</a>
-                </li> --}}
-                <li class="submenu-item ">
-                    <a href="/admin/news/article">Article</a>
-                </li>
-            </ul>
-        </li>
-
-        <li
-            class="sidebar-item ">
-            <a href="/admin/testimonial" class='sidebar-link'>
-                <i class="bi bi-chat-heart-fill"></i>
-                <span>Testimonial</span>
-            </a>
-        </li>
-        
-        <li
-            class="sidebar-item ">
-            <a href="/admin/partnership" class='sidebar-link'>
-                <i class="bi bi-people-fill"></i>
-                <span>Partnership</span>
-            </a>
-        </li>
-
-        <li
-            class="sidebar-item  has-sub">
-            <a href="/master" class='sidebar-link'>
-                <i class="bi bi-stack"></i>
-                <span>Master</span>
-            </a>
-            <ul class="submenu">
-                <li class="submenu-item">
-                    <a href="/admin/master/menubar">Menu Bar</a>
-                </li>
-                <li class="submenu-item">
-                    <a href="/admin/master/producthighlight">Product Highlight</a>
-                </li>
-                <li class="submenu-item">
-                    <a href="/admin/master/keyfeature">Key Feature</a>
-                </li>
-                <li class="submenu-item ">
-                    <a href="/admin/master/company">Company</a>
-                </li>
-            </ul>
-        </li>
-
-        <li
-            class="sidebar-item ">
-            <a href="/admin/logout" class='sidebar-link'>
-                <i class="bi bi-power"></i>
-                <span>Logout</span>
-            </a>
-        </li>
-    </ul>
-</div>
-@endsection
-
 @section('content')
 @include('sweetalert::alert')
 
@@ -167,8 +56,8 @@
                                     <td><span class="badge bg-danger">Inactive</span></td>
                                 @endif
                                 <td>
-                                    <a href="{{ route('brand.edit', $item->id) }}" class="btn icon btn-sm btn-primary d-inline-block m-1" data-bs-toggle="tooltip" title="Edit"><i class="bi bi-pencil"></i></a>
-                                    <form action="{{ route('brand.destroy', $item->id) }}" method="POST" class="d-inline-block m-1" data-bs-toggle="tooltip" title="Delete">
+                                    <a href="{{ route('admin.product.brand.edit', $item->id) }}" class="btn icon btn-sm btn-primary d-inline-block m-1" data-bs-toggle="tooltip" title="Edit"><i class="bi bi-pencil"></i></a>
+                                    <form action="{{ route('admin.product.brand.destroy', $item->id) }}" method="POST" class="d-inline-block m-1" data-bs-toggle="tooltip" title="Delete">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn icon btn-sm btn-danger show_confirm"><i class="bi bi-x"></i></button>

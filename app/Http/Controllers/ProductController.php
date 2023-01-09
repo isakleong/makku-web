@@ -101,7 +101,7 @@ class ProductController extends Controller
 
         Product::create($input);
 
-        return redirect('/admin/product')->withSuccess('Data Added Successfully!');
+        return redirect('/admin/product/item')->withSuccess('Data Added Successfully!');
     }
 
     public function show(Product $product)
@@ -109,18 +109,18 @@ class ProductController extends Controller
 
     }
 
-    public function edit(Product $product)
+    public function edit(Product $item)
     {
         $category = ProductCategory::all();
         $brand = ProductBrand::all();
 
-        $categorySelected = DB::table('product_category')->where('id', $product->categoryID)->first();
-        $brandSelected = DB::table('product_brand')->where('id', $product->brandID)->first();
+        $categorySelected = DB::table('product_category')->where('id', $item->categoryID)->first();
+        $brandSelected = DB::table('product_brand')->where('id', $item->brandID)->first();
 
-        return view('administrator.product-edit', compact(['product', 'category', 'brand', 'categorySelected', 'brandSelected']));
+        return view('administrator.product-edit', compact(['item', 'category', 'brand', 'categorySelected', 'brandSelected']));
     }
 
-    public function update(Request $request, Product $product)
+    public function update(Request $request, Product $item)
     {
         $request->validate([
             'categoryID' => 'required',
@@ -140,7 +140,7 @@ class ProductController extends Controller
 
         $imageDelete = "";
         if($image = $request->file('image')) {
-            $imageDelete = public_path()."/".$product->image;
+            $imageDelete = public_path()."/".$item->image;
 
             //commented because never trust client side inputs
             // $destinationPath = 'image/upload/';
@@ -161,10 +161,10 @@ class ProductController extends Controller
             unset($input['image']);
         }
 
-        $product->slug = null;
+        $item->slug = null;
         $slug = SlugService::createSlug(Product::class, 'slug', $input['slug']);
         $input['slug'] = $slug;
-        $product->update($input);
+        $item->update($input);
 
         if($imageDelete != "") {
             File::delete($imageDelete);
@@ -173,14 +173,14 @@ class ProductController extends Controller
         return redirect('/admin/product')->withSuccess('Data Updated Successfully!');
     }
 
-    public function destroy(Product $product)
+    public function destroy(Product $item)
     {
-        $imageDelete = public_path()."/".$product->image;
+        $imageDelete = public_path()."/".$item->image;
 
-        $product->delete();
+        $item->delete();
 
         File::delete($imageDelete);
 
-        return redirect('/admin/product')->withSuccess('Data Deleted Successfully!');
+        return redirect('/admin/product/item')->withSuccess('Data Deleted Successfully!');
     }
 }

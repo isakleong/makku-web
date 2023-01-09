@@ -115,46 +115,87 @@ Route::get('/admin/logout', [AuthController::class, 'logout']);
 
 
 //Admin panel
-Route::get('/admin', [DashboardController::class, 'index'])->middleware('auth');
-Route::get('/admin/dashboard', [DashboardController::class, 'index'])->middleware('auth');
-Route::resource('/admin/master/menubar', MenuBarController::class)->middleware('auth');
-Route::resource('/admin/master/producthighlight', ProductHighlightController::class)->middleware('auth');
-Route::resource('/admin/master/keyfeature', KeyFeatureController::class)->middleware('auth');
-Route::prefix('admin')->group(static function() {
-    Route::middleware('auth')->group(static function () {
-        Route::resource('master/companyimage', CompanyImageController::class);
-    });
-});
-Route::prefix('admin')->group(static function() {
-    Route::middleware('auth')->group(static function () {
-        Route::resource('master/company', CompanyController::class);
-    });
-});
-Route::resource('/admin/partnership', PartnershipController::class)->middleware('auth');
-Route::resource('/admin/testimonial', TestimonialController::class)->middleware('auth');
-Route::resource('/admin/product/category', ProductCategoryController::class, ["as"=>"product"])->middleware('auth');
-Route::resource('/admin/product/catalogue', CatalogueController::class)->middleware('auth');
-Route::resource('/admin/product/brand', ProductBrandController::class)->middleware('auth');
-Route::resource('/admin/product', ProductController::class)->middleware('auth');
-Route::resource('/admin/news/category', NewsCategoryController::class, ["as"=>"news"])->middleware('auth');
-Route::resource('/admin/news/tag', NewsTagController::class)->middleware('auth');
-Route::resource('/admin/news/article', NewsArticleController::class)->middleware('auth');
-Route::resource('/admin/news', NewsController::class)->middleware('auth');
-Route::group(['prefix' => 'admin', 'as' =>'admin.'], function(){
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function() {
+    // Route::get('/', [DashboardController::class, 'index']);
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');;
+
     //spatie laravel image (successfully tested on CKEditor) --> not used anymore, because already using Summernote with image upload handler
     Route::post('images', [\App\Http\Controllers\ImageController::class, 'store'])->middleware('auth')->name('images.store');
 
-    //dashboard admin controller (google analytic handler)
+    //google analytic handler
     Route::post('dashboard/sum-views', [\App\Http\Controllers\DashboardController::class, 'ga4_totalViews'])->middleware('auth')->name('dashboard.filterSumViews');
     Route::post('dashboard/sum-visitors', [\App\Http\Controllers\DashboardController::class, 'ga4_totalUsers'])->middleware('auth')->name('dashboard.filterSumVisitors');
     Route::post('dashboard/sum-returning-visitors', [\App\Http\Controllers\DashboardController::class, 'ga4_totalNewAndReturningUsers'])->middleware('auth')->name('dashboard.filterSumReturningVisitors');
     Route::post('dashboard/sum-avg-sessions', [\App\Http\Controllers\DashboardController::class, 'ga4_averageSessionDuration'])->middleware('auth')->name('dashboard.filterSumAvgSessions');
-    
-
     Route::post('dashboard/most-views', [\App\Http\Controllers\DashboardController::class, 'ga4_mostViewsByPage'])->middleware('auth')->name('dashboard.filterMostViewsByPage');
     Route::post('dashboard/total-users', [\App\Http\Controllers\DashboardController::class, 'ga4_totalUsersByDate'])->middleware('auth')->name('dashboard.filterTotalUsersByDate');
+    //end of google analytic handler
+
+    Route::resource('master/menubar', MenuBarController::class, ["as"=>"master"]);
+    Route::resource('master/producthighlight', ProductHighlightController::class, ["as"=>"master"]);
+    Route::resource('master/keyfeature', KeyFeatureController::class, ["as"=>"master"]);
+
+    Route::resource('master/companyimage', CompanyImageController::class, ["as"=>"master"]);
+    Route::resource('master/company', CompanyController::class, ["as"=>"master"]);
+
+    Route::resource('partnership', PartnershipController::class);
+    Route::resource('testimonial', TestimonialController::class);
+
+    Route::resource('product/catalogue', CatalogueController::class, ["as"=>"product"]);
+    Route::resource('product/category', ProductCategoryController::class, ["as"=>"product"]);
+    Route::resource('product/brand', ProductBrandController::class, ["as"=>"product"]);
+    Route::resource('product/item', ProductController::class, ["as"=>"product"]);
+
+    Route::resource('news/category', NewsCategoryController::class, ["as"=>"news"]);
+    Route::resource('news/tag', NewsTagController::class);
+    Route::resource('news/article', NewsArticleController::class, ["as"=>"news"]);
+    Route::resource('news', NewsController::class);
+
+    Route::post('upload', 'ImageController@upload');
 });
-Route::post('/admin/upload', 'ImageController@upload')->name('admin.upload');
+//End of Admin Panel
+
+// Route::get('/admin', [DashboardController::class, 'index'])->middleware('auth');
+// Route::get('/admin/dashboard', [DashboardController::class, 'index'])->middleware('auth');
+// Route::resource('/admin/master/menubar', MenuBarController::class)->middleware('auth');
+// Route::resource('/admin/master/producthighlight', ProductHighlightController::class)->middleware('auth');
+// Route::resource('/admin/master/keyfeature', KeyFeatureController::class)->middleware('auth');
+// Route::prefix('admin')->group(static function() {
+//     Route::middleware('auth')->group(static function () {
+//         Route::resource('master/companyimage', CompanyImageController::class);
+//     });
+// });
+// Route::prefix('admin')->group(static function() {
+//     Route::middleware('auth')->group(static function () {
+//         Route::resource('master/company', CompanyController::class);
+//     });
+// });
+// Route::resource('/admin/partnership', PartnershipController::class)->middleware('auth');
+// Route::resource('/admin/testimonial', TestimonialController::class)->middleware('auth');
+// Route::resource('/admin/product/category', ProductCategoryController::class, ["as"=>"product"])->middleware('auth');
+// Route::resource('/admin/product/catalogue', CatalogueController::class)->middleware('auth');
+// Route::resource('/admin/product/brand', ProductBrandController::class)->middleware('auth');
+// Route::resource('/admin/product', ProductController::class)->middleware('auth');
+// Route::resource('/admin/news/category', NewsCategoryController::class, ["as"=>"news"])->middleware('auth');
+// Route::resource('/admin/news/tag', NewsTagController::class)->middleware('auth');
+// Route::resource('/admin/news/article', NewsArticleController::class)->middleware('auth');
+// Route::resource('/admin/news', NewsController::class)->middleware('auth');
+
+// Route::group(['prefix' => 'admin', 'as' =>'admin.'], function(){
+//     //spatie laravel image (successfully tested on CKEditor) --> not used anymore, because already using Summernote with image upload handler
+//     Route::post('images', [\App\Http\Controllers\ImageController::class, 'store'])->middleware('auth')->name('images.store');
+
+//     //dashboard admin controller (google analytic handler)
+//     Route::post('dashboard/sum-views', [\App\Http\Controllers\DashboardController::class, 'ga4_totalViews'])->middleware('auth')->name('dashboard.filterSumViews');
+//     Route::post('dashboard/sum-visitors', [\App\Http\Controllers\DashboardController::class, 'ga4_totalUsers'])->middleware('auth')->name('dashboard.filterSumVisitors');
+//     Route::post('dashboard/sum-returning-visitors', [\App\Http\Controllers\DashboardController::class, 'ga4_totalNewAndReturningUsers'])->middleware('auth')->name('dashboard.filterSumReturningVisitors');
+//     Route::post('dashboard/sum-avg-sessions', [\App\Http\Controllers\DashboardController::class, 'ga4_averageSessionDuration'])->middleware('auth')->name('dashboard.filterSumAvgSessions');
+    
+
+//     Route::post('dashboard/most-views', [\App\Http\Controllers\DashboardController::class, 'ga4_mostViewsByPage'])->middleware('auth')->name('dashboard.filterMostViewsByPage');
+//     Route::post('dashboard/total-users', [\App\Http\Controllers\DashboardController::class, 'ga4_totalUsersByDate'])->middleware('auth')->name('dashboard.filterTotalUsersByDate');
+// });
+// Route::post('/admin/upload', 'ImageController@upload')->name('admin.upload');
 //End of Admin Panel
 
 //Homepage

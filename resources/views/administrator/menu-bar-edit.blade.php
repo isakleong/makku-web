@@ -143,7 +143,7 @@
                         <div class="card">
                             <div class="card-content">
                                 <div class="card-body">
-                                    <form action="{{ route('menubar.update', $menubar->id) }}" id="selectbox" method="POST" class="form form-vertical" enctype="multipart/form-data">
+                                    <form action="{{ route('admin.master.menubar.update', $menubar->id) }}" id="selectbox" method="POST" class="form form-vertical" enctype="multipart/form-data">
                                         @csrf
                                         {{ csrf_field() }}
                                         @method('PUT')

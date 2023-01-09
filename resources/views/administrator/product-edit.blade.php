@@ -6,117 +6,6 @@
     <link rel="stylesheet" href="/lte/assets/extensions/choices.js/public/assets/styles/choices.css">
 @endsection
 
-@section('navbar')
-<div class="sidebar-menu">
-    <ul class="menu">
-        <li class="sidebar-title">Menu</li>
-        
-        <li
-            class="sidebar-item ">
-            <a href="/admin/dashboard" class='sidebar-link'>
-                <i class="bi bi-grid-fill"></i>
-                <span>Dashboard</span>
-            </a>
-        </li>
-
-        <li
-            class="sidebar-item ">
-            <a href="/" target="_blank" class='sidebar-link'>
-                <i class="bi bi-globe"></i>
-                <span>Go To Website</span>
-            </a>
-        </li>
-
-        <li
-            class="sidebar-item  has-sub active">
-            <a href="" class='sidebar-link'>
-                <i class="bi bi-basket-fill"></i>
-                <span>Product</span>
-            </a>
-            <ul class="submenu active">
-                <li class="submenu-item ">
-                    <a href="/admin/product/catalogue">Catalogue</a>
-                </li>
-                <li class="submenu-item">
-                    <a href="/admin/product/category">Category</a>
-                </li>
-                <li class="submenu-item ">
-                    <a href="/admin/product/brand">Brand</a>
-                </li>
-                <li class="submenu-item active">
-                    <a href="/admin/product">Item</a>
-                </li>
-            </ul>
-        </li>
-
-        <li
-            class="sidebar-item  has-sub">
-            <a href="" class='sidebar-link'>
-                <i class="bi bi-newspaper"></i>
-                <span>News</span>
-            </a>
-            <ul class="submenu ">
-                <li class="submenu-item ">
-                    <a href="/admin/news/category">Category</a>
-                </li>
-                {{-- <li class="submenu-item ">
-                    <a href="/admin/news/tag">Tag</a>
-                </li> --}}
-                <li class="submenu-item ">
-                    <a href="/admin/news/article">Article</a>
-                </li>
-            </ul>
-        </li>
-
-        <li
-            class="sidebar-item ">
-            <a href="/admin/testimonial" class='sidebar-link'>
-                <i class="bi bi-chat-heart-fill"></i>
-                <span>Testimonial</span>
-            </a>
-        </li>
-        
-        <li
-            class="sidebar-item ">
-            <a href="/admin/partnership" class='sidebar-link'>
-                <i class="bi bi-people-fill"></i>
-                <span>Partnership</span>
-            </a>
-        </li>
-
-        <li
-            class="sidebar-item  has-sub">
-            <a href="/master" class='sidebar-link'>
-                <i class="bi bi-stack"></i>
-                <span>Master</span>
-            </a>
-            <ul class="submenu">
-                <li class="submenu-item">
-                    <a href="/admin/master/menubar">Menu Bar</a>
-                </li>
-                <li class="submenu-item">
-                    <a href="/admin/master/producthighlight">Product Highlight</a>
-                </li>
-                <li class="submenu-item">
-                    <a href="/admin/master/keyfeature">Key Feature</a>
-                </li>
-                <li class="submenu-item ">
-                    <a href="/admin/master/company">Company</a>
-                </li>
-            </ul>
-        </li>
-
-        <li
-            class="sidebar-item ">
-            <a href="/admin/logout" class='sidebar-link'>
-                <i class="bi bi-power"></i>
-                <span>Logout</span>
-            </a>
-        </li>
-    </ul>
-</div>
-@endsection
-
 @section('content')
 <header class="mb-3">
     <a href="#" class="burger-btn d-block d-xl-none">
@@ -136,7 +25,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="buttons">
-                    <a href="/admin/product" class="btn btn-outline-primary">Back</a>
+                    <a href="/admin/product/item" class="btn btn-outline-primary">Back</a>
                 </div>
             </div>
             <section id="basic-vertical-layouts">
@@ -145,7 +34,7 @@
                         <div class="card">
                             <div class="card-content">
                                 <div class="card-body">
-                                    <form action="{{ route('product.update', $product->id) }}" method="POST" class="form form-vertical" enctype="multipart/form-data">
+                                    <form action="{{ route('admin.product.item.update', $item->id) }}" method="POST" class="form form-vertical" enctype="multipart/form-data">
                                         @csrf
                                         @method('PUT')
                                         <div class="form-body">
@@ -154,7 +43,7 @@
                                                     <div class="form-group">
                                                         <label for="name_en">Name - EN</label>
                                                         <input type="text" id="name_en" class="form-control"
-                                                            name="name_en" placeholder="Name (English)" value="{{$product->name_en}}">
+                                                            name="name_en" placeholder="Name (English)" value="{{$item->name_en}}">
                                                     </div>
                                                     @error('name_en')
                                                         <p style="color: red">{{$message}}</p>
@@ -165,7 +54,7 @@
                                                     <div class="form-group">
                                                         <label for="name_id">Name - ID</label>
                                                         <input type="text" id="name_id" class="form-control"
-                                                            name="name_id" placeholder="Name (Indonesia)" value="{{$product->name_id}}">
+                                                            name="name_id" placeholder="Name (Indonesia)" value="{{$item->name_id}}">
                                                     </div>
                                                     @error('name_id')
                                                         <p style="color: red">{{$message}}</p>
@@ -176,7 +65,7 @@
                                                     <div class="form-group">
                                                         <label for="slug">Slug</label>
                                                         <input type="text" id="slug" class="form-control"
-                                                            name="slug" placeholder="Slug" value="{{$product->slug}}">
+                                                            name="slug" placeholder="Slug" value="{{$item->slug}}">
                                                     </div>
                                                     @error('slug')
                                                         <p style="color: red">{{$message}}</p>
@@ -224,8 +113,8 @@
                                                     <div class="form-group">
                                                         <div class="mb-3">
                                                             <label for="image">Image (Optional)</label>
-                                                            @if ($product->image != "")
-                                                                <img src="/{{$product->image}}" alt="" class="img-preview img-fluid mb-3 mt-3 col-4 d-block"> 
+                                                            @if ($item->image != "")
+                                                                <img src="/{{$item->image}}" alt="" class="img-preview img-fluid mb-3 mt-3 col-4 d-block"> 
                                                             @else
                                                                 <img class="img-preview img-fluid mb-3 mt-3 col-4">
                                                             @endif
@@ -240,7 +129,7 @@
                                                 <div class="col-12 mt-3">
                                                     <div class="form-group">
                                                         <div class="form-check form-switch">
-                                                            <input name="active" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" {{ $product->active=='1' ? 'checked' : '' }}>
+                                                            <input name="active" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" {{ $item->active=='1' ? 'checked' : '' }}>
                                                             <label class="form-check-label" for="flexSwitchCheckChecked">Active</label>
                                                         </div>
                                                     </div>

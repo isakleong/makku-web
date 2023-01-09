@@ -151,7 +151,7 @@
                         <div class="card">
                             <div class="card-content">
                                 <div class="card-body">
-                                    <form action="{{ route('company.store') }}" method="POST" class="form form-vertical" enctype="multipart/form-data">
+                                    <form action="{{ route('admin.master.company.store') }}" method="POST" class="form form-vertical" enctype="multipart/form-data">
                                         @csrf
                                         <div class="form-body">
                                             <div class="row">
