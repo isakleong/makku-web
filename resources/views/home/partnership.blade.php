@@ -13,30 +13,23 @@
       @endphp
 
       @if (count($arrSectionTitle) > 0)
-        <table>
-          <tbody>
-              <tr>
-                <div class="col-4">
-                  <td class="align-baseline"><h1 class="display-5">{{$arrSectionTitle[0]}}</h1></td>
-                </div>
-                <div class="col-4">
-                  <td class="align-middle"><img width="60" class="mx-auto d-block" src="/home/assets/img/handshake.png"/></td>
-                </div>
-                <div class="col-4">
-                  <td class="align-bottom"><h1 class="display-5">{{$arrSectionTitle[1]}}</h1></td>
-                </div>
-              </tr>
-          </tbody>
-        </table>
-        {{-- <div class="row">
-          <div class="col-4">
-            <h1 class="display-5">{{strtoupper($arrSectionTitle[0])}}</h1>
+        <div class="container text-center">
+          <div class="row">
+            <div class="col align-self-start">
+              <h1 class="display-5">{{strtoupper($arrSectionTitle[0])}}</h1>
+            </div>
+            <div class="col align-self-center">
+              <img width="100" src="/home/assets/img/handshake.png"/>
+            </div>
+            <div class="col align-self-end">
+              <h1 class="display-5">{{strtoupper($arrSectionTitle[1])}}</h1>
+            </div>
+
+            <div class="col align-self-start"></div>
+            <div class="col align-self-center"></div>
+            <div class="col align-self-end"></div>
           </div>
-          <div class="col-6">
-            <img class="img-fluid" src="/home/assets/img/handshake.png" width="100"/>
-            <h1 class="display-5 ms-5">{{strtoupper($arrSectionTitle[1])}}</h1>
-          </div>
-        </div> --}}
+        </div>
       @else
         <div class="row">
           <div class="col-12">

@@ -165,7 +165,9 @@
                     <div class="modal-dialog modal-dialog-scrollable" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                @if ((str_contains(Route::currentRouteName(), 'product.catalogue')  == true))
+                                @if ((str_contains(Route::currentRouteName(), 'dashboard')  == true))
+                                    <h5 class="modal-title" id="exampleModalScrollableTitle">Dashboard Data</h5>
+                                @elseif ((str_contains(Route::currentRouteName(), 'product.catalogue')  == true))
                                     <h5 class="modal-title" id="exampleModalScrollableTitle">Catalogue Data</h5>
                                 @elseif ((str_contains(Route::currentRouteName(), 'product.category')  == true))
                                     <h5 class="modal-title" id="exampleModalScrollableTitle">Product Category Data</h5>
@@ -197,7 +199,24 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                @if ((str_contains(Route::currentRouteName(), 'product.catalogue')  == true))
+                                @if ((str_contains(Route::currentRouteName(), 'dashboard')  == true))
+                                    <p>Menampilkan data dari google analytic.</p>
+                                    <strong>Data yang ditampilkan adalah:</strong>
+                                    <ul>
+                                        <li>Views</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Total website dilihat selama periode tertentu.</p>
+                                        <li>Visitors</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Total pengunjung website selama periode tertentu.</p>
+                                        <li>Returning Visitors</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Total pengunjung website yang sudah pernah mengunjungi sebelumnya, tetapi kembali mengunjungi website selama periode tertentu.</p>
+                                        <li>Average Sessions</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Rata-rata lama pengunjung melihat website (dalam detik) selama periode tertentu.</p>
+                                        <li>Most Views By Page</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Grafik peringkat tertinggi halaman yang dikunjungi selama periode tertentu. Peringkat bisa diatur range nya (misal 10 besar).</p>
+                                        <li>Total Visitors By Date</li>
+                                        <p><i class="bi bi-arrow-return-right"></i> Grafik total pengunjung website berdasarkan tanggal selama periode tertentu.</p>
+                                    </ul>
+                                @elseif ((str_contains(Route::currentRouteName(), 'product.catalogue')  == true))
                                     <p>Berfungsi untuk mengatur data katalog produk.</p>
                                     <strong>Struktur Data</strong>
                                     <ul>
