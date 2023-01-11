@@ -6,81 +6,69 @@
 <link rel="stylesheet" type="text/css" href="/vendor/datatable/css/datatables.min.css"/>
 @endsection
 
+@section('page-header', 'Product')
+@section('page-desc', 'Product master data')
+
 @section('content')
 @include('sweetalert::alert')
 
-<header class="mb-3">
-    <a href="#" class="burger-btn d-block d-xl-none">
-        <i class="bi bi-justify fs-3"></i>
-    </a>
-</header>
-<div class="page-heading">
-    <div class="page-title">
-        <div class="row">
-            <div class="col-12 col-md-6 order-md-1 order-last">
-                <h3>Product</h3>
-                <p class="text-subtitle text-muted">Product master data</p>
+<section class="section">
+    <div class="card">
+        <div class="card-header">
+            <div class="buttons">
+                <a href="/admin/product/item/create" class="btn btn-outline-primary">Add Data</a>
             </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped" id="table1" style="width: 100%">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Name - EN</th>
+                        <th>Name - ID</th>
+                        <th>Slug</th>
+                        <th>Image</th>
+                        <th>Category</th>
+                        <th>Brand</th>
+                        <th>Active</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @php
+                        $i = 1
+                    @endphp
+
+                    @foreach ($product as $item)
+                        <tr>
+                            <td>{{$i++}}</td>
+                            <td>{{$item->name_en}}</td>
+                            <td>{{$item->name_id}}</td>
+                            <td>{{$item->slug}}</td>
+                            <td><img src="/{{$item->image}}" alt="" class="img-fluid" width="100"></td>
+                            <td>{{$item->categoryName}}</td>
+                            <td>{{$item->brandName}}</td>
+                            @if ($item->active=='1')
+                                <td><span class="badge bg-success">Active</span></td>
+                            @else
+                                <td><span class="badge bg-danger">Inactive</span></td>
+                            @endif                                
+                            <td>
+                                <a href="{{ route('admin.product.item.edit', $item->id) }}" class="btn icon btn-sm btn-primary d-inline-block m-1" data-bs-toggle="tooltip" title="Edit"><i class="bi bi-pencil"></i></a>
+                                <form action="{{ route('admin.product.item.destroy', $item->id) }}" method="POST" class="d-inline-block m-1" data-bs-toggle="tooltip" title="Delete">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn icon btn-sm btn-danger show_confirm"><i class="bi bi-x"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
-    <section class="section">
-        <div class="card">
-            <div class="card-header">
-                <div class="buttons">
-                    <a href="/admin/product/item/create" class="btn btn-outline-primary">Add Data</a>
-                </div>
-            </div>
-            <div class="card-body">
-                <table class="table table-striped" id="table1" style="width: 100%">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Name - EN</th>
-                            <th>Name - ID</th>
-                            <th>Slug</th>
-                            <th>Image</th>
-                            <th>Category</th>
-                            <th>Brand</th>
-                            <th>Active</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @php
-                            $i = 1
-                        @endphp
 
-                        @foreach ($product as $item)
-                            <tr>
-                                <td>{{$i++}}</td>
-                                <td>{{$item->name_en}}</td>
-                                <td>{{$item->name_id}}</td>
-                                <td>{{$item->slug}}</td>
-                                <td><img src="/{{$item->image}}" alt="" class="img-fluid" width="100"></td>
-                                <td>{{$item->categoryName}}</td>
-                                <td>{{$item->brandName}}</td>
-                                @if ($item->active=='1')
-                                    <td><span class="badge bg-success">Active</span></td>
-                                @else
-                                    <td><span class="badge bg-danger">Inactive</span></td>
-                                @endif                                
-                                <td>
-                                    <a href="{{ route('admin.product.item.edit', $item->id) }}" class="btn icon btn-sm btn-primary d-inline-block m-1" data-bs-toggle="tooltip" title="Edit"><i class="bi bi-pencil"></i></a>
-                                    <form action="{{ route('admin.product.item.destroy', $item->id) }}" method="POST" class="d-inline-block m-1" data-bs-toggle="tooltip" title="Delete">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn icon btn-sm btn-danger show_confirm"><i class="bi bi-x"></i></button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-    </section>
-</div>
+</section>
 
 @endsection
 

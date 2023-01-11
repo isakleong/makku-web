@@ -216,7 +216,10 @@ Route::group([
     });
     Route::get('/news', [NewsArticleController::class, 'home']);
     Route::get('/news/{news_category:slug}', [NewsCategoryController::class, 'show']);
+    
+    //news detail
     Route::get('/news/{news_category:slug}/{news_article:slug}', [NewsArticleController::class, 'show']);
+
     Route::get('/contact-us', [HomeController::class, 'contactUs']);
 });
 //End of Homepage

@@ -64,7 +64,7 @@ class NewsArticleController extends Controller
                 ->get();
 
                 $company = DB::table('company')
-                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp, phone'))
                 ->get()->first();
 
                 $news = NewsArticle::with('category')->filterEN(request(['search']))->latest()->paginate(6);
@@ -80,7 +80,7 @@ class NewsArticleController extends Controller
                 ->get();
 
                 $company = DB::table('company')
-                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp, phone'))
                 ->get()->first();
 
                 $news = NewsArticle::with('category')->filterID(request(['search']))->latest()->paginate(6);
@@ -215,7 +215,7 @@ class NewsArticleController extends Controller
                 ->get();
 
                 $company = DB::table('company')
-                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp, phone'))
                 ->get()->first();
 
                 // $article = DB::table('news_article')
@@ -240,7 +240,7 @@ class NewsArticleController extends Controller
                 ->get();
 
                 $company = DB::table('company')
-                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp, phone'))
                 ->get()->first();
 
                 // $article = DB::table('news_article')

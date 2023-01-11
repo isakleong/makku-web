@@ -69,10 +69,22 @@ class NewsCategoryController extends Controller
                 ->get();
 
                 $company = DB::table('company')
-                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->select(DB::raw('name, highlight_en as highlight, description_en as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp, phone'))
                 ->get()->first();
 
-                $news_category = $news_category->load('news');
+                //LAZY EAGER LOADING (without search function)
+                // $news_category = $news_category->load('news');
+
+                $news_category->load(['news' => function ($query) {
+                    // $query->where('title_en', 'like', '%'.$filters['search'].'%')->orWhere('content_en', 'like', '%'.$filters['search'].'%');
+                    
+                    $filters = request(['search']);
+                    $query->when($filters['search'] ?? false, function($query, $search){
+                        return $query->where(function($query) use ($search) {
+                            $query->where('title_en', 'like', '%' . $search . '%')->orWhere('content_en', 'like', '%' . $search . '%');
+                        });
+                    });
+                }]);
 
             } elseif($locale == "id") {
                 $sectionTitle = 'Kategori Berita';
@@ -84,13 +96,25 @@ class NewsCategoryController extends Controller
                 ->get();
 
                 $company = DB::table('company')
-                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp'))
+                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp, phone'))
                 ->get()->first();
 
-                $news_category = $news_category->load('news');
+                // $news_category = $news_category->load('news');
+
+                $news_category->load(['news' => function ($query) {
+                    // $query->where('title_en', 'like', '%'.$filters['search'].'%')->orWhere('content_en', 'like', '%'.$filters['search'].'%');
+                    
+                    $filters = request(['search']);
+                    $query->when($filters['search'] ?? false, function($query, $search){
+                        return $query->where(function($query) use ($search) {
+                            $query->where('title_id', 'like', '%' . $search . '%')->orWhere('content_id', 'like', '%' . $search . '%');
+                        });
+                    });
+                }]);
             }
 
             return view('home.news-category', compact(['sectionTitle', 'menubar', 'company', 'news_category']));
+            // return ('hahah');
         }
     }
 
