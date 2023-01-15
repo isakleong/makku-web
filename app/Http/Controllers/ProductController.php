@@ -47,8 +47,11 @@ class ProductController extends Controller
 
     public function create()
     {
-        $category = ProductCategory::all();
-        $brand = ProductBrand::all();
+        // $category = ProductCategory::all();
+        $category = ProductCategory::where('active', 1)->get();
+
+        // $brand = ProductBrand::all();
+        $brand = ProductBrand::where('active', 1)->get();
         return view('administrator.product-create', compact(['category', 'brand']));
     }
 

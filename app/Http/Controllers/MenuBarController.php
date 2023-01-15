@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\MenuBar;
+use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -23,7 +24,8 @@ class MenuBarController extends Controller
     public function create()
     {
         $parent = MenuBar::all();
-        return view('administrator.menu-bar-create', compact('parent'));
+        $productCategory = ProductCategory::where('active', 1)->get();
+        return view('administrator.menu-bar-create', compact('parent', 'productCategory'));
     }
 
     public function store(Request $request)

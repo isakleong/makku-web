@@ -48,13 +48,28 @@
                                                 @enderror
                                             </div>
 
-                                            <div class="col-12 mt-1">
+                                            <div class="col-6 mt-1">
                                                 <div class="form-group">
                                                     <label for="refer">Refer</label>
                                                     <input type="text" id="refer" class="form-control"
                                                         name="refer" placeholder="Refer" required value="{{old('refer')}}">
                                                 </div>
                                                 @error('refer')
+                                                    <p style="color: red">{{$message}}</p>
+                                                @enderror
+                                            </div>
+                                            
+                                            <div id="refer-dropdown" class="col-6 mt-1" style="visibility: hidden;">
+                                                <div class="form-group">
+                                                    <input type="hidden" id="referData" name="referData" required value="{{ $productCategory }}"/>
+                                                    <label for="productCategorySlug">Product Category Slug</label>
+                                                    <select class="choices form-select" id="productCategorySlug" name="productCategorySlug">
+                                                        @foreach($productCategory as $item)
+                                                            <option value="{{ $item->slug }}">{{ $item->slug }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                @error('parent')
                                                     <p style="color: red">{{$message}}</p>
                                                 @enderror
                                             </div>
@@ -164,12 +179,15 @@
             
             if(typeSelected == 'parent') {
                 $('#parent-dropdown').css("visibility", "hidden");
+                $('#refer').removeAttr('disabled');
+                $('#refer').val('');
+                $('#refer-dropdown').css("visibility", "hidden");
             } else {
                 $('#parent-dropdown').css("visibility", "visible");
             }
             
             $('#uname').val(parentData);
-            console.log($("#selectbox").serialize());
+            // console.log($("#selectbox").serialize());
             $.ajax({
                 headers: {
                   'X-CSRF-TOKEN': '{{ csrf_token() }}'
@@ -179,19 +197,28 @@
                 data: $("#selectbox").serialize()
             })
             .done(function(data){
-                console.log(data);
+                // console.log(data);
                 var parentData = jQuery.parseJSON($('#parentData').val());
                 
                 $('#parent').empty();
                 for(var i in parentData) {
                     if(data == 'child') {
                         if(parentData[i].type == 'parent') {
-                            $('#parent').append('<option value = '+parentData[i].id+'>'+parentData[i].title_en+'</option>');
+                            // $('#parent').append('<option value = '+parentData[i].id+'>'+parentData[i].title_en+' ('+parentData[i].title_id+')'+'</option>');
+                            $('#parent').append('<option value = '+parentData[i].id+'>'+parentData[i].title_en+' ('+parentData[i].title_id+')'+'</option>');
                         }
                     } else if(data == 'sub child') {
                         if(parentData[i].type == 'child') {
                             $('#parent').append('<option value = '+parentData[i].id+'>'+parentData[i].title_en+'</option>');
                         }
+                    }
+                }
+
+                if(data == 'child' || data == 'sub child') {
+                    $('#parent').trigger("change");
+                    var isHidden = $("#refer-dropdown").css('visibility');
+                    if (isHidden == 'visible') {
+                        $('#productCategorySlug').trigger("change");
                     }
                 }
             })
@@ -200,6 +227,61 @@
             });
             return false;
         });
+
+        $('#parent').change(function() {
+            alert('WKWK');
+            var parentSelectedId = $('#parent option:selected').val();
+            var parentData = jQuery.parseJSON($('#parentData').val());
+            console.log(parentData);
+            
+            var strParentSelected = '';
+            var tempStrParent = '';
+            var isOurProduct = false;
+            for(var i in parentData) {
+                if(parentData[i].id == parentSelectedId) {
+                    strParentSelected = parentData[i].title_en;
+                    tempStrParent = parentData[i].parent;
+
+                    for(var j in parentData) {
+                        if(parentData[j].id == tempStrParent) {
+                            if((parentData[j].title_en).toLowerCase() == 'our company') {
+                                isOurProduct = true;
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+            console.log('tes '+tempStrParent);
+
+            if(strParentSelected.toLowerCase() == 'our company' || isOurProduct) {
+                $('#refer').attr('disabled','disabled');
+                $('#refer').val('our-product/');
+                $('#refer-dropdown').css("visibility", "visible");
+                
+            } else {
+                $('#refer').removeAttr('disabled');
+                $('#refer').val('');
+                $('#refer-dropdown').css("visibility", "hidden");
+            }
+
+            $('#parent').trigger("change");
+            var isHidden = $("#refer-dropdown").css('visibility');
+            alert(isHidden);
+            if (isHidden == 'visible') {
+                
+                $('#productCategorySlug').trigger("change");
+            }
+        });
+
+        $('#productCategorySlug').change(function() {
+            var slugSelected = $('#productCategorySlug option:selected').val();
+            $("#refer").val(function() {
+                return 'our-product/' + slugSelected;
+            });
+        }); 
+
     });
 </script>
 

@@ -92,7 +92,8 @@ class NewsArticleController extends Controller
 
     public function create()
     {
-        $category = NewsCategory::all();
+        // $category = NewsCategory::all();
+        $category = NewsCategory::where('active', 1)->get();
 
         return view('administrator.news-article-create', compact(['category']));
     }
