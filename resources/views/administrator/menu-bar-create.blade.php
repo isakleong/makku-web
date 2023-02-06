@@ -65,7 +65,7 @@
                                                     <label for="productCategorySlug">Product Category Slug</label>
                                                     <select class="choices form-select" id="productCategorySlug" name="productCategorySlug">
                                                         @foreach($productCategory as $item)
-                                                            <option value="{{ $item->slug }}">{{ $item->slug }}</option>
+                                                            <option value="{{ $item->slug }}">{{ $item->name_en }} ({{ $item->name_id }})</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -147,6 +147,7 @@
                                             </div>
                                             <div class="col-12 d-flex justify-content-end mt-3">
                                                 <button type="submit" class="btn btn-primary me-1 mb-1 show_confirm">Add</button>
+                                                <button type="button" class="btn btn-primary me-1 mb-1" id="testbtn">Test</button>
                                                 <button type="reset"
                                                     class="btn btn-light-secondary me-1 mb-1">Reset</button>
                                             </div>
@@ -179,7 +180,8 @@
             
             if(typeSelected == 'parent') {
                 $('#parent-dropdown').css("visibility", "hidden");
-                $('#refer').removeAttr('disabled');
+                // $('#refer').removeAttr('disabled'); icha
+                $('#refer').prop('readonly', false);
                 $('#refer').val('');
                 $('#refer-dropdown').css("visibility", "hidden");
             } else {
@@ -203,12 +205,13 @@
                 $('#parent').empty();
                 for(var i in parentData) {
                     if(data == 'child') {
-                        if(parentData[i].type == 'parent') {
+                        if(parentData[i].type == 'parent' && parentData[i].active == '1') {
                             // $('#parent').append('<option value = '+parentData[i].id+'>'+parentData[i].title_en+' ('+parentData[i].title_id+')'+'</option>');
+                            
                             $('#parent').append('<option value = '+parentData[i].id+'>'+parentData[i].title_en+' ('+parentData[i].title_id+')'+'</option>');
                         }
                     } else if(data == 'sub child') {
-                        if(parentData[i].type == 'child') {
+                        if(parentData[i].type == 'child' && parentData[i].active == '1' ) {
                             $('#parent').append('<option value = '+parentData[i].id+'>'+parentData[i].title_en+'</option>');
                         }
                     }
@@ -229,7 +232,6 @@
         });
 
         $('#parent').change(function() {
-            alert('WKWK');
             var parentSelectedId = $('#parent option:selected').val();
             var parentData = jQuery.parseJSON($('#parentData').val());
             console.log(parentData);
@@ -244,7 +246,7 @@
 
                     for(var j in parentData) {
                         if(parentData[j].id == tempStrParent) {
-                            if((parentData[j].title_en).toLowerCase() == 'our company') {
+                            if((parentData[j].title_en).toLowerCase() == 'our product') {
                                 isOurProduct = true;
                                 break;
                             }
@@ -253,26 +255,29 @@
                     break;
                 }
             }
-            console.log('tes '+tempStrParent);
+            console.log('tes icha '+isOurProduct);
 
-            if(strParentSelected.toLowerCase() == 'our company' || isOurProduct) {
-                $('#refer').attr('disabled','disabled');
+            if(strParentSelected.toLowerCase() == 'our product' || isOurProduct) {
+                // $('#refer').attr('disabled','disabled'); icha
+                $('#refer').prop('readonly', true);
                 $('#refer').val('our-product/');
                 $('#refer-dropdown').css("visibility", "visible");
-                
+                $('#productCategorySlug').prop('selectedIndex',0).val();
+                $('#productCategorySlug').trigger("change");
             } else {
-                $('#refer').removeAttr('disabled');
+                // $('#refer').removeAttr('disabled'); icha
+                $('#refer').prop('readonly', false);
                 $('#refer').val('');
                 $('#refer-dropdown').css("visibility", "hidden");
             }
 
-            $('#parent').trigger("change");
-            var isHidden = $("#refer-dropdown").css('visibility');
-            alert(isHidden);
-            if (isHidden == 'visible') {
+            // $('#parent').trigger("change");
+            // var isHidden = $("#refer-dropdown").css('visibility');
+            // alert(isHidden);
+            // if (isHidden == 'visible') {
                 
-                $('#productCategorySlug').trigger("change");
-            }
+            //     $('#productCategorySlug').trigger("change");
+            // }
         });
 
         $('#productCategorySlug').change(function() {
@@ -286,6 +291,13 @@
 </script>
 
 <script>
+    $('#testbtn').click(function(event) {
+        var data1 = $("#title_en").val();
+        var data2 = $("#refer").val();
+        alert(data1);
+        alert(data2);
+    });
+
     $('.show_confirm').click(function(event) {
         var form =  $(this).closest("form");
         var name = $(this).data("name");

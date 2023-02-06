@@ -108,6 +108,7 @@
         @php
           $tempChildMenuBar = $menubar;
           $tempSubChildMenuBar = $menubar;
+          $cnt = 0;
         @endphp
   
         <nav id="navbar" class="navbar">
@@ -120,8 +121,10 @@
                         @foreach ($tempChildMenuBar as $itemChild)
                           @if ($itemChild->parent == $item->id)
                             @if ($itemChild->ChildrenCount == 0)
-                              <li id="navbar-dropdown" style="background-image: url(/{{$itemChild->image}});"><a href=/{{$itemChild->refer}}>{{$itemChild->title}}</a></li>
-                              <div style="border-bottom: 3px solid white"></div>
+                              <li id="navbar-dropdown" style="background-image: url(/{{$itemChild->image}});"><a href=/{{$itemChild->refer}}>wkwkwk {{$itemChild->title}}</a></li>
+                              @if ($cnt != (count($tempChildMenuBar)))
+                                <div style="border-bottom: 3px solid white"></div>
+                              @endif
                             @else
                               <li class="dropdown"><a href="/{{$itemChild->refer}}"><span>{{$itemChild->title}}</span> <i class="bi bi-chevron-right"></i></a>
                                 <ul>
@@ -132,7 +135,13 @@
                                   @endforeach
                                 </ul>
                               </li>
+                              @if ($cnt != (count($tempChildMenuBar)))
+                                <div style="border-bottom: 3px solid white"></div>
+                              @endif
                             @endif
+                            @php
+                              $cnt++;
+                            @endphp
                           @endif
                         @endforeach
                       </ul>

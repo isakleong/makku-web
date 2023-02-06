@@ -29,7 +29,7 @@ class MenuBarController extends Controller
     }
 
     public function store(Request $request)
-    {
+    {   
         $request->validate([
             'title_en' => 'required',
             'title_id' => 'required',
