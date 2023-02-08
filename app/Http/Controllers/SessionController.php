@@ -26,4 +26,15 @@ class SessionController extends Controller
         Session::put('selectedMenuBarType', $request->type);
         echo $request->type;
     }
+
+    public function setSelectedParent(Request $request)
+    {
+        Session::put('selectedMenuBarParent', $request->parent);
+        echo $request->parent;
+    }
+
+    public function getSelectedParent()
+    {
+        echo Session::get('selectedMenuBarParent');
+    }
 }

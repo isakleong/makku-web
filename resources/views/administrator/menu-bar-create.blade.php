@@ -79,9 +79,9 @@
                                                     <input type="hidden" id="uname" name="uname" required/>
                                                     <label for="type">Type</label>
                                                     <select class="form-select dropdown" id="type"  name="type">
-                                                        <option value="parent">Parent</option>
-                                                        <option value="child">Child</option>
-                                                        <option value="sub child">Sub Child</option>
+                                                        <option value="parent" @if (old('type') == 'parent') selected="selected" @endif>Parent</option>
+                                                        <option value="child" @if (old('type') == 'child') selected="selected" @endif>Child</option>
+                                                        <option value="sub child" @if (old('type') == 'sub child') selected="selected" @endif>Sub Child</option>
                                                     </select>
                                                 </div>
                                                 @error('type')
@@ -98,11 +98,11 @@
                                                         @foreach($parent as $item)
                                                             @if (session('selectedMenuBarType') == 'child')
                                                                 @if ($item->type == 'parent')
-                                                                    <option value="{{ $item->id }}">{{ $item->title_en }}</option>  
+                                                                    <option value="{{ $item->id }}" @if (old('parent') == '{{ $item->id }}') selected="selected" @endif>{{ $item->title_en }}</option>  
                                                                 @endif
                                                             @elseif (session('selectedMenuBarType') == 'sub child')
                                                                 @if ($item->type == 'child')
-                                                                    <option value="{{ $item->id }}">{{ $item->title_en }}</option>  
+                                                                    <option value="{{ $item->id }}" @if (old('parent') == '{{ $item->id }}') selected="selected" @endif>{{ $item->title_en }}</option>  
                                                                 @endif
                                                             @endif
                                                         @endforeach
@@ -173,10 +173,39 @@
 <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
 <script type="text/javascript">
+    function getSelectedParent(params) {
+        $.ajax({headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            type: 'GET',
+            url: '/get_parent'
+        })
+        .done(function(data){
+            console.log('harusnya masuk ini '+data);
+            $("#parent").val(data);
+        })
+        .fail(function() {
+            alert( "Posting failed huhu." );
+        });
+
+        
+    }
+
+    $( window ).on( "load", function() {
+        console.log( "window loaded" );
+        $('#type').trigger("change");
+    });
+
     $(document).ready(function(){
+        /*Onload Handler
+        if there is an error in the form validation process, then prevent parent dropdown and product category slug dropdown set to hidden, when selected type dropdown is child or sub child
+        */
+
         $('#type').change(function() {
             var typeSelected = $('#type option:selected').val();
             var parentData = $('#parentData').val();
+
+            // alert(typeSelected);
             
             if(typeSelected == 'parent') {
                 $('#parent-dropdown').css("visibility", "hidden");
@@ -217,6 +246,8 @@
                     }
                 }
 
+                getSelectedParent();
+
                 if(data == 'child' || data == 'sub child') {
                     $('#parent').trigger("change");
                     var isHidden = $("#refer-dropdown").css('visibility');
@@ -255,7 +286,22 @@
                     break;
                 }
             }
-            console.log('tes icha '+isOurProduct);
+            console.log('tes icha '+strParentSelected);
+
+            $.ajax({
+                headers: {
+                  'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                type: 'POST',
+                url: '/set_parent',
+                data: {parent: parentSelectedId }
+            })
+            .done(function(data){
+                // alert(data+' haha');
+            })
+            .fail(function() {
+                alert( "Posting failed." );
+            });
 
             if(strParentSelected.toLowerCase() == 'our product' || isOurProduct) {
                 // $('#refer').attr('disabled','disabled'); icha
