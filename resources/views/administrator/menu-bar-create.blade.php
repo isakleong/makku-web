@@ -173,39 +173,10 @@
 <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
 <script type="text/javascript">
-    function getSelectedParent(params) {
-        $.ajax({headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            type: 'GET',
-            url: '/get_parent'
-        })
-        .done(function(data){
-            console.log('harusnya masuk ini '+data);
-            $("#parent").val(data);
-        })
-        .fail(function() {
-            alert( "Posting failed huhu." );
-        });
-
-        
-    }
-
-    $( window ).on( "load", function() {
-        console.log( "window loaded" );
-        $('#type').trigger("change");
-    });
-
     $(document).ready(function(){
-        /*Onload Handler
-        if there is an error in the form validation process, then prevent parent dropdown and product category slug dropdown set to hidden, when selected type dropdown is child or sub child
-        */
-
         $('#type').change(function() {
             var typeSelected = $('#type option:selected').val();
             var parentData = $('#parentData').val();
-
-            // alert(typeSelected);
             
             if(typeSelected == 'parent') {
                 $('#parent-dropdown').css("visibility", "hidden");
@@ -218,7 +189,6 @@
             }
             
             $('#uname').val(parentData);
-            // console.log($("#selectbox").serialize());
             $.ajax({
                 headers: {
                   'X-CSRF-TOKEN': '{{ csrf_token() }}'
@@ -228,7 +198,6 @@
                 data: $("#selectbox").serialize()
             })
             .done(function(data){
-                // console.log(data);
                 var parentData = jQuery.parseJSON($('#parentData').val());
                 
                 $('#parent').empty();
@@ -236,7 +205,6 @@
                     if(data == 'child') {
                         if(parentData[i].type == 'parent' && parentData[i].active == '1') {
                             // $('#parent').append('<option value = '+parentData[i].id+'>'+parentData[i].title_en+' ('+parentData[i].title_id+')'+'</option>');
-                            
                             $('#parent').append('<option value = '+parentData[i].id+'>'+parentData[i].title_en+' ('+parentData[i].title_id+')'+'</option>');
                         }
                     } else if(data == 'sub child') {
@@ -245,8 +213,6 @@
                         }
                     }
                 }
-
-                getSelectedParent();
 
                 if(data == 'child' || data == 'sub child') {
                     $('#parent').trigger("change");
@@ -265,7 +231,6 @@
         $('#parent').change(function() {
             var parentSelectedId = $('#parent option:selected').val();
             var parentData = jQuery.parseJSON($('#parentData').val());
-            console.log(parentData);
             
             var strParentSelected = '';
             var tempStrParent = '';
@@ -297,7 +262,6 @@
                 data: {parent: parentSelectedId }
             })
             .done(function(data){
-                // alert(data+' haha');
             })
             .fail(function() {
                 alert( "Posting failed." );

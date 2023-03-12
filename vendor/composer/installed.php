@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '55bb51f15f4e85e02d1d87004d154c7c98948dcf',
+        'reference' => 'bb8cfc4ba2da672fc2b46762e03052f4822fefd5',
         'name' => 'laravel/laravel',
         'dev' => true,
     ),
@@ -541,7 +541,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '55bb51f15f4e85e02d1d87004d154c7c98948dcf',
+            'reference' => 'bb8cfc4ba2da672fc2b46762e03052f4822fefd5',
             'dev_requirement' => false,
         ),
         'laravel/pint' => array(
@@ -1215,6 +1215,15 @@
             'install_path' => __DIR__ . '/../spatie/laravel-analytics',
             'aliases' => array(),
             'reference' => 'b28812b4aaaed08d596f1c5dd2a0e8b29f143d55',
+            'dev_requirement' => false,
+        ),
+        'spatie/laravel-cookie-consent' => array(
+            'pretty_version' => '3.2.4',
+            'version' => '3.2.4.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../spatie/laravel-cookie-consent',
+            'aliases' => array(),
+            'reference' => '5a5b2f0a03cc66d8ffede42037a7f3e00f95aaa9',
             'dev_requirement' => false,
         ),
         'spatie/laravel-ignition' => array(
