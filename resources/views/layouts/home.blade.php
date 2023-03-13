@@ -49,6 +49,7 @@
   <link rel="stylesheet" href="/home/assets/css/floating-wpp.min.css">
 
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"/>
+  {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
 
   <!-- Google tag (gtag.js) -->
   {{-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-KRTK7GZC8H"></script>
@@ -93,6 +94,8 @@
   </style>
 
   @yield('vendorCSS')
+
+  @include('cookie-consent::index')
 </head>
 
 <body class="go-mart food-fmcg">

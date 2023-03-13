@@ -53,7 +53,7 @@ class HomeController extends Controller {
 
             } elseif($locale == "id") {
                 $company = DB::table('company')
-                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp. phone'))
+                ->select(DB::raw('name, highlight_id as highlight, description_id as description, image, logoPrimary, logoSecondary, address, email, facebook, instagram, whatsapp, phone'))
                 ->get()->first();
 
                 $menubar = DB::table('menu_bar as b')
