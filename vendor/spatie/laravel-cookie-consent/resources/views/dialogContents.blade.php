@@ -17,42 +17,19 @@
     </div>
 </div> --}}
 
-<div class="p-1" style="position:fixed; bottom: 15px; left: 50%; transform: translate(-50%, 0); z-index: 99999; border-radius: 5px; background: #8894f6">
-    <div class="mx=auto">
-        <p class="ml-3 text-white cookie-consent__message">{!! trans('cookie-consent::texts.message') !!}</p>
-        <button class="js-cookie-consent-agree cookie-consent__agree text-sm font-medium text-yellow-800 bg-yellow-400 hover:bg-yellow-300">
-            {{ trans('cookie-consent::texts.agree') }}
-        </button>
-        {{-- <div class="flex items-center justify-between flex-wrap">
-            <div class="w-0 flex-1 items-center hidden md:inline">
-                
-            </div>
-            <div class="mt-2 flex-shrink-0 w-full sm:mt-0 sm:w-auto">
-                
-            </div>
-        </div> --}}
-    </div>
-
-    
-</div>
-
-
-{{-- <div class="js-cookie-consent cookie-consent fixed bottom-0 inset-x-0 pb-2" style="z-index: 99999;">
-    <div class="max-w-7xl mx-auto px-6">
-        <div class="p-2 rounded-lg bg-yellow-100">
-            <div class="flex items-center justify-between flex-wrap">
-                <div class="w-0 flex-1 items-center hidden md:inline">
-                    <p class="ml-3 text-black cookie-consent__message">
-                        {!! trans('cookie-consent::texts.message') !!}
-                    </p>
+<div class="pb-2" style="position:fixed; bottom: 15px; left: 50%; transform: translate(-50%, 0); z-index: 99999; border-radius: 10px; background: #8894f6">
+    <div class="px-6">
+        <div class="p-2">
+            <div class="d-flex align-items-center justify-content-between flex-wrap">
+                <div class="flex-shrink-1 align-items-center d-inline-flex"style="width: 0px;">
+                    <p class="ml-3 text-white cookie-consent__message">{!! trans('cookie-consent::texts.message') !!}</p>
                 </div>
-                <div class="mt-2 flex-shrink-0 w-full sm:mt-0 sm:w-auto">
-                    <button class="js-cookie-consent-agree cookie-consent__agree cursor-pointer flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium text-yellow-800 bg-yellow-400 hover:bg-yellow-300">
-                        {{ trans('cookie-consent::texts.agree') }}
-                    </button>
+
+                <div class="mt-2 flex-shrink-0" style="width: 100%;">
+                    <button class="js-cookie-consent-agree cookie-consent__agree d-flex align-items-center justify-content-center px-4 py-2">{{ trans('cookie-consent::texts.agree') }}</button>
                 </div>
             </div>
         </div>
     </div>
-</div> --}}
+</div>
 
