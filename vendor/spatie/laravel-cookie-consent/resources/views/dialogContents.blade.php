@@ -21,11 +21,11 @@
     <div class="px-6">
         <div class="p-2">
             <div class="d-flex align-items-center justify-content-between flex-wrap">
-                <div class="flex-shrink-1 align-items-center d-inline-flex"style="width: 0px;">
-                    <p class="ml-3 text-white cookie-consent__message">{!! trans('cookie-consent::texts.message') !!}</p>
+                <div class="flex-shrink-1 align-items-center d-inline-flex">
+                    <h5 class="ml-3 me-3 text-white cookie-consent__message">{!! trans('cookie-consent::texts.message') !!}</h5>
                 </div>
 
-                <div class="mt-2 flex-shrink-0" style="width: 100%;">
+                <div class="flex-shrink-0">
                     <button class="js-cookie-consent-agree cookie-consent__agree d-flex align-items-center justify-content-center px-4 py-2">{{ trans('cookie-consent::texts.agree') }}</button>
                 </div>
             </div>
