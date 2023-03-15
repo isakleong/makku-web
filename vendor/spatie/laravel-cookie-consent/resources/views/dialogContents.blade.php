@@ -17,16 +17,16 @@
     </div>
 </div> --}}
 
-<div class="pb-2" style="position:fixed; bottom: 15px; left: 50%; transform: translate(-50%, 0); z-index: 99999; border-radius: 10px; background: #8894f6">
+<div style="position:fixed; bottom: 15px; left: 50%; transform: translate(-50%, 0); z-index: 99999; border-radius: 10px; background: #6776f4">
     <div class="px-6">
         <div class="p-2">
             <div class="d-flex align-items-center justify-content-between flex-wrap">
                 <div class="flex-shrink-1 align-items-center d-inline-flex">
-                    <h5 class="ml-3 me-3 text-white cookie-consent__message">{!! trans('cookie-consent::texts.message') !!}</h5>
+                    <div class="ml-3 me-3 text-white cookie-consent__message">{!! trans('cookie-consent::texts.message') !!}</div>
                 </div>
 
                 <div class="flex-shrink-0">
-                    <button class="js-cookie-consent-agree cookie-consent__agree d-flex align-items-center justify-content-center px-4 py-2">{{ trans('cookie-consent::texts.agree') }}</button>
+                    <button class="btn js-cookie-consent-agree cookie-consent__agree d-flex align-items-center justify-content-center" style="background: #243675; color: #fff;">{{ trans('cookie-consent::texts.agree') }}</button>
                 </div>
             </div>
         </div>

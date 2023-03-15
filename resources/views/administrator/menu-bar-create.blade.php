@@ -51,6 +51,8 @@
                                             <div class="col-6 mt-1">
                                                 <div class="form-group">
                                                     <label for="refer">Refer</label>
+                                                    {{-- <input type="text" id="refer" class="form-control"
+                                                        name="refer" placeholder="Refer" required value="{{old('refer')}}"> --}}
                                                     <input type="text" id="refer" class="form-control"
                                                         name="refer" placeholder="Refer" required value="{{old('refer')}}">
                                                 </div>
@@ -251,7 +253,6 @@
                     break;
                 }
             }
-            console.log('tes icha '+strParentSelected);
 
             $.ajax({
                 headers: {
