@@ -54,7 +54,7 @@
                                                     {{-- <input type="text" id="refer" class="form-control"
                                                         name="refer" placeholder="Refer" required value="{{old('refer')}}"> --}}
                                                     <input type="text" id="refer" class="form-control"
-                                                        name="refer" placeholder="Refer" required value="{{old('refer')}}">
+                                                        name="refer" placeholder="Refer" required>
                                                 </div>
                                                 @error('refer')
                                                     <p style="color: red">{{$message}}</p>
@@ -81,9 +81,13 @@
                                                     <input type="hidden" id="uname" name="uname" required/>
                                                     <label for="type">Type</label>
                                                     <select class="form-select dropdown" id="type"  name="type">
-                                                        <option value="parent" @if (old('type') == 'parent') selected="selected" @endif>Parent</option>
+                                                        {{-- <option value="parent" @if (old('type') == 'parent') selected="selected" @endif>Parent</option>
                                                         <option value="child" @if (old('type') == 'child') selected="selected" @endif>Child</option>
-                                                        <option value="sub child" @if (old('type') == 'sub child') selected="selected" @endif>Sub Child</option>
+                                                        <option value="sub child" @if (old('type') == 'sub child') selected="selected" @endif>Sub Child</option> --}}
+
+                                                        <option value="parent">Parent</option>
+                                                        <option value="child">Child</option>
+                                                        <option value="sub child">Sub Child</option>
                                                     </select>
                                                 </div>
                                                 @error('type')

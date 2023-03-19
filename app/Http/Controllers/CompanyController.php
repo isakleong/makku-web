@@ -81,7 +81,7 @@ class CompanyController extends Controller
             $generatedID = hexdec(uniqid());
             $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
             // $image->move($destinationPath, $imageName);
-            Image::make($image)->resize(250, 100, function ($constraint) {
+            Image::make($image)->resize(250, 150, function ($constraint) {
                 $constraint->aspectRatio();
             })->save($destinationPath.$imageName);
 
@@ -99,7 +99,7 @@ class CompanyController extends Controller
             $generatedID = hexdec(uniqid());
             $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
             // $image->move($destinationPath, $imageName);
-            Image::make($image)->resize(250, 100, function ($constraint) {
+            Image::make($image)->resize(250, 150, function ($constraint) {
                 $constraint->aspectRatio();
             })->save($destinationPath.$imageName);
 
@@ -179,7 +179,7 @@ class CompanyController extends Controller
             $generatedID = hexdec(uniqid());
             $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
             // $image->move($destinationPath, $imageName);
-            Image::make($image)->resize(250, 100, function ($constraint) {
+            Image::make($image)->resize(250, 150, function ($constraint) {
                 $constraint->aspectRatio();
             })->save($destinationPath.$imageName);
 
@@ -202,7 +202,7 @@ class CompanyController extends Controller
             $generatedID = hexdec(uniqid());
             $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
             // $image->move($destinationPath, $imageName);
-            Image::make($image)->resize(250, 100, function ($constraint) {
+            Image::make($image)->resize(250, 150, function ($constraint) {
                 $constraint->aspectRatio();
             })->save($destinationPath.$imageName);
 

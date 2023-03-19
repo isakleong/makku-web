@@ -14,7 +14,31 @@ class MenuBarController extends Controller
 {
     public function index()
     {
-        $menuBar = MenuBar::all();
+        // $menuBar = MenuBar::all();
+
+        $menuBar = DB::table('menu_bar as tbl_1')
+            ->leftjoin('menu_bar as tbl_2', 'tbl_1.parent', '=', 'tbl_2.id')
+            ->select(DB::raw('tbl_1.id, tbl_1.title_en, tbl_1.title_id, tbl_1.orderNumber, tbl_1.refer, tbl_1.type, concat(tbl_2.title_en, " (", tbl_2.title_id, ")") as parent, tbl_1.image, tbl_1.active'))
+            ->get();
+
+        // $menuBar = MenuBar::join('menu_bar as tbl_2', 'menu_bar.parent', '=', 'menu_bar.id')
+        //     ->select(
+        //         "menu_bar.id",
+        //         "menu_bar.title_en",
+        //         "menu_bar.title_id",
+        //         "menu_bar.orderNumber",
+        //         "menu_bar.refer",
+        //         "menu_bar.type",
+        //         "tbl_2.title_en as parent",
+        //         "menu_bar.image",
+        //         "menu_bar.active",
+        //     )
+        //     ->get();
+
+        // select tbl_1.title_en, tbl_1.title_id, tbl_1.orderNumber, tbl_1.refer, tbl_1.type, tbl_2.title_en as parent, tbl_1.image, tbl_1.active
+        // from menu_bar as tbl_1
+        // left join menu_bar as tbl_2
+        // on tbl_1.parent = tbl_2.id;
 
         // dd($menuBar);
 

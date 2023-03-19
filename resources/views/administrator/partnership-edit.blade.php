@@ -97,8 +97,8 @@
                                                             <img src="/{{$partnership->logo}}" alt="" class="img-preview-logo img-fluid mb-3 mt-3 col-4 d-block"> 
                                                             <div class="form-check">
                                                                 <div class="checkbox">
-                                                                    <input name="discard-logo" type="checkbox" id="checkbox3" class="form-check-input"/>
-                                                                    <label for="checkbox3">Discard Old Logo</label>
+                                                                    <input name="discard-logo" type="checkbox" id="checkbox4" class="form-check-input"/>
+                                                                    <label for="checkbox4">Discard Old Logo</label>
                                                                 </div>
                                                             </div>
                                                         @else
