@@ -32,11 +32,19 @@ class ProductBrandController extends Controller
             $request->merge(['active'=>'1']);
         }
 
-        $input = $request->all();
+        $brand = ProductBrand::where([
+            'name' => $request->name,
+        ])->get();
 
-        ProductBrand::create($input);
+        $cntData = $brand->count();
 
-        return redirect('/admin/product/brand')->withSuccess('Data Added Successfully!');
+        if($cntData == 0) {
+            $input = $request->all();
+            ProductBrand::create($input);
+            return redirect('/admin/product/brand')->withSuccess('Data Added Successfully!');
+        } else {
+            return redirect('/admin/product/brand')->with('error', 'errordata');
+        }
     }
 
     public function show(ProductBrand $productBrand)

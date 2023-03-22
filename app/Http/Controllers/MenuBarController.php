@@ -64,7 +64,7 @@ class MenuBarController extends Controller
         ]);
 
         $menubar = MenuBar::where([
-            'active' => 1,
+            // 'active' => 1,
             'type' => $request->type,
             'parent' => $request->parent,
             'orderNumber' => $request->orderNumber

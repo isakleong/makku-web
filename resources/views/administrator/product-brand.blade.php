@@ -109,4 +109,18 @@
     });
 </script>
 
+<script>
+    @if($message = session('error'))
+        // Swal.fire(
+        //     'Data with the same Name already exists!',
+        //     'error'
+        // )
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Brand with the same Name already exists!',
+        })
+    @endif
+</script>
+
 @endsection
