@@ -113,4 +113,14 @@
     });
 </script>
 
+<script>
+    @if($message = session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Product Category with the same Name already exists!',
+        })
+    @endif
+</script>
+
 @endsection

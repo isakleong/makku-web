@@ -82,20 +82,23 @@ class ProductBrandController extends Controller
             }
             return redirect('/admin/product/brand')->withSuccess('Data Updated Successfully!');
         } else {
-            $brand = ProductBrand::where([
+            $tempBrand = ProductBrand::where([
                 'name' => $request->name,
             ])->get();
     
-            $cntData = $brand->count();
+            $cntData = $tempBrand->count();
             if($cntData == 0) {
                 $input = $request->all();
-    
-                //uncomment, prevent slug update when it's not needed
-                // $brand->slug = null;
-                // $slug = SlugService::createSlug(ProductBrand::class, 'slug', $input['slug']);
-                // $input['slug'] = $slug;
-                $brand->update($input);
-    
+
+                if($request->slug == $brand->slug) {
+                    $brand->update($input);
+                } else {
+                    $brand->slug = null;
+                    $slug = SlugService::createSlug(ProductBrand::class, 'slug', $input['slug']);
+                    $input['slug'] = $slug;
+
+                    $brand->update($input);
+                }
                 return redirect('/admin/product/brand')->withSuccess('Data Updated Successfully!');
             } else {
                 return redirect('/admin/product/brand')->with('error', 'errordata');

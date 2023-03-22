@@ -39,40 +39,49 @@ class ProductCategoryController extends Controller
             $request->merge(['active'=>'1']);
         }
 
-        $input = $request->all();
+        $category = ProductCategory::where([
+            'name_en' => $request->name_en,
+        ])->orWhere(['name_id' => $request->name_id])->get();
 
-        if($image = $request->file('image')) {
-            //commented because never trust client side inputs
-            // $destinationPath = 'image/upload/';
-            // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-            // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
-            // $image->move($destinationPath, $imageName);
+        $cntData = $category->count();
+        if($cntData == 0) {
+            $input = $request->all();
 
-            $destinationPath = 'image/upload/';
-            $generatedID = hexdec(uniqid());
-            $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
-            // $image->move($destinationPath, $imageName);
-            Image::make($image)->resize(800, 600, function ($constraint) {
-                $constraint->aspectRatio();
-            })->save($destinationPath.$imageName);
+            if($image = $request->file('image')) {
+                //commented because never trust client side inputs
+                // $destinationPath = 'image/upload/';
+                // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
+                // $image->move($destinationPath, $imageName);
 
-            $input['image'] = $destinationPath.$imageName;
+                $destinationPath = 'image/upload/';
+                $generatedID = hexdec(uniqid());
+                $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
+                // $image->move($destinationPath, $imageName);
+                Image::make($image)->resize(800, 600, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($destinationPath.$imageName);
+
+                $input['image'] = $destinationPath.$imageName;
+            } else {
+                unset($input['image']);
+            }
+
+            //custom slug handler (indonesia or english)
+            if($request->slug == 'id') {
+                $slug = SlugService::createSlug(ProductCategory::class, 'slug', $input['name_id']);
+                $input['slug'] = $slug;
+            } else {
+                $slug = SlugService::createSlug(ProductCategory::class, 'slug', $input['name_en']);
+                $input['slug'] = $slug;
+            }
+
+            ProductCategory::create($input);
+
+            return redirect('/admin/product/category')->withSuccess('Data Added Successfully!');
         } else {
-            unset($input['image']);
+            return redirect('/admin/product/category')->with('error', 'errordata');
         }
-
-        //custom slug handler (indonesia or english)
-        if($request->slug == 'id') {
-            $slug = SlugService::createSlug(ProductCategory::class, 'slug', $input['name_id']);
-            $input['slug'] = $slug;
-        } else {
-            $slug = SlugService::createSlug(ProductCategory::class, 'slug', $input['name_en']);
-            $input['slug'] = $slug;
-        }
-
-        ProductCategory::create($input);
-
-        return redirect('/admin/product/category')->withSuccess('Data Added Successfully!');
     }
 
     public function show($locale, ProductCategory $product_category)
@@ -133,53 +142,116 @@ class ProductCategoryController extends Controller
             $request->merge(['active'=>'1']);
         }
 
-        $input = $request->all();
+        if(($request->name_en == $category->name_en) && ($request->name_id == $category->name_id)) {
+            $input = $request->all();
+            
+            $imageDelete = "";
+            if($image = $request->file('image')) {
+                $imageDelete = public_path()."/".$category->image;
 
-        $imageDelete = "";
-        if($image = $request->file('image')) {
-            $imageDelete = public_path()."/".$category->image;
+                
 
-            //commented because never trust client side inputs
-            // $destinationPath = 'image/upload/';
-            // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-            // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
-            // $image->move($destinationPath, $imageName);
+                $destinationPath = 'image/upload/';
+                $generatedID = hexdec(uniqid());
+                $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
+                // $image->move($destinationPath, $imageName);
+                Image::make($image)->resize(800, 600, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($destinationPath.$imageName);
 
-            $destinationPath = 'image/upload/';
-            $generatedID = hexdec(uniqid());
-            $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
-            // $image->move($destinationPath, $imageName);
-            Image::make($image)->resize(800, 600, function ($constraint) {
-                $constraint->aspectRatio();
-            })->save($destinationPath.$imageName);
+                $input['image'] = $destinationPath.$imageName;
+            } else {
+                unset($input['image']);
+            }
 
-            $input['image'] = $destinationPath.$imageName;
+            $oldSlug = $category->slug;
+
+            if($request->slug == $category->slug) {
+                $category->update($input);
+            } else {
+                $category->slug = null;
+                $slug = SlugService::createSlug(ProductCategory::class, 'slug', $input['slug']);
+                $input['slug'] = $slug;
+
+                $category->update($input);
+
+                //update menubar slug
+                $menubar = MenuBar::where('refer', 'LIKE', '%'.$oldSlug.'%')->get();
+                for($i=0; $i<$menubar->count(); $i++) {
+                    $str_split = explode($oldSlug, $menubar[$i]->refer);
+                    $menubar[$i]->update(array('refer' => $str_split[0].$category->slug));
+                }
+            }
+
+            if($imageDelete != "") {
+                File::delete($imageDelete);
+            }
+
+            return redirect('/admin/product/category')->withSuccess('Data Updated Successfully!');
         } else {
-            unset($input['image']);
+            $tempCategory = ProductCategory::where([
+                'name_en' => $request->name_en,
+            ])->orWhere(['name_id' => $request->name_id])->get();
+    
+            $cntData = $tempCategory->count();
+            if($cntData == 0) {
+                $input = $request->all();
+    
+                $imageDelete = "";
+                if($image = $request->file('image')) {
+                    $imageDelete = public_path()."/".$category->image;
+    
+                    //commented because never trust client side inputs
+                    // $destinationPath = 'image/upload/';
+                    // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                    // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
+                    // $image->move($destinationPath, $imageName);
+    
+                    $destinationPath = 'image/upload/';
+                    $generatedID = hexdec(uniqid());
+                    $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
+                    // $image->move($destinationPath, $imageName);
+                    Image::make($image)->resize(800, 600, function ($constraint) {
+                        $constraint->aspectRatio();
+                    })->save($destinationPath.$imageName);
+    
+                    $input['image'] = $destinationPath.$imageName;
+                } else {
+                    unset($input['image']);
+                }
+    
+                $oldSlug = $category->slug;
+    
+                if($request->slug == $category->slug) {
+                    $category->update($input);
+                } else {
+    
+                    $category->slug = null;
+                    $slug = SlugService::createSlug(ProductCategory::class, 'slug', $input['slug']);
+                    $input['slug'] = $slug;
+    
+                    $category->update($input);
+    
+                    //update menubar slug
+                    $menubar = MenuBar::where('refer', 'LIKE', '%'.$oldSlug.'%')->get();
+                    for($i=0; $i<$menubar->count(); $i++) {
+                        $str_split = explode($oldSlug, $menubar[$i]->refer);
+                        $menubar[$i]->update(array('refer' => $str_split[0].$category->slug));
+                    }
+                }
+    
+                if($imageDelete != "") {
+                    File::delete($imageDelete);
+                }
+    
+                return redirect('/admin/product/category')->withSuccess('Data Updated Successfully!');
+                
+            } else {
+                return redirect('/admin/product/category')->with('error', 'errordata');
+            }
         }
 
-        //uncomment, prevent slug update when it's not needed
-        // $category->slug = null;
-        // $slug = SlugService::createSlug(ProductCategory::class, 'slug', $input['slug']);
-        // $input['slug'] = $slug;
-
-        $oldSlug = $category->slug;
-
-        // dd($oldCategory['slug']);
-        $category->update($input);
-
-        if($imageDelete != "") {
-            File::delete($imageDelete);
-        }
-
-        //update menubar slug
-        $menubar = MenuBar::where('refer', 'LIKE', '%'.$oldSlug.'%')->get();
-        for($i=0; $i<$menubar->count(); $i++) {
-            $str_split = explode($oldSlug, $menubar[$i]->refer);
-            $menubar[$i]->update(array('refer' => $str_split[0].$category->slug));
-        }
-
-        return redirect('/admin/product/category')->withSuccess('Data Updated Successfully!');
+        
     }
 
     public function destroy(ProductCategory $category)
