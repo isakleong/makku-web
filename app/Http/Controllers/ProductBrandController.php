@@ -37,7 +37,6 @@ class ProductBrandController extends Controller
         ])->get();
 
         $cntData = $brand->count();
-
         if($cntData == 0) {
             $input = $request->all();
             ProductBrand::create($input);
@@ -69,14 +68,39 @@ class ProductBrandController extends Controller
             $request->merge(['active'=>'1']);
         }
 
-        $input = $request->all();
+        if($request->name == $brand->name) {
+            $input = $request->all();
 
-        $brand->slug = null;
-        $slug = SlugService::createSlug(ProductBrand::class, 'slug', $input['slug']);
-        $input['slug'] = $slug;
-        $brand->update($input);
+            if($request->slug == $brand->slug) {
+                $brand->update($input);
+            } else {
+                $brand->slug = null;
+                $slug = SlugService::createSlug(ProductBrand::class, 'slug', $input['slug']);
+                $input['slug'] = $slug;
 
-        return redirect('/admin/product/brand')->withSuccess('Data Updated Successfully!');
+                $brand->update($input);
+            }
+            return redirect('/admin/product/brand')->withSuccess('Data Updated Successfully!');
+        } else {
+            $brand = ProductBrand::where([
+                'name' => $request->name,
+            ])->get();
+    
+            $cntData = $brand->count();
+            if($cntData == 0) {
+                $input = $request->all();
+    
+                //uncomment, prevent slug update when it's not needed
+                // $brand->slug = null;
+                // $slug = SlugService::createSlug(ProductBrand::class, 'slug', $input['slug']);
+                // $input['slug'] = $slug;
+                $brand->update($input);
+    
+                return redirect('/admin/product/brand')->withSuccess('Data Updated Successfully!');
+            } else {
+                return redirect('/admin/product/brand')->with('error', 'errordata');
+            }
+        }
     }
 
     public function destroy(ProductBrand $brand)

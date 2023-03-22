@@ -164,16 +164,18 @@ class ProductController extends Controller
             unset($input['image']);
         }
 
-        $item->slug = null;
-        $slug = SlugService::createSlug(Product::class, 'slug', $input['slug']);
-        $input['slug'] = $slug;
+        //uncomment, prevent slug update when it's not needed
+        // $item->slug = null;
+        // $slug = SlugService::createSlug(Product::class, 'slug', $input['slug']);
+        // $input['slug'] = $slug;
+
         $item->update($input);
 
         if($imageDelete != "") {
             File::delete($imageDelete);
         }
 
-        return redirect('/admin/product')->withSuccess('Data Updated Successfully!');
+        return redirect('/admin/product/item')->withSuccess('Data Updated Successfully!');
     }
 
     public function destroy(Product $item)
