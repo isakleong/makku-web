@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MenuBar;
 use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -157,13 +158,25 @@ class ProductCategoryController extends Controller
             unset($input['image']);
         }
 
+        //uncomment, prevent slug update when it's not needed
         // $category->slug = null;
         // $slug = SlugService::createSlug(ProductCategory::class, 'slug', $input['slug']);
         // $input['slug'] = $slug;
+
+        $oldSlug = $category->slug;
+
+        // dd($oldCategory['slug']);
         $category->update($input);
 
         if($imageDelete != "") {
             File::delete($imageDelete);
+        }
+
+        //update menubar slug
+        $menubar = MenuBar::where('refer', 'LIKE', '%'.$oldSlug.'%')->get();
+        for($i=0; $i<$menubar->count(); $i++) {
+            $str_split = explode($oldSlug, $menubar[$i]->refer);
+            $menubar[$i]->update(array('refer' => $str_split[0].$category->slug));
         }
 
         return redirect('/admin/product/category')->withSuccess('Data Updated Successfully!');
