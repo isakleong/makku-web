@@ -71,40 +71,57 @@ class ProductController extends Controller
             $request->merge(['active'=>'1']);
         }
 
-        $input = $request->all();
+        $product_1 = Product::where([
+            'name_en' => $request->name_en,
+            'categoryID' => $request->categoryID,
+            'brandID' => $request->brandID,
+        ])->get();
 
-        if($image = $request->file('image')) {
-            //commented because never trust client side inputs
-            // $destinationPath = 'image/upload/';
-            // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-            // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
-            // $image->move($destinationPath, $imageName);
+        $product_2 = Product::where([
+            'name_id' => $request->name_id,
+            'categoryID' => $request->categoryID,
+            'brandID' => $request->brandID,
+        ])->get();
 
-            $destinationPath = 'image/upload/';
-            $generatedID = hexdec(uniqid());
-            $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
-            // $image->move($destinationPath, $imageName);
-            Image::make($image)->resize(800, 800, function ($constraint) {
-                $constraint->aspectRatio();
-            })->save($destinationPath.$imageName);
+        $cntData = $product_1->count() + $product_2->count();
+        if($cntData == 0) {
+            $input = $request->all();
 
-            $input['image'] = $destinationPath.$imageName;
+            if($image = $request->file('image')) {
+                //commented because never trust client side inputs
+                // $destinationPath = 'image/upload/';
+                // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
+                // $image->move($destinationPath, $imageName);
+    
+                $destinationPath = 'image/upload/';
+                $generatedID = hexdec(uniqid());
+                $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
+                // $image->move($destinationPath, $imageName);
+                Image::make($image)->resize(800, 800, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($destinationPath.$imageName);
+    
+                $input['image'] = $destinationPath.$imageName;
+            } else {
+                unset($input['image']);
+            }
+    
+            //custom slug handler (indonesia or english)
+            if($request->slug == 'id') {
+                $slug = SlugService::createSlug(Product::class, 'slug', $input['name_id']);
+                $input['slug'] = $slug;
+            } else {
+                $slug = SlugService::createSlug(Product::class, 'slug', $input['name_en']);
+                $input['slug'] = $slug;
+            }
+    
+            Product::create($input);
+    
+            return redirect('/admin/product/item')->withSuccess('Data Added Successfully!');
         } else {
-            unset($input['image']);
+            return redirect('/admin/product/item')->with('error', 'errordata');
         }
-
-        //custom slug handler (indonesia or english)
-        if($request->slug == 'id') {
-            $slug = SlugService::createSlug(Product::class, 'slug', $input['name_id']);
-            $input['slug'] = $slug;
-        } else {
-            $slug = SlugService::createSlug(Product::class, 'slug', $input['name_en']);
-            $input['slug'] = $slug;
-        }
-
-        Product::create($input);
-
-        return redirect('/admin/product/item')->withSuccess('Data Added Successfully!');
     }
 
     public function show(Product $product)
@@ -139,43 +156,107 @@ class ProductController extends Controller
             $request->merge(['active'=>'1']);
         }
 
-        $input = $request->all();
+        if(($request->name_en == $item->name_en) && ($request->name_id == $item->name_id) && ($request->categoryID == $item->categoryID) && ($request->brandID == $item->brandID)) {
+            $input = $request->all();
 
-        $imageDelete = "";
-        if($image = $request->file('image')) {
-            $imageDelete = public_path()."/".$item->image;
+            $imageDelete = "";
+            if($image = $request->file('image')) {
+                $imageDelete = public_path()."/".$item->image;
 
-            //commented because never trust client side inputs
-            // $destinationPath = 'image/upload/';
-            // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-            // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
-            // $image->move($destinationPath, $imageName);
+                //commented because never trust client side inputs
+                // $destinationPath = 'image/upload/';
+                // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
+                // $image->move($destinationPath, $imageName);
 
-            $destinationPath = 'image/upload/';
-            $generatedID = hexdec(uniqid());
-            $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
-            // $image->move($destinationPath, $imageName);
-            Image::make($image)->resize(800, 800, function ($constraint) {
-                $constraint->aspectRatio();
-            })->save($destinationPath.$imageName);
+                $destinationPath = 'image/upload/';
+                $generatedID = hexdec(uniqid());
+                $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
+                // $image->move($destinationPath, $imageName);
+                Image::make($image)->resize(800, 800, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($destinationPath.$imageName);
 
-            $input['image'] = $destinationPath.$imageName;
+                $input['image'] = $destinationPath.$imageName;
+            } else {
+                unset($input['image']);
+            }
+
+            if($request->slug == $item->slug) {
+                $item->update($input);
+            } else {
+                $item->slug = null;
+                $slug = SlugService::createSlug(Product::class, 'slug', $input['slug']);
+                $input['slug'] = $slug;
+
+                $item->update($input);
+            }
+
+            if($imageDelete != "") {
+                File::delete($imageDelete);
+            }
+
+            return redirect('/admin/product/item')->withSuccess('Data Updated Successfully!');
         } else {
-            unset($input['image']);
+            $product_1 = Product::where([
+                'name_en' => $request->name_en,
+                'categoryID' => $request->categoryID,
+                'brandID' => $request->brandID,
+            ])->get();
+    
+            $product_2 = Product::where([
+                'name_id' => $request->name_id,
+                'categoryID' => $request->categoryID,
+                'brandID' => $request->brandID,
+            ])->get();
+    
+            $cntData = $product_1->count() + $product_2->count();
+            // dd($request->categoryID);
+            if($cntData == 0) {
+                $input = $request->all();
+
+                $imageDelete = "";
+                if($image = $request->file('image')) {
+                    $imageDelete = public_path()."/".$item->image;
+
+                    //commented because never trust client side inputs
+                    // $destinationPath = 'image/upload/';
+                    // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                    // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
+                    // $image->move($destinationPath, $imageName);
+
+                    $destinationPath = 'image/upload/';
+                    $generatedID = hexdec(uniqid());
+                    $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
+                    // $image->move($destinationPath, $imageName);
+                    Image::make($image)->resize(800, 800, function ($constraint) {
+                        $constraint->aspectRatio();
+                    })->save($destinationPath.$imageName);
+
+                    $input['image'] = $destinationPath.$imageName;
+                } else {
+                    unset($input['image']);
+                }
+
+                if($request->slug == $item->slug) {
+                    $item->update($input);
+                } else {
+                    $item->slug = null;
+                    $slug = SlugService::createSlug(Product::class, 'slug', $input['slug']);
+                    $input['slug'] = $slug;
+
+                    $item->update($input);
+                }
+
+                if($imageDelete != "") {
+                    File::delete($imageDelete);
+                }
+
+                return redirect('/admin/product/item')->withSuccess('Data Updated Successfully!');
+            } else {
+                return redirect('/admin/product/item')->with('error', 'errordata');
+            }
         }
-
-        //uncomment, prevent slug update when it's not needed
-        // $item->slug = null;
-        // $slug = SlugService::createSlug(Product::class, 'slug', $input['slug']);
-        // $input['slug'] = $slug;
-
-        $item->update($input);
-
-        if($imageDelete != "") {
-            File::delete($imageDelete);
-        }
-
-        return redirect('/admin/product/item')->withSuccess('Data Updated Successfully!');
     }
 
     public function destroy(Product $item)
