@@ -157,9 +157,9 @@ class ProductCategoryController extends Controller
             unset($input['image']);
         }
 
-        $category->slug = null;
-        $slug = SlugService::createSlug(ProductCategory::class, 'slug', $input['slug']);
-        $input['slug'] = $slug;
+        // $category->slug = null;
+        // $slug = SlugService::createSlug(ProductCategory::class, 'slug', $input['slug']);
+        // $input['slug'] = $slug;
         $category->update($input);
 
         if($imageDelete != "") {
