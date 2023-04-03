@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\MenuBar;
+use App\Models\Product;
 use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
 use Intervention\Image\Facades\Image;
 use \Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Support\Str;
 
 class ProductCategoryController extends Controller
 {
@@ -39,25 +41,13 @@ class ProductCategoryController extends Controller
             $request->merge(['active'=>'1']);
         }
 
-        $category = ProductCategory::where([
-            'name_en' => $request->name_en,
-        ])->orWhere(['name_id' => $request->name_id])->get();
-
-        $cntData = $category->count();
-        if($cntData == 0) {
+        try {
             $input = $request->all();
 
             if($image = $request->file('image')) {
-                //commented because never trust client side inputs
-                // $destinationPath = 'image/upload/';
-                // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-                // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
-                // $image->move($destinationPath, $imageName);
-
                 $destinationPath = 'image/upload/';
                 $generatedID = hexdec(uniqid());
                 $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
-                // $image->move($destinationPath, $imageName);
                 Image::make($image)->resize(800, 600, function ($constraint) {
                     $constraint->aspectRatio();
                 })->save($destinationPath.$imageName);
@@ -79,8 +69,13 @@ class ProductCategoryController extends Controller
             ProductCategory::create($input);
 
             return redirect('/admin/product/category')->withSuccess('Data Added Successfully!');
-        } else {
-            return redirect('/admin/product/category')->with('error', 'errordata');
+        } catch (\Exception $e) {
+            $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
+            if($isForeignKey) {
+                return redirect('/admin/product/category')->with('errorData', 'Product Category cannot be added because the data is not unique.');
+            } else {
+                return redirect('/admin/product/category')->with('errorData', $e->getMessage());
+            }
         }
     }
 
@@ -141,20 +136,17 @@ class ProductCategoryController extends Controller
         } else {
             $request->merge(['active'=>'1']);
         }
-
-        if(($request->name_en == $category->name_en) && ($request->name_id == $category->name_id)) {
+        
+        try {
             $input = $request->all();
-            
+
             $imageDelete = "";
             if($image = $request->file('image')) {
                 $imageDelete = public_path()."/".$category->image;
 
-                
-
                 $destinationPath = 'image/upload/';
                 $generatedID = hexdec(uniqid());
                 $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
-                // $image->move($destinationPath, $imageName);
                 Image::make($image)->resize(800, 600, function ($constraint) {
                     $constraint->aspectRatio();
                 })->save($destinationPath.$imageName);
@@ -169,6 +161,7 @@ class ProductCategoryController extends Controller
             if($request->slug == $category->slug) {
                 $category->update($input);
             } else {
+
                 $category->slug = null;
                 $slug = SlugService::createSlug(ProductCategory::class, 'slug', $input['slug']);
                 $input['slug'] = $slug;
@@ -188,80 +181,31 @@ class ProductCategoryController extends Controller
             }
 
             return redirect('/admin/product/category')->withSuccess('Data Updated Successfully!');
-        } else {
-            $tempCategory = ProductCategory::where([
-                'name_en' => $request->name_en,
-            ])->orWhere(['name_id' => $request->name_id])->get();
-    
-            $cntData = $tempCategory->count();
-            if($cntData == 0) {
-                $input = $request->all();
-    
-                $imageDelete = "";
-                if($image = $request->file('image')) {
-                    $imageDelete = public_path()."/".$category->image;
-    
-                    //commented because never trust client side inputs
-                    // $destinationPath = 'image/upload/';
-                    // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-                    // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
-                    // $image->move($destinationPath, $imageName);
-    
-                    $destinationPath = 'image/upload/';
-                    $generatedID = hexdec(uniqid());
-                    $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
-                    // $image->move($destinationPath, $imageName);
-                    Image::make($image)->resize(800, 600, function ($constraint) {
-                        $constraint->aspectRatio();
-                    })->save($destinationPath.$imageName);
-    
-                    $input['image'] = $destinationPath.$imageName;
-                } else {
-                    unset($input['image']);
-                }
-    
-                $oldSlug = $category->slug;
-    
-                if($request->slug == $category->slug) {
-                    $category->update($input);
-                } else {
-    
-                    $category->slug = null;
-                    $slug = SlugService::createSlug(ProductCategory::class, 'slug', $input['slug']);
-                    $input['slug'] = $slug;
-    
-                    $category->update($input);
-    
-                    //update menubar slug
-                    $menubar = MenuBar::where('refer', 'LIKE', '%'.$oldSlug.'%')->get();
-                    for($i=0; $i<$menubar->count(); $i++) {
-                        $str_split = explode($oldSlug, $menubar[$i]->refer);
-                        $menubar[$i]->update(array('refer' => $str_split[0].$category->slug));
-                    }
-                }
-    
-                if($imageDelete != "") {
-                    File::delete($imageDelete);
-                }
-    
-                return redirect('/admin/product/category')->withSuccess('Data Updated Successfully!');
-                
+        } catch (\Exception $e) {
+            $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
+            if($isForeignKey) {
+                return redirect('/admin/product/category')->with('errorData', 'Product Category cannot be updated because the data is not unique.');
             } else {
-                return redirect('/admin/product/category')->with('error', 'errordata');
+                return redirect('/admin/product/category')->with('errorData', $e->getMessage());
             }
         }
-
-        
     }
 
     public function destroy(ProductCategory $category)
     {
-        $imageDelete = public_path()."/".$category->image;
+        try {
+            $imageDelete = public_path()."/".$category->image;
+            $category->delete();
+            File::delete($imageDelete);
 
-        $category->delete();
-
-        File::delete($imageDelete);
-
-        return redirect('/admin/product/category')->withSuccess('Data Deleted Successfully!');
+            return redirect('/admin/product/category')->withSuccess('Data Deleted Successfully!');
+          } catch (\Exception $e) {
+            $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
+            if($isForeignKey) {
+                return redirect('/admin/product/category')->with('errorData', 'Product Category cannot be deleted because it is still referenced by other page (Menu Bar or Product Item).');
+            } else {
+                return redirect('/admin/product/category')->with('errorData', $e->getMessage());
+            }
+        }
     }
 }

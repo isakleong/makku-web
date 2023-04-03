@@ -110,15 +110,12 @@
 </script>
 
 <script>
-    @if($message = session('error'))
-        // Swal.fire(
-        //     'Data with the same Name already exists!',
-        //     'error'
-        // )
+    @if($message = session('errorData'))
         Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: 'Brand with the same Name already exists!',
+            // text: '',
+            text: '{{Session::get("errorData")}}',
         })
     @endif
 </script>

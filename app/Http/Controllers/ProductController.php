@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -71,33 +72,13 @@ class ProductController extends Controller
             $request->merge(['active'=>'1']);
         }
 
-        $product_1 = Product::where([
-            'name_en' => $request->name_en,
-            'categoryID' => $request->categoryID,
-            'brandID' => $request->brandID,
-        ])->get();
-
-        $product_2 = Product::where([
-            'name_id' => $request->name_id,
-            'categoryID' => $request->categoryID,
-            'brandID' => $request->brandID,
-        ])->get();
-
-        $cntData = $product_1->count() + $product_2->count();
-        if($cntData == 0) {
+        try {
             $input = $request->all();
 
             if($image = $request->file('image')) {
-                //commented because never trust client side inputs
-                // $destinationPath = 'image/upload/';
-                // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-                // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
-                // $image->move($destinationPath, $imageName);
-    
                 $destinationPath = 'image/upload/';
                 $generatedID = hexdec(uniqid());
                 $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
-                // $image->move($destinationPath, $imageName);
                 Image::make($image)->resize(800, 800, function ($constraint) {
                     $constraint->aspectRatio();
                 })->save($destinationPath.$imageName);
@@ -119,8 +100,13 @@ class ProductController extends Controller
             Product::create($input);
     
             return redirect('/admin/product/item')->withSuccess('Data Added Successfully!');
-        } else {
-            return redirect('/admin/product/item')->with('error', 'errordata');
+        } catch (\Exception $e) {
+            $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
+            if($isForeignKey) {
+                return redirect('/admin/product/item')->with('errorData', 'Product cannot be added because the data is not unique.');
+            } else {
+                return redirect('/admin/product/item')->with('errorData', $e->getMessage());
+            }
         }
     }
 
@@ -163,16 +149,9 @@ class ProductController extends Controller
             if($image = $request->file('image')) {
                 $imageDelete = public_path()."/".$item->image;
 
-                //commented because never trust client side inputs
-                // $destinationPath = 'image/upload/';
-                // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-                // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
-                // $image->move($destinationPath, $imageName);
-
                 $destinationPath = 'image/upload/';
                 $generatedID = hexdec(uniqid());
                 $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
-                // $image->move($destinationPath, $imageName);
                 Image::make($image)->resize(800, 800, function ($constraint) {
                     $constraint->aspectRatio();
                 })->save($destinationPath.$imageName);
@@ -219,16 +198,9 @@ class ProductController extends Controller
                 if($image = $request->file('image')) {
                     $imageDelete = public_path()."/".$item->image;
 
-                    //commented because never trust client side inputs
-                    // $destinationPath = 'image/upload/';
-                    // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-                    // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
-                    // $image->move($destinationPath, $imageName);
-
                     $destinationPath = 'image/upload/';
                     $generatedID = hexdec(uniqid());
                     $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
-                    // $image->move($destinationPath, $imageName);
                     Image::make($image)->resize(800, 800, function ($constraint) {
                         $constraint->aspectRatio();
                     })->save($destinationPath.$imageName);

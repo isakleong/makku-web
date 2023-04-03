@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ProductBrand;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ProductBrandController extends Controller
 {
@@ -32,17 +33,18 @@ class ProductBrandController extends Controller
             $request->merge(['active'=>'1']);
         }
 
-        $brand = ProductBrand::where([
-            'name' => $request->name,
-        ])->get();
-
-        $cntData = $brand->count();
-        if($cntData == 0) {
+        try {
             $input = $request->all();
             ProductBrand::create($input);
+
             return redirect('/admin/product/brand')->withSuccess('Data Added Successfully!');
-        } else {
-            return redirect('/admin/product/brand')->with('error', 'errordata');
+        } catch (\Exception $e) {
+            $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
+            if($isForeignKey) {
+                return redirect('/admin/product/brand')->with('errorData', 'Product Brand cannot be added because the data is not unique.');
+            } else {
+                return redirect('/admin/product/brand')->with('errorData', $e->getMessage());
+            }
         }
     }
 
@@ -68,7 +70,7 @@ class ProductBrandController extends Controller
             $request->merge(['active'=>'1']);
         }
 
-        if($request->name == $brand->name) {
+        try {
             $input = $request->all();
 
             if($request->slug == $brand->slug) {
@@ -80,36 +82,31 @@ class ProductBrandController extends Controller
 
                 $brand->update($input);
             }
+
             return redirect('/admin/product/brand')->withSuccess('Data Updated Successfully!');
-        } else {
-            $tempBrand = ProductBrand::where([
-                'name' => $request->name,
-            ])->get();
-    
-            $cntData = $tempBrand->count();
-            if($cntData == 0) {
-                $input = $request->all();
-
-                if($request->slug == $brand->slug) {
-                    $brand->update($input);
-                } else {
-                    $brand->slug = null;
-                    $slug = SlugService::createSlug(ProductBrand::class, 'slug', $input['slug']);
-                    $input['slug'] = $slug;
-
-                    $brand->update($input);
-                }
-                return redirect('/admin/product/brand')->withSuccess('Data Updated Successfully!');
+        } catch (\Exception $e) {
+            $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
+            if($isForeignKey) {
+                return redirect('/admin/product/brand')->with('errorData', 'Product Brand cannot be added because the data is not unique.');
             } else {
-                return redirect('/admin/product/brand')->with('error', 'errordata');
+                return redirect('/admin/product/brand')->with('errorData', $e->getMessage());
             }
         }
     }
 
     public function destroy(ProductBrand $brand)
     {
-        $brand->delete();
+        try {
+            $brand->delete();
 
-        return redirect('/admin/product/brand')->withSuccess('Data Deleted Successfully!');
+            return redirect('/admin/product/brand')->withSuccess('Data Deleted Successfully!');
+        } catch (\Exception $e) {
+            $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
+            if($isForeignKey) {
+                return redirect('/admin/product/brand')->with('errorData', 'Product Brand cannot be deleted because it is still referenced by other page (Product Item).');
+            } else {
+                return redirect('/admin/product/brand')->with('errorData', $e->getMessage());
+            }
+        }
     }
 }
