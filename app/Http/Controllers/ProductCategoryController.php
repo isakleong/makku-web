@@ -156,24 +156,13 @@ class ProductCategoryController extends Controller
                 unset($input['image']);
             }
 
-            $oldSlug = $category->slug;
+            $category->update($input);
 
-            if($request->slug == $category->slug) {
-                $category->update($input);
-            } else {
-
-                $category->slug = null;
-                $slug = SlugService::createSlug(ProductCategory::class, 'slug', $input['slug']);
-                $input['slug'] = $slug;
-
-                $category->update($input);
-
-                //update menubar slug
-                $menubar = MenuBar::where('refer', 'LIKE', '%'.$oldSlug.'%')->get();
-                for($i=0; $i<$menubar->count(); $i++) {
-                    $str_split = explode($oldSlug, $menubar[$i]->refer);
-                    $menubar[$i]->update(array('refer' => $str_split[0].$category->slug));
-                }
+            //update menubar slug
+            $menubar = MenuBar::where('categoryID', $category->id)->get();
+            for($i=0; $i<$menubar->count(); $i++) {
+                $str_split = explode('/', $menubar[$i]->refer);
+                $menubar[$i]->update(array('refer' => $str_split[0].'/'.$category->slug));
             }
 
             if($imageDelete != "") {

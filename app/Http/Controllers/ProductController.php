@@ -87,13 +87,21 @@ class ProductController extends Controller
             } else {
                 unset($input['image']);
             }
+
+            $str_split = explode('|', $input['categoryID']);
+            $input['categoryID'] = $str_split[0];
+
+            $brandName = "";
+            $str_split = explode('|', $input['brandID']);
+            $input['brandID'] = $str_split[0];
+            $brandName = $str_split[1];
     
             //custom slug handler (indonesia or english)
             if($request->slug == 'id') {
-                $slug = SlugService::createSlug(Product::class, 'slug', $input['name_id']);
+                $slug = SlugService::createSlug(Product::class, 'slug', $brandName.' '.$input['name_id']);
                 $input['slug'] = $slug;
             } else {
-                $slug = SlugService::createSlug(Product::class, 'slug', $input['name_en']);
+                $slug = SlugService::createSlug(Product::class, 'slug', $brandName.' '.$input['name_en']);
                 $input['slug'] = $slug;
             }
     
@@ -142,7 +150,7 @@ class ProductController extends Controller
             $request->merge(['active'=>'1']);
         }
 
-        if(($request->name_en == $item->name_en) && ($request->name_id == $item->name_id) && ($request->categoryID == $item->categoryID) && ($request->brandID == $item->brandID)) {
+        try{
             $input = $request->all();
 
             $imageDelete = "";
@@ -161,74 +169,23 @@ class ProductController extends Controller
                 unset($input['image']);
             }
 
-            if($request->slug == $item->slug) {
-                $item->update($input);
-            } else {
-                $item->slug = null;
-                $slug = SlugService::createSlug(Product::class, 'slug', $input['slug']);
-                $input['slug'] = $slug;
-
-                $item->update($input);
-            }
+            $item->update($input);
 
             if($imageDelete != "") {
                 File::delete($imageDelete);
             }
 
             return redirect('/admin/product/item')->withSuccess('Data Updated Successfully!');
-        } else {
-            $product_1 = Product::where([
-                'name_en' => $request->name_en,
-                'categoryID' => $request->categoryID,
-                'brandID' => $request->brandID,
-            ])->get();
-    
-            $product_2 = Product::where([
-                'name_id' => $request->name_id,
-                'categoryID' => $request->categoryID,
-                'brandID' => $request->brandID,
-            ])->get();
-    
-            $cntData = $product_1->count() + $product_2->count();
-            // dd($request->categoryID);
-            if($cntData == 0) {
-                $input = $request->all();
-
-                $imageDelete = "";
-                if($image = $request->file('image')) {
-                    $imageDelete = public_path()."/".$item->image;
-
-                    $destinationPath = 'image/upload/';
-                    $generatedID = hexdec(uniqid());
-                    $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
-                    Image::make($image)->resize(800, 800, function ($constraint) {
-                        $constraint->aspectRatio();
-                    })->save($destinationPath.$imageName);
-
-                    $input['image'] = $destinationPath.$imageName;
-                } else {
-                    unset($input['image']);
-                }
-
-                if($request->slug == $item->slug) {
-                    $item->update($input);
-                } else {
-                    $item->slug = null;
-                    $slug = SlugService::createSlug(Product::class, 'slug', $input['slug']);
-                    $input['slug'] = $slug;
-
-                    $item->update($input);
-                }
-
-                if($imageDelete != "") {
-                    File::delete($imageDelete);
-                }
-
-                return redirect('/admin/product/item')->withSuccess('Data Updated Successfully!');
+        } catch (\Exception $e) {
+            $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
+            if($isForeignKey) {
+                return redirect('/admin/product/item')->with('errorData', 'Product cannot be updated because the data is not unique.');
             } else {
-                return redirect('/admin/product/item')->with('error', 'errordata');
+                return redirect('/admin/product/item')->with('errorData', $e->getMessage());
             }
         }
+
+        
     }
 
     public function destroy(Product $item)

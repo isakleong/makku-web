@@ -50,6 +50,15 @@
                                                 @enderror
                                             </div>
 
+                                            <div class="col-12 mt-3">
+                                                <div class="form-group">
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input custom-slug" type="checkbox" id="flexSwitchCheckChecked" {{ $item->active=='1' ? 'checked' : '' }}>
+                                                        <label class="form-check-label" for="flexSwitchCheckChecked">Custom Slug</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             <div class="col-12 mt-1">
                                                 <div class="form-group">
                                                     <label for="slug">Slug</label>
@@ -68,9 +77,9 @@
                                                         @foreach($category as $row)
                                                             {{-- <option value="{{ $item->id }}">{{ $item->name_en }}</option> --}}
                                                             @if ($row->name_en == $categorySelected->name_en)
-                                                                <option value="{{ $row->id }}" selected>{{ $row->name_en }}</option>
+                                                                <option value="{{ $row->id }}|{{ $row->name_en }}" selected>{{ $row->name_en }} ({{ $row->name_id }})</option>
                                                             @else
-                                                                <option value="{{ $row->id }}">{{ $row->name_en }}</option>
+                                                                <option value="{{ $row->id }}|{{ $row->name_en }}">{{ $row->name_en }} ({{ $row->name_id }})</option>
                                                             @endif
                                                         @endforeach
                                                     </select>
@@ -86,9 +95,9 @@
                                                     <select class="choices form-select" id="brandID"  name="brandID">
                                                         @foreach($brand as $row)
                                                             @if ($row->name == $brandSelected->name)
-                                                                <option value="{{ $row->id }}" selected>{{ $row->name }}</option>
+                                                                <option value="{{ $row->id }}|{{ $row->name }}" selected>{{ $row->name }}</option>
                                                             @else
-                                                                <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                                                <option value="{{ $row->id }}|{{ $row->name }}">{{ $row->name }}</option>
                                                             @endif
                                                         @endforeach
                                                     </select>
@@ -166,6 +175,23 @@
                 form.submit();
             }
         });
+    });
+
+    var switchStatus = false;
+    $(".custom-slug").on('change', function() {
+        if ($(this).is(':checked')) {
+            switchStatus = $(this).is(':checked');
+            alert(switchStatus);
+        } else {
+            switchStatus = $(this).is(':checked');
+            alert(switchStatus);// To verify
+        }
+
+        if(switchStatus) {
+            $('#slug').prop('readonly', false);
+        } else {
+            $('#slug').prop('readonly', false);
+        }
     });
 </script>
 

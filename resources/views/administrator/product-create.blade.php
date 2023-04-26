@@ -84,7 +84,7 @@
                                                     <label for="categoryID">Category</label>
                                                     <select class="choices form-select" id="categoryID"  name="categoryID">
                                                         @foreach($category as $item)
-                                                            <option value="{{ $item->id }}">{{ $item->name_en }}</option>
+                                                            <option value="{{ $item->id }}|{{ $item->name_en }}">{{ $item->name_en }} ({{ $item->name_id }})</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -98,7 +98,7 @@
                                                     <label for="brandID">Brand</label>
                                                     <select class="choices form-select" id="brandID"  name="brandID">
                                                         @foreach($brand as $item)
-                                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                                            <option value="{{ $item->id }}|{{ $item->name }}">{{ $item->name }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>

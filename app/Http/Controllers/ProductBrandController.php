@@ -73,15 +73,7 @@ class ProductBrandController extends Controller
         try {
             $input = $request->all();
 
-            if($request->slug == $brand->slug) {
-                $brand->update($input);
-            } else {
-                $brand->slug = null;
-                $slug = SlugService::createSlug(ProductBrand::class, 'slug', $input['slug']);
-                $input['slug'] = $slug;
-
-                $brand->update($input);
-            }
+            $brand->update($input);
 
             return redirect('/admin/product/brand')->withSuccess('Data Updated Successfully!');
         } catch (\Exception $e) {
