@@ -50,26 +50,6 @@
                                                 @enderror
                                             </div>
 
-                                            <div class="col-12 mt-3">
-                                                <div class="form-group">
-                                                    <div class="form-check form-switch">
-                                                        <input class="form-check-input custom-slug" type="checkbox" id="flexSwitchCheckChecked" {{ $item->active=='1' ? 'checked' : '' }}>
-                                                        <label class="form-check-label" for="flexSwitchCheckChecked">Custom Slug</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-12 mt-1">
-                                                <div class="form-group">
-                                                    <label for="slug">Slug</label>
-                                                    <input type="text" id="slug" class="form-control"
-                                                        name="slug" placeholder="Slug" value="{{$item->slug}}">
-                                                </div>
-                                                @error('slug')
-                                                    <p style="color: red">{{$message}}</p>
-                                                @enderror
-                                            </div>
-
                                             <div class="col-12 mt-1">
                                                 <div class="form-group">
                                                     <label for="categoryID">Category</label>
@@ -103,6 +83,30 @@
                                                     </select>
                                                 </div>
                                                 @error('brandID')
+                                                    <p style="color: red">{{$message}}</p>
+                                                @enderror
+                                            </div>
+
+                                            <div class="col-12 mt-3">
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input custom-slug" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="automatic" checked>
+                                                        <label class="form-check-label" for="flexRadioDefault1">Auto-Generated Slug</label>
+                                                      </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input custom-slug" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="custom">
+                                                        <label class="form-check-label" for="flexRadioDefault2">Custom Slug</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12 mt-1">
+                                                <div class="form-group">
+                                                    <label for="slug">Slug</label>
+                                                    <input type="text" id="slug" class="form-control"
+                                                        name="slug" placeholder="Slug" value="{{$item->slug}}">
+                                                </div>
+                                                @error('slug')
                                                     <p style="color: red">{{$message}}</p>
                                                 @enderror
                                             </div>
@@ -160,6 +164,43 @@
 <script src="/vendor/sweetalert/sweetalert.all.js"></script>
 
 <script>
+    function generateSlug() {
+        var categoryID = $('#categoryID').val();
+        var brandID = $('#brandID').val();
+
+        $str_split = explode('|', $categoryID);
+        $categoryID = $str_split[0];
+
+        $str_split = explode('|', $brandID);
+        $brandID = $str_split[0];
+
+        var slug = $brandID+"-"+
+    }
+
+    $(document).ready(function(){
+        var slug = $(".custom-slug:checked").val();
+        if(slug == 'automatic') {
+            $('#slug').prop('readonly', true);
+        } else {
+            $('#slug').prop('readonly', false);
+        }
+    });
+
+    $(".custom-slug").on('change', function() {
+        var slug = $(this).val();
+        if(slug == 'automatic') {
+            $('#slug').prop('readonly', true);
+        } else {
+            $('#slug').prop('readonly', false);
+        }
+    });
+
+    $("#categoryID").on('change', function() {
+        var category = $(this).val();
+        var aa = $('#brandID').val();
+        alert(aa);
+    });
+
     $('.show_confirm').click(function(event) {
         var form =  $(this).closest("form");
         var name = $(this).data("name");
@@ -175,23 +216,6 @@
                 form.submit();
             }
         });
-    });
-
-    var switchStatus = false;
-    $(".custom-slug").on('change', function() {
-        if ($(this).is(':checked')) {
-            switchStatus = $(this).is(':checked');
-            alert(switchStatus);
-        } else {
-            switchStatus = $(this).is(':checked');
-            alert(switchStatus);// To verify
-        }
-
-        if(switchStatus) {
-            $('#slug').prop('readonly', false);
-        } else {
-            $('#slug').prop('readonly', false);
-        }
     });
 </script>
 
