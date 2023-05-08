@@ -8,16 +8,16 @@
     <div class="container" data-aos="fade-in">
       <ol>
         @if (strtolower(Session::get('languagedata')) == 'id')
-          <li><a href="/">Beranda</a></li>
-          <li><a href="/id/news/">Berita</a></li>
-          <li><a href="/id/news/{{ $news_category->slug }}">{{ $news_category->name_id }}</a></li>
+          <li style="font-weight:bold;"><a href="/">Beranda</a></li>
+          <li style="font-weight:bold;"><a href="/id/news/">Berita</a></li>
+          <li style="font-weight:bold;"><a href="/id/news/{{ $news_category->slug }}">{{ $news_category->name_id }}</a></li>
           <li>{{ $news_article->title_id }}</li>
         @else
-          <li><a href="/">Home</a></li>
-          <li><a href="/en/news/">News</a></li>
+          <li style="font-weight:bold;"><a href="/">Home</a></li>
+          <li style="font-weight:bold;"><a href="/en/news/">News</a></li>
           {{-- <li><a href="/news/{{ $news_category->slug }}">{{ $news_category->name_en }}</a></li> --}}
 
-          <li><a href="/en/news/{{ $news_category->slug }}">{{ $news_category->name_en }}</a></li>
+          <li style="font-weight:bold;"><a href="/en/news/{{ $news_category->slug }}">{{ $news_category->name_en }}</a></li>
           <li>{{ $news_article->title_en }}</li>
         @endif
       </ol>

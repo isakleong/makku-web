@@ -238,12 +238,13 @@
 </script>
 
 <script>
-    @if($message = session('error'))
-        Swal.fire(
-            'Data with the same Order Number already exists!',
-            'The existing data is <b>{{ $message }}</b>',
-            'error'
-        )
+    @if($message = session('errorData'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            // text: '',
+            text: '{{Session::get("errorData")}}',
+        })
     @endif
 </script>
 

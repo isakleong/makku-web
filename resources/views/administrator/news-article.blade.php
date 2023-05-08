@@ -103,4 +103,15 @@
     });
 </script>
 
+<script>
+    @if($message = session('errorData'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            // text: '',
+            text: '{{Session::get("errorData")}}',
+        })
+    @endif
+</script>
+
 @endsection

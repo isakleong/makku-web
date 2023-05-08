@@ -79,7 +79,7 @@ class ProductBrandController extends Controller
         } catch (\Exception $e) {
             $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
             if($isForeignKey) {
-                return redirect('/admin/product/brand')->with('errorData', 'Product Brand cannot be added because the data is not unique.');
+                return redirect('/admin/product/brand')->with('errorData', 'Product Brand cannot be updated because the data is not unique.');
             } else {
                 return redirect('/admin/product/brand')->with('errorData', $e->getMessage());
             }

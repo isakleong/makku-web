@@ -90,13 +90,25 @@
                                             <div class="col-12 mt-3">
                                                 <div class="form-group">
                                                     <div class="form-check">
-                                                        <input class="form-check-input custom-slug" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="automatic" checked>
-                                                        <label class="form-check-label" for="flexRadioDefault1">Auto-Generated Slug</label>
-                                                      </div>
+                                                        <input class="form-check-input custom-slug" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="automatic-id" checked>
+                                                        <label class="form-check-label" for="flexRadioDefault1">Auto-Generated Slug (Indonesia)</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input custom-slug" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="automatic-en">
+                                                        <label class="form-check-label" for="flexRadioDefault1">Auto-Generated Slug (English)</label>
+                                                    </div>
                                                     <div class="form-check">
                                                         <input class="form-check-input custom-slug" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="custom">
                                                         <label class="form-check-label" for="flexRadioDefault2">Custom Slug</label>
                                                     </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12 mt-1">
+                                                <div class="form-group">
+                                                    <label for="old-slug">Old Slug</label>
+                                                    <input type="text" id="old-slug" class="form-control"
+                                                        name="old-slug" placeholder="Old Slug" value="{{$item->slug}}" disabled>
                                                 </div>
                                             </div>
 
@@ -164,23 +176,33 @@
 <script src="/vendor/sweetalert/sweetalert.all.js"></script>
 
 <script>
-    function generateSlug() {
-        var categoryID = $('#categoryID').val();
+    function generateSlug(lang) {
         var brandID = $('#brandID').val();
+        var name = '';
+        if(lang == 'en') {
+            name = $('#name_en').val();
+        } else {
+            name = $('#name_id').val();
+        }
 
-        $str_split = explode('|', $categoryID);
-        $categoryID = $str_split[0];
+        var str_split = brandID.split('|');
+        var brandID = str_split[1];
 
-        $str_split = explode('|', $brandID);
-        $brandID = $str_split[0];
+        name = name.trim().split(' ').join('-');
 
-        var slug = $brandID+"-"+
+        var slug = brandID+'-'+name;
+        $('#slug').val(slug.toLowerCase());
     }
 
     $(document).ready(function(){
         var slug = $(".custom-slug:checked").val();
-        if(slug == 'automatic') {
+        if(slug == 'automatic-id' || slug == 'automatic-en') {
             $('#slug').prop('readonly', true);
+            if(slug == 'automatic-id') {
+                generateSlug('id');
+            } else {
+                generateSlug('en');
+            }
         } else {
             $('#slug').prop('readonly', false);
         }
@@ -188,17 +210,52 @@
 
     $(".custom-slug").on('change', function() {
         var slug = $(this).val();
-        if(slug == 'automatic') {
+        if(slug == 'automatic-id' || slug == 'automatic-en') {
             $('#slug').prop('readonly', true);
+            if(slug == 'automatic-id') {
+                generateSlug('id');
+            } else {
+                generateSlug('en');
+            }
         } else {
             $('#slug').prop('readonly', false);
         }
     });
 
-    $("#categoryID").on('change', function() {
-        var category = $(this).val();
-        var aa = $('#brandID').val();
-        alert(aa);
+    $("#brandID").on('change', function() {
+        var slug = $(".custom-slug:checked").val();
+        if(slug == 'automatic-id' || slug == 'automatic-en') {
+            $('#slug').prop('readonly', true);
+            if(slug == 'automatic-id') {
+                generateSlug('id');
+            } else {
+                generateSlug('en');
+            }
+        }
+    });
+
+    $("#name_en").on('input',function(){
+        var slug = $(".custom-slug:checked").val();
+        if(slug == 'automatic-id' || slug == 'automatic-en') {
+            $('#slug').prop('readonly', true);
+            if(slug == 'automatic-id') {
+                generateSlug('id');
+            } else {
+                generateSlug('en');
+            }
+        }
+    });
+
+    $("#name_id").on('input',function(){
+        var slug = $(".custom-slug:checked").val();
+        if(slug == 'automatic-id' || slug == 'automatic-en') {
+            $('#slug').prop('readonly', true);
+            if(slug == 'automatic-id') {
+                generateSlug('id');
+            } else {
+                generateSlug('en');
+            }
+        }
     });
 
     $('.show_confirm').click(function(event) {

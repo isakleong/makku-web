@@ -64,14 +64,14 @@
 
 
   <!-- Google tag (gtag.js) -->
-  {{-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-KRTK7GZC8H"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KRTK7GZC8H"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
 
     gtag('config', 'G-KRTK7GZC8H');
-  </script> --}}
+  </script>
 
   <style>
     .form-select {
@@ -98,8 +98,8 @@
   @include('cookie-consent::index')
 </head>
 
-<body class="go-mart food-fmcg">
-{{-- <body class="d-flex flex-column h-100"> --}}
+{{-- <body class="go-mart food-fmcg"> --}}
+<body class="d-flex flex-column h-100">
     {{-- @yield('navbar') --}}
     <header id="header" class="header fixed-top">
       <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
@@ -124,7 +124,7 @@
                         @foreach ($tempChildMenuBar as $itemChild)
                           @if ($itemChild->parent == $item->id)
                             @if ($itemChild->ChildrenCount == 0)
-                              <li id="navbar-dropdown" style="background-image: url(/{{$itemChild->image}});"><a href=/{{$itemChild->refer}}>wkwkwk {{$itemChild->title}}</a></li>
+                              <li id="navbar-dropdown" style="background-image: url(/{{$itemChild->image}});"><a href=/{{$itemChild->refer}}>{{$itemChild->title}}</a></li>
                               @if ($cnt != (count($tempChildMenuBar)))
                                 <div style="border-bottom: 3px solid white"></div>
                               @endif

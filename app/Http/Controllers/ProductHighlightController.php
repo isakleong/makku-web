@@ -6,6 +6,7 @@ use App\Models\ProductHighlight;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Str;
 
 class ProductHighlightController extends Controller
 {
@@ -29,22 +30,16 @@ class ProductHighlightController extends Controller
             'image' => 'required|image',
             'orderNumber' => 'required'
         ]);
+        
+        if(!$request->has('active')) {
+            $request->merge(['active'=>'0']);
+        } else {
+            $request->merge(['active'=>'1']);
+        }
 
-        $productHighlight = ProductHighlight::where([
-            'active' => 1,
-            'orderNumber' => $request->orderNumber
-        ])->get();
-
-        $cntData = $productHighlight->count();
-        if($cntData == 0) {
-            if(!$request->has('active')) {
-                $request->merge(['active'=>'0']);
-            } else {
-                $request->merge(['active'=>'1']);
-            }
-    
+        try {
             $input = $request->all();
-    
+
             if($image = $request->file('image')) {
                 //commented because never trust client side inputs
                 // $destinationPath = 'image/upload/';
@@ -66,21 +61,14 @@ class ProductHighlightController extends Controller
             ProductHighlight::create($input);
     
             return redirect('/admin/master/producthighlight')->withSuccess('Data Added Successfully!');
-        } else {
-            $dataExist = "";
-            $i = 0;
-            foreach($productHighlight as $item) {
-                if($i == $cntData-1) {
-                    $dataExist.=$item->name_en;
-                } else {
-                    $dataExist.=$item->name_en.", ";
-                }
-                $i++;
+        } catch (\Exception $e) {
+            $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
+            if($isForeignKey) {
+                return redirect('/admin/master/producthighlight')->with('errorData', 'Product Highlight cannot be added because the data is not unique.');
+            } else {
+                return redirect('/admin/master/producthighlight')->with('errorData', $e->getMessage());
             }
-            return redirect('/admin/master/producthighlight')->with('error', $dataExist);
         }
-
-        
     }
 
     public function show(ProductHighlight $productHighlight)
@@ -108,38 +96,47 @@ class ProductHighlightController extends Controller
             $request->merge(['active'=>'1']);
         }
 
-        $input = $request->all();
+        try {
+            $input = $request->all();
 
-        $imageDelete = "";
-        if($image = $request->file('image')) {
-            $imageDelete = public_path()."/".$producthighlight->image;
+            $imageDelete = "";
+            if($image = $request->file('image')) {
+                $imageDelete = public_path()."/".$producthighlight->image;
 
-            //commented because never trust client side inputs
-            // $destinationPath = 'image/upload/';
-            // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-            // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
-            // $image->move($destinationPath, $imageName);
+                //commented because never trust client side inputs
+                // $destinationPath = 'image/upload/';
+                // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
+                // $image->move($destinationPath, $imageName);
 
-            $destinationPath = 'image/upload/';
-            $generatedID = hexdec(uniqid());
-            $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
-            // $image->move($destinationPath, $imageName);
-            Image::make($image)->resize(800, 800, function ($constraint) {
-                $constraint->aspectRatio();
-            })->save($destinationPath.$imageName);
+                $destinationPath = 'image/upload/';
+                $generatedID = hexdec(uniqid());
+                $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
+                // $image->move($destinationPath, $imageName);
+                Image::make($image)->resize(800, 800, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($destinationPath.$imageName);
 
-            $input['image'] = $destinationPath.$imageName;            
-        } else {
-            unset($input['image']);
+                $input['image'] = $destinationPath.$imageName;            
+            } else {
+                unset($input['image']);
+            }
+
+            $producthighlight->update($input);
+
+            if($imageDelete != "") {
+                File::delete($imageDelete);
+            }
+
+            return redirect('/admin/master/producthighlight')->withSuccess('Data Updated Successfully!');
+        } catch (\Exception $e) {
+            $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
+            if($isForeignKey) {
+                return redirect('/admin/master/producthighlight')->with('errorData', 'Product Highlight cannot be updated because the data is not unique.');
+            } else {
+                return redirect('/admin/master/producthighlight')->with('errorData', $e->getMessage());
+            }
         }
-
-        $producthighlight->update($input);
-
-        if($imageDelete != "") {
-            File::delete($imageDelete);
-        }
-
-        return redirect('/admin/master/producthighlight')->withSuccess('Data Updated Successfully!');
     }
 
     public function destroy(ProductHighlight $producthighlight)

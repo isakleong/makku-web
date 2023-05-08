@@ -6,6 +6,7 @@ use App\Models\KeyFeature;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Str;
 
 class KeyFeatureController extends Controller
 {
@@ -30,21 +31,15 @@ class KeyFeatureController extends Controller
             'orderNumber' => 'required'
         ]);
 
-        $keyFeature = KeyFeature::where([
-            'active' => 1,
-            'orderNumber' => $request->orderNumber
-        ])->get();
+        if(!$request->has('active')) {
+            $request->merge(['active'=>'0']);
+        } else {
+            $request->merge(['active'=>'1']);
+        }
 
-        $cntData = $keyFeature->count();
-        if($cntData == 0) {
-            if(!$request->has('active')) {
-                $request->merge(['active'=>'0']);
-            } else {
-                $request->merge(['active'=>'1']);
-            }
-    
+        try {
             $input = $request->all();
-    
+
             if($image = $request->file('image')) {
                 //commented because never trust client side inputs
                 // $destinationPath = 'image/upload/';
@@ -68,18 +63,13 @@ class KeyFeatureController extends Controller
             KeyFeature::create($input);
     
             return redirect('/admin/master/keyfeature')->withSuccess('Data Added Successfully!');
-        } else {
-            $dataExist = "";
-            $i = 0;
-            foreach($keyFeature as $item) {
-                if($i == $cntData-1) {
-                    $dataExist.=$item->name_en;
-                } else {
-                    $dataExist.=$item->name_en.", ";
-                }
-                $i++;
+        } catch (\Exception $e) {
+            $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
+            if($isForeignKey) {
+                return redirect('/admin/master/keyfeature')->with('errorData', 'Key Feature cannot be added because the data is not unique.');
+            } else {
+                return redirect('/admin/master/keyfeature')->with('errorData', $e->getMessage());
             }
-            return redirect('/admin/master/keyfeature')->with('error', $dataExist);
         }
     }
 
@@ -114,40 +104,49 @@ class KeyFeatureController extends Controller
             File::delete($path);
         }
 
-        $input = $request->all();
+        try {
+            $input = $request->all();
 
-        $imageDelete = "";
-        if($image = $request->file('image')) {
-            $imageDelete = public_path()."/".$keyfeature->image;
+            $imageDelete = "";
+            if($image = $request->file('image')) {
+                $imageDelete = public_path()."/".$keyfeature->image;
 
-            //commented because never trust client side inputs
-            // $destinationPath = 'image/upload/';
-            // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-            // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
-            // $image->move($destinationPath, $imageName);
+                //commented because never trust client side inputs
+                // $destinationPath = 'image/upload/';
+                // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
+                // $image->move($destinationPath, $imageName);
 
-            $destinationPath = 'image/upload/';
-            $generatedID = hexdec(uniqid());
-            $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
-            // $image->move($destinationPath, $imageName);
-            Image::make($image)->resize(250, 250, function ($constraint) {
-                $constraint->aspectRatio();
-            })->save($destinationPath.$imageName);
+                $destinationPath = 'image/upload/';
+                $generatedID = hexdec(uniqid());
+                $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
+                // $image->move($destinationPath, $imageName);
+                Image::make($image)->resize(250, 250, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($destinationPath.$imageName);
 
-            $input['image'] = $destinationPath.$imageName;
-        } else {
-            if(!$request->has('discard')) {
-                unset($input['image']);
+                $input['image'] = $destinationPath.$imageName;
+            } else {
+                if(!$request->has('discard')) {
+                    unset($input['image']);
+                }
+            }
+
+            $keyfeature->update($input);
+
+            if($imageDelete != "") {
+                File::delete($imageDelete);
+            }
+
+            return redirect('/admin/master/keyfeature')->withSuccess('Data Updated Successfully!');
+        } catch (\Exception $e) {
+            $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
+            if($isForeignKey) {
+                return redirect('/admin/master/keyfeature')->with('errorData', 'Key Feature cannot be updated because the data is not unique.');
+            } else {
+                return redirect('/admin/master/keyfeature')->with('errorData', $e->getMessage());
             }
         }
-
-        $keyfeature->update($input);
-
-        if($imageDelete != "") {
-            File::delete($imageDelete);
-        }
-
-        return redirect('/admin/master/keyfeature')->withSuccess('Data Updated Successfully!');
     }
 
     public function destroy(KeyFeature $keyfeature)

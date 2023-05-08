@@ -12,6 +12,7 @@ use Exception;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Str;
 
 class NewsArticleController extends Controller
 {
@@ -109,94 +110,104 @@ class NewsArticleController extends Controller
             'image' => 'required',
         ]);
 
-        $input = $request->all();
-
-        //summernote image upload handling
-        $content_en = $request->content_en;
-        $domContent_en = new \DOMDocument();
-        @$domContent_en->loadHtml($content_en, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-        $imageFile = $domContent_en->getElementsByTagName('img');
-        foreach($imageFile as $item => $image){
-            $data = $image->getAttribute('src');
+        try {
             
-            if ($this->check_base64_image($data)) {
-                list($type, $data) = explode(';', $data);
-                list(, $data)      = explode(',', $data);
-                $imageData = base64_decode($data);
-                $image_name= "/image/upload/"."en-".time().$item.'.png';
-                $path = public_path() . $image_name;
-                // file_put_contents($path, $imageData);
-                Image::make($imageData)->resize(1200, 630, function ($constraint) {
-                    $constraint->aspectRatio();
-                })->save($path);
+            $input = $request->all();
+
+            //summernote image upload handling
+            $content_en = $request->content_en;
+            $domContent_en = new \DOMDocument();
+            @$domContent_en->loadHtml($content_en, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+            $imageFile = $domContent_en->getElementsByTagName('img');
+            foreach($imageFile as $item => $image){
+                $data = $image->getAttribute('src');
                 
-                $image->removeAttribute('src');
-                $image->setAttribute('src', $image_name);
+                if ($this->check_base64_image($data)) {
+                    list($type, $data) = explode(';', $data);
+                    list(, $data)      = explode(',', $data);
+                    $imageData = base64_decode($data);
+                    $image_name= "/image/upload/"."en-".time().$item.'.png';
+                    $path = public_path() . $image_name;
+                    // file_put_contents($path, $imageData);
+                    Image::make($imageData)->resize(1200, 630, function ($constraint) {
+                        $constraint->aspectRatio();
+                    })->save($path);
+                    
+                    $image->removeAttribute('src');
+                    $image->setAttribute('src', $image_name);
+                } else {
+                    // bad character
+                }
+            }
+            $content_en = $domContent_en->saveHTML();
+            $input['content_en'] = $content_en;
+
+            $content_id = $request->content_id;
+            $domContent_id = new \DOMDocument();
+            @$domContent_id->loadHtml($content_id, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+            $imageFile = $domContent_id->getElementsByTagName('img');
+            foreach($imageFile as $item => $image){
+                $data = $image->getAttribute('src');
+                
+                if ($this->check_base64_image($data)) {
+                    list($type, $data) = explode(';', $data);
+                    list(, $data)      = explode(',', $data);
+                    $imageData = base64_decode($data);
+                    $image_name= "/image/upload/"."id-".time().$item.'.png';
+                    $path = public_path() . $image_name;
+                    // file_put_contents($path, $imageData);
+
+                    Image::make($imageData)->resize(1200, 630, function ($constraint) {
+                        $constraint->aspectRatio();
+                    })->save($path);
+                    
+                    $image->removeAttribute('src');
+                    $image->setAttribute('src', $image_name);
+                } else {
+                    // bad character
+                }
+            }
+            $content_id = $domContent_id->saveHTML();
+            $input['content_id'] = $content_id;
+            //end of summernote image upload handling
+
+            if($image = $request->file('image')) {
+                // $destinationPath = 'image/upload/';
+                // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
+                // $image->move($destinationPath, $imageName);
+                // $input['image'] = $destinationPath.$imageName;
+
+                $destinationPath = 'image/upload/';
+                $generatedID = hexdec(uniqid());
+                $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
+                Image::make($image)->resize(1200, 630, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($destinationPath.$imageName);
+
+                $input['image'] = $destinationPath.$imageName;
+            }
+
+            //custom slug handler (indonesia or english)
+            if($request->slug == 'id') {
+                $slug = SlugService::createSlug(NewsArticle::class, 'slug', $input['title_id']);
+                $input['slug'] = $slug;
             } else {
-                // bad character
+                $slug = SlugService::createSlug(NewsArticle::class, 'slug', $input['title_en']);
+                $input['slug'] = $slug;
+            }
+
+            NewsArticle::create($input);
+
+            return redirect('/admin/news/article')->withSuccess('Data Added Successfully!');
+        } catch (\Exception $e) {
+            $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
+            if($isForeignKey) {
+                return redirect('/admin/news/article')->with('errorData', 'News Article cannot be added because the data is not unique.');
+            } else {
+                return redirect('/admin/news/article')->with('errorData', $e->getMessage());
             }
         }
-        $content_en = $domContent_en->saveHTML();
-        $input['content_en'] = $content_en;
-
-        $content_id = $request->content_id;
-        $domContent_id = new \DOMDocument();
-        @$domContent_id->loadHtml($content_id, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-        $imageFile = $domContent_id->getElementsByTagName('img');
-        foreach($imageFile as $item => $image){
-            $data = $image->getAttribute('src');
-            
-            if ($this->check_base64_image($data)) {
-                list($type, $data) = explode(';', $data);
-                list(, $data)      = explode(',', $data);
-                $imageData = base64_decode($data);
-                $image_name= "/image/upload/"."id-".time().$item.'.png';
-                $path = public_path() . $image_name;
-                // file_put_contents($path, $imageData);
-
-                Image::make($imageData)->resize(1200, 630, function ($constraint) {
-                    $constraint->aspectRatio();
-                })->save($path);
-                
-                $image->removeAttribute('src');
-                $image->setAttribute('src', $image_name);
-            } else {
-                // bad character
-            }
-        }
-        $content_id = $domContent_id->saveHTML();
-        $input['content_id'] = $content_id;
-        //end of summernote image upload handling
-
-        if($image = $request->file('image')) {
-            // $destinationPath = 'image/upload/';
-            // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-            // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
-            // $image->move($destinationPath, $imageName);
-            // $input['image'] = $destinationPath.$imageName;
-
-            $destinationPath = 'image/upload/';
-            $generatedID = hexdec(uniqid());
-            $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
-            Image::make($image)->resize(1200, 630, function ($constraint) {
-                $constraint->aspectRatio();
-            })->save($destinationPath.$imageName);
-
-            $input['image'] = $destinationPath.$imageName;
-        }
-
-        //custom slug handler (indonesia or english)
-        if($request->slug == 'id') {
-            $slug = SlugService::createSlug(NewsArticle::class, 'slug', $input['title_id']);
-            $input['slug'] = $slug;
-        } else {
-            $slug = SlugService::createSlug(NewsArticle::class, 'slug', $input['title_en']);
-            $input['slug'] = $slug;
-        }
-
-        NewsArticle::create($input);
-
-        return redirect('/admin/news/article')->withSuccess('Data Added Successfully!');
     }
 
     public function show($locale, NewsCategory $news_category, NewsArticle $news_article)
@@ -301,139 +312,149 @@ class NewsArticleController extends Controller
             'image' => 'image'
         ]);
 
-        $input = $request->all();
+        try {
+            $input = $request->all();
 
-        //summernote image upload handling
-        $content_en = $request->content_en;
-        $domContent_en = new \DOMDocument();
-        @$domContent_en->loadHtml($content_en, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-        $imageFile = $domContent_en->getElementsByTagName('img');
-        foreach($imageFile as $item => $image){
-            $data = $image->getAttribute('src');
-            
-            if ($this->check_base64_image($data)) {
-                list($type, $data) = explode(';', $data);
-                list(, $data)      = explode(',', $data);
-                $imageData = base64_decode($data);
-                $image_name= "/image/upload/"."en-".time().$item.'.png';
-                $path = public_path() . $image_name;
-                // file_put_contents($path, $imageData);
-
-                Image::make($imageData)->resize(1200, 630, function ($constraint) {
-                    $constraint->aspectRatio();
-                })->save($path);
+            //summernote image upload handling
+            $content_en = $request->content_en;
+            $domContent_en = new \DOMDocument();
+            @$domContent_en->loadHtml($content_en, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+            $imageFile = $domContent_en->getElementsByTagName('img');
+            foreach($imageFile as $item => $image){
+                $data = $image->getAttribute('src');
                 
-                $image->removeAttribute('src');
-                $image->setAttribute('src', $image_name);
+                if ($this->check_base64_image($data)) {
+                    list($type, $data) = explode(';', $data);
+                    list(, $data)      = explode(',', $data);
+                    $imageData = base64_decode($data);
+                    $image_name= "/image/upload/"."en-".time().$item.'.png';
+                    $path = public_path() . $image_name;
+                    // file_put_contents($path, $imageData);
+
+                    Image::make($imageData)->resize(1200, 630, function ($constraint) {
+                        $constraint->aspectRatio();
+                    })->save($path);
+                    
+                    $image->removeAttribute('src');
+                    $image->setAttribute('src', $image_name);
+                } else {
+                    // bad character
+                }
+            }
+            $content_en = $domContent_en->saveHTML();
+            $input['content_en'] = $content_en;
+
+            $content_id = $request->content_id;
+            $domContent_id = new \DOMDocument();
+            @$domContent_id->loadHtml($content_id, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+            $imageFile = $domContent_id->getElementsByTagName('img');
+            foreach($imageFile as $item => $image){
+                $data = $image->getAttribute('src');
+                
+                if ($this->check_base64_image($data)) {
+                    list($type, $data) = explode(';', $data);
+                    list(, $data)      = explode(',', $data);
+                    $imageData = base64_decode($data);
+                    $image_name= "/image/upload/"."id-".time().$item.'.png';
+                    $path = public_path() . $image_name;
+                    // file_put_contents($path, $imageData);
+
+                    Image::make($imageData)->resize(1200, 630, function ($constraint) {
+                        $constraint->aspectRatio();
+                    })->save($path);
+                    
+                    $image->removeAttribute('src');
+                    $image->setAttribute('src', $image_name);
+                } else {
+                    // bad character
+                }
+            }
+            $content_id = $domContent_id->saveHTML();
+            $input['content_id'] = $content_id;
+            //end of summernote image upload handling
+            
+            //summernote image delete handling
+            $existContent_en = $article->content_en;
+            $domExistContent_en = new \DOMDocument();
+            @$domExistContent_en->loadHtml($existContent_en, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+            $domExistContent_en->preserveWhiteSpace = false;
+            $existImage  = $domExistContent_en->getElementsByTagName("img");
+            $arrExistImage = array();
+            for($i = 0; $i < $existImage->length; $i++) {
+                $arrExistImage[] = $existImage[$i]->getAttribute("src");
+            }
+
+            $content_en = $request->content_en;
+            $domContent_en = new \DOMDocument();
+            @$domContent_en->loadHtml($content_en, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+            $domContent_en->preserveWhiteSpace = false;
+            $imageFile  = $domContent_en->getElementsByTagName("img");
+            $arrImage = array();
+            for($i = 0; $i < $imageFile->length; $i++) {
+                $arrImage[] = $imageFile[$i]->getAttribute("src");
+            }
+            $result=array_diff($arrExistImage, $arrImage);
+            foreach($result as $deleteFile) {
+                File::delete(public_path()."/".$deleteFile);
+            }
+
+            $existContent_id = $article->content_id;
+            $domExistContent_id = new \DOMDocument();
+            @$domExistContent_id->loadHtml($existContent_id, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+            $domExistContent_id->preserveWhiteSpace = false;
+            $existImage  = $domExistContent_id->getElementsByTagName("img");
+            $arrExistImage = array();
+            for($i = 0; $i < $existImage->length; $i++) {
+                $arrExistImage[] = $existImage[$i]->getAttribute("src");
+            }
+
+            $content_id = $request->content_id;
+            $domContent_id = new \DOMDocument();
+            @$domContent_id->loadHtml($content_id, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+            $domContent_id->preserveWhiteSpace = false;
+            $imageFile  = $domContent_id->getElementsByTagName("img");
+            $arrImage = array();
+            for($i = 0; $i < $imageFile->length; $i++) {
+                $arrImage[] = $imageFile[$i]->getAttribute("src");
+            }
+            $result=array_diff($arrExistImage, $arrImage);
+            foreach($result as $deleteFile) {
+                File::delete(public_path()."/".$deleteFile);
+            }
+            //end of summernote image delete handling
+
+            $imageDelete = "";
+            if($image = $request->file('image')) {
+                $imageDelete = public_path()."/".$article->image;
+
+                $destinationPath = 'image/upload/';
+                $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
+                $image->move($destinationPath, $imageName);
+                $input['image'] = $destinationPath.$imageName;
             } else {
-                // bad character
+                unset($input['image']);
+            }
+
+            // $article->slug = null;
+            // $slug = SlugService::createSlug(NewsArticle::class, 'slug', $input['slug']);
+            // $input['slug'] = $slug;
+            $article->update($input);
+
+            if($imageDelete != "") {
+                File::delete($imageDelete);
+            }
+
+            return redirect('/admin/news/article')->withSuccess('Data Updated Successfully!');
+
+        } catch (\Exception $e) {
+            $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
+            if($isForeignKey) {
+                return redirect('/admin/news/article')->with('errorData', 'News Article cannot be updated because the data is not unique.');
+            } else {
+                return redirect('/admin/news/article')->with('errorData', $e->getMessage());
             }
         }
-        $content_en = $domContent_en->saveHTML();
-        $input['content_en'] = $content_en;
-
-        $content_id = $request->content_id;
-        $domContent_id = new \DOMDocument();
-        @$domContent_id->loadHtml($content_id, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-        $imageFile = $domContent_id->getElementsByTagName('img');
-        foreach($imageFile as $item => $image){
-            $data = $image->getAttribute('src');
-            
-            if ($this->check_base64_image($data)) {
-                list($type, $data) = explode(';', $data);
-                list(, $data)      = explode(',', $data);
-                $imageData = base64_decode($data);
-                $image_name= "/image/upload/"."id-".time().$item.'.png';
-                $path = public_path() . $image_name;
-                // file_put_contents($path, $imageData);
-
-                Image::make($imageData)->resize(1200, 630, function ($constraint) {
-                    $constraint->aspectRatio();
-                })->save($path);
-                
-                $image->removeAttribute('src');
-                $image->setAttribute('src', $image_name);
-            } else {
-                // bad character
-            }
-        }
-        $content_id = $domContent_id->saveHTML();
-        $input['content_id'] = $content_id;
-        //end of summernote image upload handling
-        
-        //summernote image delete handling
-        $existContent_en = $article->content_en;
-        $domExistContent_en = new \DOMDocument();
-        @$domExistContent_en->loadHtml($existContent_en, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-        $domExistContent_en->preserveWhiteSpace = false;
-        $existImage  = $domExistContent_en->getElementsByTagName("img");
-        $arrExistImage = array();
-        for($i = 0; $i < $existImage->length; $i++) {
-            $arrExistImage[] = $existImage[$i]->getAttribute("src");
-        }
-
-        $content_en = $request->content_en;
-        $domContent_en = new \DOMDocument();
-        @$domContent_en->loadHtml($content_en, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-        $domContent_en->preserveWhiteSpace = false;
-        $imageFile  = $domContent_en->getElementsByTagName("img");
-        $arrImage = array();
-        for($i = 0; $i < $imageFile->length; $i++) {
-            $arrImage[] = $imageFile[$i]->getAttribute("src");
-        }
-        $result=array_diff($arrExistImage, $arrImage);
-        foreach($result as $deleteFile) {
-            File::delete(public_path()."/".$deleteFile);
-        }
-
-        $existContent_id = $article->content_id;
-        $domExistContent_id = new \DOMDocument();
-        @$domExistContent_id->loadHtml($existContent_id, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-        $domExistContent_id->preserveWhiteSpace = false;
-        $existImage  = $domExistContent_id->getElementsByTagName("img");
-        $arrExistImage = array();
-        for($i = 0; $i < $existImage->length; $i++) {
-            $arrExistImage[] = $existImage[$i]->getAttribute("src");
-        }
-
-        $content_id = $request->content_id;
-        $domContent_id = new \DOMDocument();
-        @$domContent_id->loadHtml($content_id, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-        $domContent_id->preserveWhiteSpace = false;
-        $imageFile  = $domContent_id->getElementsByTagName("img");
-        $arrImage = array();
-        for($i = 0; $i < $imageFile->length; $i++) {
-            $arrImage[] = $imageFile[$i]->getAttribute("src");
-        }
-        $result=array_diff($arrExistImage, $arrImage);
-        foreach($result as $deleteFile) {
-            File::delete(public_path()."/".$deleteFile);
-        }
-        //end of summernote image delete handling
-
-        $imageDelete = "";
-        if($image = $request->file('image')) {
-            $imageDelete = public_path()."/".$article->image;
-
-            $destinationPath = 'image/upload/';
-            $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-            $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
-            $image->move($destinationPath, $imageName);
-            $input['image'] = $destinationPath.$imageName;
-        } else {
-            unset($input['image']);
-        }
-
-        $article->slug = null;
-        $slug = SlugService::createSlug(NewsArticle::class, 'slug', $input['slug']);
-        $input['slug'] = $slug;
-        $article->update($input);
-
-        if($imageDelete != "") {
-            File::delete($imageDelete);
-        }
-
-        return redirect('/admin/news/article')->withSuccess('Data Updated Successfully!');
     }
 
     public function destroy(NewsArticle $article)

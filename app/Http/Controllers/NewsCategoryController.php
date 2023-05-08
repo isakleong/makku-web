@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
 
 class NewsCategoryController extends Controller
 {
@@ -36,20 +37,29 @@ class NewsCategoryController extends Controller
             $request->merge(['active'=>'1']);
         }
 
-        $input = $request->all();
+        try {
+            $input = $request->all();
 
-        //custom slug handler (indonesia or english)
-        if($request->slug == 'id') {
-            $slug = SlugService::createSlug(NewsCategory::class, 'slug', $input['name_id']);
-            $input['slug'] = $slug;
-        } else {
-            $slug = SlugService::createSlug(NewsCategory::class, 'slug', $input['name_en']);
-            $input['slug'] = $slug;
+            //custom slug handler (indonesia or english)
+            if($request->slug == 'id') {
+                $slug = SlugService::createSlug(NewsCategory::class, 'slug', $input['name_id']);
+                $input['slug'] = $slug;
+            } else {
+                $slug = SlugService::createSlug(NewsCategory::class, 'slug', $input['name_en']);
+                $input['slug'] = $slug;
+            }
+
+            NewsCategory::create($input);
+
+            return redirect('/admin/news/category')->withSuccess('Data Added Successfully!');
+        } catch (\Exception $e) {
+            $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
+            if($isForeignKey) {
+                return redirect('/admin/news/category')->with('errorData', 'News Category cannot be added because the data is not unique.');
+            } else {
+                return redirect('/admin/news/category')->with('errorData', $e->getMessage());
+            }
         }
-
-        NewsCategory::create($input);
-
-        return redirect('/admin/news/category')->withSuccess('Data Added Successfully!');
     }
 
     public function show($locale, NewsCategory $news_category)
@@ -136,14 +146,20 @@ class NewsCategoryController extends Controller
             $request->merge(['active'=>'1']);
         }
 
-        $input = $request->all();
+        try {
+            $input = $request->all();
 
-        $category->slug = null;
-        $slug = SlugService::createSlug(NewsCategory::class, 'slug', $input['slug']);
-        $input['slug'] = $slug;
-        $category->update($input);
+            $category->update($input);
 
-        return redirect('/admin/news/category')->withSuccess('Data Updated Successfully!');
+            return redirect('/admin/news/category')->withSuccess('Data Updated Successfully!');
+        } catch (\Exception $e) {
+            $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
+            if($isForeignKey) {
+                return redirect('/admin/news/category')->with('errorData', 'News Category cannot be updated because the data is not unique.');
+            } else {
+                return redirect('/admin/news/category')->with('errorData', $e->getMessage());
+            }
+        }
     }
 
     public function destroy(NewsCategory $category)

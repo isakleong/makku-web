@@ -169,6 +169,12 @@ class ProductController extends Controller
                 unset($input['image']);
             }
 
+            $str_split = explode('|', $input['categoryID']);
+            $input['categoryID'] = $str_split[0];
+
+            $str_split = explode('|', $input['brandID']);
+            $input['brandID'] = $str_split[0];
+
             $item->update($input);
 
             if($imageDelete != "") {
