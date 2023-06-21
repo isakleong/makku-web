@@ -37,11 +37,11 @@ class ProductBrandController extends Controller
             $input = $request->all();
             ProductBrand::create($input);
 
-            return redirect('/admin/product/brand')->withSuccess('Data Added Successfully!');
+            return redirect('/admin/product/brand')->withSuccess('Product Brand added successfully!');
         } catch (\Exception $e) {
             $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
             if($isForeignKey) {
-                return redirect('/admin/product/brand')->with('errorData', 'Product Brand cannot be added because the data is not unique.');
+                return redirect('/admin/product/brand')->with('errorData', 'Product Brand cannot be added because the data is not unique. Please make sure there are no duplicate name data.');
             } else {
                 return redirect('/admin/product/brand')->with('errorData', $e->getMessage());
             }
@@ -75,11 +75,11 @@ class ProductBrandController extends Controller
 
             $brand->update($input);
 
-            return redirect('/admin/product/brand')->withSuccess('Data Updated Successfully!');
+            return redirect('/admin/product/brand')->withSuccess('Product Brand updated successfully!');
         } catch (\Exception $e) {
             $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
             if($isForeignKey) {
-                return redirect('/admin/product/brand')->with('errorData', 'Product Brand cannot be updated because the data is not unique.');
+                return redirect('/admin/product/brand')->with('errorData', 'Product Brand cannot be updated because the data is not unique. Please make sure there are no duplicate name or slug data.');
             } else {
                 return redirect('/admin/product/brand')->with('errorData', $e->getMessage());
             }
@@ -91,7 +91,7 @@ class ProductBrandController extends Controller
         try {
             $brand->delete();
 
-            return redirect('/admin/product/brand')->withSuccess('Data Deleted Successfully!');
+            return redirect('/admin/product/brand')->withSuccess('Product Brand Deleted Successfully!');
         } catch (\Exception $e) {
             $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
             if($isForeignKey) {
