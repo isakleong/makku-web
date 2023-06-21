@@ -84,7 +84,7 @@ class PartnershipController extends Controller
 
         Partnership::create($input);
 
-        return redirect('/admin/partnership')->withSuccess('Data Added Successfully!');
+        return redirect('/admin/partnership')->withSuccess('Partnership added successfully!');
     }
 
     public function show(Partnership $partnership)
@@ -184,7 +184,7 @@ class PartnershipController extends Controller
             File::delete($logoDelete);
         }
 
-        return redirect('/admin/partnership')->withSuccess('Data Updated Successfully!');
+        return redirect('/admin/partnership')->withSuccess('Partnership updated successfully!');
     }
 
     public function destroy(Partnership $partnership)
@@ -197,6 +197,6 @@ class PartnershipController extends Controller
         File::delete($imageDelete);
         File::delete($logoDelete);
 
-        return redirect('/admin/partnership')->withSuccess('Data Deleted Successfully!');
+        return redirect('/admin/partnership')->withSuccess('Partnership deleted successfully!');
     }
 }
