@@ -108,7 +108,7 @@ class CompanyController extends Controller
 
         Company::create($input);
 
-        return redirect('/admin/master/company')->withSuccess('Data Added Successfully!');
+        return redirect('/admin/master/company')->withSuccess('Company added successfully!');
     }
 
     public function show(Company $company)
@@ -223,7 +223,7 @@ class CompanyController extends Controller
             File::delete($logoSecondaryDelete);
         }
 
-        return redirect('/admin/master/company')->withSuccess('Data Updated Successfully!');
+        return redirect('/admin/master/company')->withSuccess('Company updated successfully!');
     }
 
     public function destroy(Company $company)
@@ -238,6 +238,6 @@ class CompanyController extends Controller
         File::delete($logoPrimaryDelete);
         File::delete($logoSecondaryDelete);
 
-        return redirect('/admin/master/company')->withSuccess('Data Deleted Successfully!');
+        return redirect('/admin/master/company')->withSuccess('Company deleted successfully!');
     }
 }
