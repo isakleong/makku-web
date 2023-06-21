@@ -71,7 +71,7 @@ class ProductCategoryController extends Controller
                 })->save($input['image']);
             }
 
-            return redirect('/admin/product/category')->withSuccess('Product Category added Successfully!');
+            return redirect('/admin/product/category')->withSuccess('Product Category added successfully!');
         } catch (\Exception $e) {
             $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
             if($isForeignKey) {

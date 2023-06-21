@@ -79,10 +79,7 @@ class ProductController extends Controller
                 $destinationPath = 'image/upload/';
                 $generatedID = hexdec(uniqid());
                 $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
-                Image::make($image)->resize(800, 800, function ($constraint) {
-                    $constraint->aspectRatio();
-                })->save($destinationPath.$imageName);
-    
+
                 $input['image'] = $destinationPath.$imageName;
             } else {
                 unset($input['image']);
@@ -106,12 +103,18 @@ class ProductController extends Controller
             }
     
             Product::create($input);
+
+            if (isset($input['image'])) {
+                Image::make($image)->resize(800, 800, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($destinationPath.$imageName);
+            }
     
-            return redirect('/admin/product/item')->withSuccess('Data Added Successfully!');
+            return redirect('/admin/product/item')->withSuccess('Product added successfully!');
         } catch (\Exception $e) {
             $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
             if($isForeignKey) {
-                return redirect('/admin/product/item')->with('errorData', 'Product cannot be added because the data is not unique.');
+                return redirect('/admin/product/item')->with('errorData', 'Product cannot be added because the data is not unique. Please make sure there are no duplicate name, slug, category or brand data.');
             } else {
                 return redirect('/admin/product/item')->with('errorData', $e->getMessage());
             }
@@ -181,11 +184,11 @@ class ProductController extends Controller
                 File::delete($imageDelete);
             }
 
-            return redirect('/admin/product/item')->withSuccess('Data Updated Successfully!');
+            return redirect('/admin/product/item')->withSuccess('Product updated successfully!');
         } catch (\Exception $e) {
             $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
             if($isForeignKey) {
-                return redirect('/admin/product/item')->with('errorData', 'Product cannot be updated because the data is not unique.');
+                return redirect('/admin/product/item')->with('errorData', 'Product cannot be updated because the data is not unique. Please make sure there are no duplicate name, slug, category or brand data.');
             } else {
                 return redirect('/admin/product/item')->with('errorData', $e->getMessage());
             }
@@ -202,6 +205,6 @@ class ProductController extends Controller
 
         File::delete($imageDelete);
 
-        return redirect('/admin/product/item')->withSuccess('Data Deleted Successfully!');
+        return redirect('/admin/product/item')->withSuccess('Product deleted successfully!');
     }
 }

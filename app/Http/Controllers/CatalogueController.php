@@ -117,6 +117,6 @@ class CatalogueController extends Controller
         
         File::delete($imageDelete);
 
-        return redirect('/admin/product/catalogue')->withSuccess('Product Catalogue deleted Successfully!');
+        return redirect('/admin/product/catalogue')->withSuccess('Product Catalogue deleted successfully!');
     }
 }

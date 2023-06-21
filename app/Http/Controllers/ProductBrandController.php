@@ -91,7 +91,7 @@ class ProductBrandController extends Controller
         try {
             $brand->delete();
 
-            return redirect('/admin/product/brand')->withSuccess('Product Brand Deleted Successfully!');
+            return redirect('/admin/product/brand')->withSuccess('Product Brand deleted successfully!');
         } catch (\Exception $e) {
             $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
             if($isForeignKey) {
