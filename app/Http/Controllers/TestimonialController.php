@@ -37,7 +37,7 @@ class TestimonialController extends Controller
 
         Testimonial::create($input);
 
-        return redirect('/admin/testimonial')->withSuccess('Data Added Successfully!');
+        return redirect('/admin/testimonial')->withSuccess('Testimonial added successfully!');
     }
 
     public function show(Testimonial $testimonial)
@@ -69,13 +69,13 @@ class TestimonialController extends Controller
 
         $testimonial->update($input);
 
-        return redirect('/admin/testimonial')->withSuccess('Data Updated Successfully!');
+        return redirect('/admin/testimonial')->withSuccess('Testimonial updated successfully!');
     }
 
     public function destroy(Testimonial $testimonial)
     {
         $testimonial->delete();
 
-        return redirect('/admin/testimonial')->withSuccess('Data Deleted Successfully!');
+        return redirect('/admin/testimonial')->withSuccess('Testimonial deleted successfully!');
     }
 }
