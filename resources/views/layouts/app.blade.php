@@ -7,7 +7,6 @@
     <title>@yield('title')</title>
     
     <link rel="stylesheet" href="/lte/assets/css/main/app.css">
-    <link rel="stylesheet" href="/lte/assets/css/main/app-dark.css">
     <link rel="shortcut icon" href="/lte/assets/images/logo/favicon.svg" type="image/x-icon">
     <link rel="shortcut icon" href="/lte/assets/images/logo/favicon.png" type="image/png">
     <script src="/lte/assets/jquery/jquery.min.js"></script>
