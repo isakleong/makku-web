@@ -102,7 +102,7 @@ class MenuBarController extends Controller
     
             MenuBar::create($input);
     
-            return redirect('/admin/master/menubar')->withSuccess('Data Added Successfully!');
+            return redirect('/admin/master/menubar')->withSuccess('Menu Bar added successfully!');
         } else {
             $dataExist = "";
             $i = 0;
@@ -188,7 +188,7 @@ class MenuBarController extends Controller
             File::delete($imageDelete);
         }
 
-        return redirect('/admin/master/menubar')->withSuccess('Data Updated Successfully!');
+        return redirect('/admin/master/menubar')->withSuccess('Menu Bar updated successfully!');
     }
 
     /**
@@ -205,6 +205,6 @@ class MenuBarController extends Controller
 
         File::delete($imageDelete);
 
-        return redirect('/admin/master/menubar')->withSuccess('Data Deleted Successfully!');
+        return redirect('/admin/master/menubar')->withSuccess('Menu Bar deleted successfully!');
     }
 }
