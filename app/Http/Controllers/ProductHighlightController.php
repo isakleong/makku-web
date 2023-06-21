@@ -51,20 +51,23 @@ class ProductHighlightController extends Controller
                 $generatedID = hexdec(uniqid());
                 $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
                 // $image->move($destinationPath, $imageName);
-                Image::make($image)->resize(800, 800, function ($constraint) {
-                    $constraint->aspectRatio();
-                })->save($destinationPath.$imageName);
 
                 $input['image'] = $destinationPath.$imageName;
             }
     
             ProductHighlight::create($input);
+
+            if (isset($input['image'])) {
+                Image::make($image)->resize(800, 800, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($destinationPath.$imageName);
+            }
     
-            return redirect('/admin/master/producthighlight')->withSuccess('Data Added Successfully!');
+            return redirect('/admin/master/producthighlight')->withSuccess('Product Highlight added successfully!');
         } catch (\Exception $e) {
             $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
             if($isForeignKey) {
-                return redirect('/admin/master/producthighlight')->with('errorData', 'Product Highlight cannot be added because the data is not unique.');
+                return redirect('/admin/master/producthighlight')->with('errorData', 'Product Highlight cannot be added because the data is not unique. Please make sure there are no duplicate name or order number data.');
             } else {
                 return redirect('/admin/master/producthighlight')->with('errorData', $e->getMessage());
             }
@@ -128,11 +131,11 @@ class ProductHighlightController extends Controller
                 File::delete($imageDelete);
             }
 
-            return redirect('/admin/master/producthighlight')->withSuccess('Data Updated Successfully!');
+            return redirect('/admin/master/producthighlight')->withSuccess('Product Highlight updated successfully!');
         } catch (\Exception $e) {
             $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
             if($isForeignKey) {
-                return redirect('/admin/master/producthighlight')->with('errorData', 'Product Highlight cannot be updated because the data is not unique.');
+                return redirect('/admin/master/producthighlight')->with('errorData', 'Product Highlight cannot be updated because the data is not unique. Please make sure there are no duplicate name or order number data.');
             } else {
                 return redirect('/admin/master/producthighlight')->with('errorData', $e->getMessage());
             }
@@ -147,6 +150,6 @@ class ProductHighlightController extends Controller
 
         File::delete($imageDelete);
 
-        return redirect('/admin/master/producthighlight')->withSuccess('Data Deleted Successfully!');
+        return redirect('/admin/master/producthighlight')->withSuccess('Product Highlight deleted successfully!');
     }
 }
