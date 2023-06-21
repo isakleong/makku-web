@@ -51,11 +51,11 @@ class NewsCategoryController extends Controller
 
             NewsCategory::create($input);
 
-            return redirect('/admin/news/category')->withSuccess('Data Added Successfully!');
+            return redirect('/admin/news/category')->withSuccess('News Category added successfully!');
         } catch (\Exception $e) {
             $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
             if($isForeignKey) {
-                return redirect('/admin/news/category')->with('errorData', 'News Category cannot be added because the data is not unique.');
+                return redirect('/admin/news/category')->with('errorData', 'News Category cannot be added because the data is not unique. Please make sure there are no duplicate name or slug data.');
             } else {
                 return redirect('/admin/news/category')->with('errorData', $e->getMessage());
             }
@@ -151,11 +151,11 @@ class NewsCategoryController extends Controller
 
             $category->update($input);
 
-            return redirect('/admin/news/category')->withSuccess('Data Updated Successfully!');
+            return redirect('/admin/news/category')->withSuccess('News Category updated successfully!');
         } catch (\Exception $e) {
             $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
             if($isForeignKey) {
-                return redirect('/admin/news/category')->with('errorData', 'News Category cannot be updated because the data is not unique.');
+                return redirect('/admin/news/category')->with('errorData', 'News Category cannot be updated because the data is not unique. Please make sure there are no duplicate name or slug data.');
             } else {
                 return redirect('/admin/news/category')->with('errorData', $e->getMessage());
             }
@@ -166,6 +166,6 @@ class NewsCategoryController extends Controller
     {
         $category->delete();
 
-        return redirect('/admin/news/category')->withSuccess('Data Deleted Successfully!');
+        return redirect('/admin/news/category')->withSuccess('News Category deleted successfully!');
     }
 }
