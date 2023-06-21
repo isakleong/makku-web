@@ -199,11 +199,11 @@ class NewsArticleController extends Controller
 
             NewsArticle::create($input);
 
-            return redirect('/admin/news/article')->withSuccess('Data Added Successfully!');
+            return redirect('/admin/news/article')->withSuccess('News Article added successfully!');
         } catch (\Exception $e) {
             $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
             if($isForeignKey) {
-                return redirect('/admin/news/article')->with('errorData', 'News Article cannot be added because the data is not unique.');
+                return redirect('/admin/news/article')->with('errorData', 'News Article cannot be added because the data is not unique. Please make sure there are no duplicate category, title or slug data.');
             } else {
                 return redirect('/admin/news/article')->with('errorData', $e->getMessage());
             }
@@ -445,12 +445,12 @@ class NewsArticleController extends Controller
                 File::delete($imageDelete);
             }
 
-            return redirect('/admin/news/article')->withSuccess('Data Updated Successfully!');
+            return redirect('/admin/news/article')->withSuccess('News Article updated successfully!');
 
         } catch (\Exception $e) {
             $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
             if($isForeignKey) {
-                return redirect('/admin/news/article')->with('errorData', 'News Article cannot be updated because the data is not unique.');
+                return redirect('/admin/news/article')->with('errorData', 'News Article cannot be updated because the data is not unique. Please make sure there are no duplicate category, title or slug data');
             } else {
                 return redirect('/admin/news/article')->with('errorData', $e->getMessage());
             }
@@ -493,6 +493,6 @@ class NewsArticleController extends Controller
 
         File::delete($imageDelete);
 
-        return redirect('/admin/news/article')->withSuccess('Data Deleted Successfully!');
+        return redirect('/admin/news/article')->withSuccess('News Article deleted successfully!');
     }
 }
