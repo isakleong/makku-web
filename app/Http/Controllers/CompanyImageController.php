@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Str;
 
 class CompanyImageController extends Controller
 {
@@ -29,12 +30,7 @@ class CompanyImageController extends Controller
             'orderNumber' => 'required'
         ]);
 
-        $companyImage = CompanyImage::where([
-            'orderNumber' => $request->orderNumber
-        ])->get();
-
-        $cntData = $companyImage->count();
-        if($cntData == 0) {
+        try {
             $input = $request->all();
 
             if($image = $request->file('image')) {
@@ -48,18 +44,26 @@ class CompanyImageController extends Controller
                 $generatedID = hexdec(uniqid());
                 $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
                 // $image->move($destinationPath, $imageName);
-                Image::make($image)->resize(1200, 630, function ($constraint) {
-                    $constraint->aspectRatio();
-                })->save($destinationPath.$imageName);
 
                 $input['image'] = $destinationPath.$imageName;
             }
 
             CompanyImage::create($input);
 
-            return redirect('/admin/master/company')->withSuccess('Data Added Successfully!');
-        } else {
-            return redirect('/admin/master/company')->with('error', 'Data with the same Order Number already exists!');
+            if (isset($input['image'])) {
+                Image::make($image)->resize(1200, 630, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($destinationPath.$imageName);
+            }
+
+            return redirect('/admin/master/company')->withSuccess('Company Image added successfully!');
+        } catch (\Exception $e) {
+            $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
+            if($isForeignKey) {
+                return redirect('/admin/master/company')->with('errorData', 'Company Image cannot be added because the data is not unique. Please make sure there are no duplicate order number data.');
+            } else {
+                return redirect('/admin/master/company')->with('errorData', $e->getMessage());
+            }
         }
     }
 
@@ -82,38 +86,51 @@ class CompanyImageController extends Controller
             'orderNumber' => 'required'
         ]);
 
-        $input = $request->all();
+        try {
+            $input = $request->all();
 
-        $imageDelete = "";
-        if($image = $request->file('image')) {
-            $imageDelete = public_path()."/".$companyimage->image;
+            $imageDelete = "";
+            if($image = $request->file('image')) {
+                $imageDelete = public_path()."/".$companyimage->image;
 
-            //commented because never trust client side inputs
-            // $destinationPath = 'image/upload/';
-            // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-            // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
-            // $image->move($destinationPath, $imageName);
+                //commented because never trust client side inputs
+                // $destinationPath = 'image/upload/';
+                // $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                // $imageName = $fileName."-".time(). "." .$image->getClientOriginalExtension();
+                // $image->move($destinationPath, $imageName);
 
-            $destinationPath = 'image/upload/';
-            $generatedID = hexdec(uniqid());
-            $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
-            // $image->move($destinationPath, $imageName);
-            Image::make($image)->resize(1200, 630, function ($constraint) {
-                $constraint->aspectRatio();
-            })->save($destinationPath.$imageName);
+                $destinationPath = 'image/upload/';
+                $generatedID = hexdec(uniqid());
+                $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
+                // $image->move($destinationPath, $imageName);
 
-            $input['image'] = $destinationPath.$imageName;
-        } else {
-            unset($input['image']);
+                $input['image'] = $destinationPath.$imageName;
+            } else {
+                unset($input['image']);
+            }
+
+            $companyimage->update($input);
+
+            if (isset($input['image'])) {
+                Image::make($image)->resize(1200, 630, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($destinationPath.$imageName);
+            }
+
+            if($imageDelete != "") {
+                File::delete($imageDelete);
+            }
+
+            return redirect('/admin/master/company')->withSuccess('Company Image updated successfully!');
+
+        } catch (\Exception $e) {
+            $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
+            if($isForeignKey) {
+                return redirect('/admin/master/company')->with('errorData', 'Company Image cannot be updated because the data is not unique. Please make sure there are no duplicate order number data.');
+            } else {
+                return redirect('/admin/master/company')->with('errorData', $e->getMessage());
+            }
         }
-
-        $companyimage->update($input);
-
-        if($imageDelete != "") {
-            File::delete($imageDelete);
-        }
-
-        return redirect('/admin/master/company')->withSuccess('Data Updated Successfully!');
     }
 
     public function destroy(CompanyImage $companyimage)
@@ -124,6 +141,6 @@ class CompanyImageController extends Controller
 
         File::delete($imageDelete);
 
-        return redirect('/admin/master/company')->withSuccess('Data Deleted Successfully!');
+        return redirect('/admin/master/company')->withSuccess('Company Image deleted successfully!');
     }
 }
