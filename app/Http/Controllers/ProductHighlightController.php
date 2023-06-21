@@ -116,9 +116,6 @@ class ProductHighlightController extends Controller
                 $generatedID = hexdec(uniqid());
                 $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
                 // $image->move($destinationPath, $imageName);
-                Image::make($image)->resize(800, 800, function ($constraint) {
-                    $constraint->aspectRatio();
-                })->save($destinationPath.$imageName);
 
                 $input['image'] = $destinationPath.$imageName;            
             } else {
@@ -126,6 +123,12 @@ class ProductHighlightController extends Controller
             }
 
             $producthighlight->update($input);
+
+            if (isset($input['image'])) {
+                Image::make($image)->resize(800, 800, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($destinationPath.$imageName);
+            }
 
             if($imageDelete != "") {
                 File::delete($imageDelete);
