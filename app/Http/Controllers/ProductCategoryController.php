@@ -48,9 +48,6 @@ class ProductCategoryController extends Controller
                 $destinationPath = 'image/upload/';
                 $generatedID = hexdec(uniqid());
                 $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
-                Image::make($image)->resize(800, 600, function ($constraint) {
-                    $constraint->aspectRatio();
-                })->save($destinationPath.$imageName);
 
                 $input['image'] = $destinationPath.$imageName;
             } else {
@@ -68,11 +65,17 @@ class ProductCategoryController extends Controller
 
             ProductCategory::create($input);
 
-            return redirect('/admin/product/category')->withSuccess('Data Added Successfully!');
+            if (isset($input['image'])) {
+                Image::make($image)->resize(800, 600, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($input['image']);
+            }
+
+            return redirect('/admin/product/category')->withSuccess('Product Category added Successfully!');
         } catch (\Exception $e) {
             $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
             if($isForeignKey) {
-                return redirect('/admin/product/category')->with('errorData', 'Product Category cannot be added because the data is not unique.');
+                return redirect('/admin/product/category')->with('errorData', 'Product Category cannot be added because the data is not unique. Please make sure there are no duplicate name or slug data.');
             } else {
                 return redirect('/admin/product/category')->with('errorData', $e->getMessage());
             }
@@ -147,9 +150,6 @@ class ProductCategoryController extends Controller
                 $destinationPath = 'image/upload/';
                 $generatedID = hexdec(uniqid());
                 $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
-                Image::make($image)->resize(800, 600, function ($constraint) {
-                    $constraint->aspectRatio();
-                })->save($destinationPath.$imageName);
 
                 $input['image'] = $destinationPath.$imageName;
             } else {
@@ -158,6 +158,16 @@ class ProductCategoryController extends Controller
 
             $category->update($input);
 
+            if (isset($input['image'])) {
+                Image::make($image)->resize(800, 600, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($destinationPath.$imageName);
+            }
+
+            if($imageDelete != "") {
+                File::delete($imageDelete);
+            }
+
             //update menubar slug
             $menubar = MenuBar::where('categoryID', $category->id)->get();
             for($i=0; $i<$menubar->count(); $i++) {
@@ -165,15 +175,11 @@ class ProductCategoryController extends Controller
                 $menubar[$i]->update(array('refer' => $str_split[0].'/'.$category->slug));
             }
 
-            if($imageDelete != "") {
-                File::delete($imageDelete);
-            }
-
-            return redirect('/admin/product/category')->withSuccess('Data Updated Successfully!');
+            return redirect('/admin/product/category')->withSuccess('Product Category updated successfully!');
         } catch (\Exception $e) {
             $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
             if($isForeignKey) {
-                return redirect('/admin/product/category')->with('errorData', 'Product Category cannot be updated because the data is not unique.');
+                return redirect('/admin/product/category')->with('errorData', 'Product Category cannot be updated because the data is not unique. Please make sure there are no duplicate name or slug data.');
             } else {
                 return redirect('/admin/product/category')->with('errorData', $e->getMessage());
             }
@@ -187,7 +193,7 @@ class ProductCategoryController extends Controller
             $category->delete();
             File::delete($imageDelete);
 
-            return redirect('/admin/product/category')->withSuccess('Data Deleted Successfully!');
+            return redirect('/admin/product/category')->withSuccess('Product Category deleted successfully!');
           } catch (\Exception $e) {
             $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
             if($isForeignKey) {
