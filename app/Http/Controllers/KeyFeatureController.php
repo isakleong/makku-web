@@ -51,9 +51,6 @@ class KeyFeatureController extends Controller
                 $generatedID = hexdec(uniqid());
                 $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
                 // $image->move($destinationPath, $imageName);
-                Image::make($image)->resize(250, 250, function ($constraint) {
-                    $constraint->aspectRatio();
-                })->save($destinationPath.$imageName);
 
                 $input['image'] = $destinationPath.$imageName;
             } else {
@@ -61,12 +58,18 @@ class KeyFeatureController extends Controller
             }
     
             KeyFeature::create($input);
+
+            if (isset($input['image'])) {
+                Image::make($image)->resize(250, 250, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($destinationPath.$imageName);
+            }
     
-            return redirect('/admin/master/keyfeature')->withSuccess('Data Added Successfully!');
+            return redirect('/admin/master/keyfeature')->withSuccess('Key Feature added successfully!');
         } catch (\Exception $e) {
             $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
             if($isForeignKey) {
-                return redirect('/admin/master/keyfeature')->with('errorData', 'Key Feature cannot be added because the data is not unique.');
+                return redirect('/admin/master/keyfeature')->with('errorData', 'Key Feature cannot be added because the data is not unique. Please make sure there are no duplicate name or order number data.');
             } else {
                 return redirect('/admin/master/keyfeature')->with('errorData', $e->getMessage());
             }
@@ -121,9 +124,6 @@ class KeyFeatureController extends Controller
                 $generatedID = hexdec(uniqid());
                 $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
                 // $image->move($destinationPath, $imageName);
-                Image::make($image)->resize(250, 250, function ($constraint) {
-                    $constraint->aspectRatio();
-                })->save($destinationPath.$imageName);
 
                 $input['image'] = $destinationPath.$imageName;
             } else {
@@ -134,15 +134,21 @@ class KeyFeatureController extends Controller
 
             $keyfeature->update($input);
 
+            if (isset($input['image'])) {
+                Image::make($image)->resize(250, 250, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($destinationPath.$imageName);
+            }
+
             if($imageDelete != "") {
                 File::delete($imageDelete);
             }
 
-            return redirect('/admin/master/keyfeature')->withSuccess('Data Updated Successfully!');
+            return redirect('/admin/master/keyfeature')->withSuccess('Key Feature updated successfully!');
         } catch (\Exception $e) {
             $isForeignKey = Str::contains($e->getMessage(), 'SQLSTATE[23000]');
             if($isForeignKey) {
-                return redirect('/admin/master/keyfeature')->with('errorData', 'Key Feature cannot be updated because the data is not unique.');
+                return redirect('/admin/master/keyfeature')->with('errorData', 'Key Feature cannot be updated because the data is not unique. Please make sure there are no duplicate name or order number data.');
             } else {
                 return redirect('/admin/master/keyfeature')->with('errorData', $e->getMessage());
             }
@@ -157,6 +163,6 @@ class KeyFeatureController extends Controller
 
         File::delete($imageDelete);
 
-        return redirect('/admin/master/keyfeature')->withSuccess('Data Deleted Successfully!');
+        return redirect('/admin/master/keyfeature')->withSuccess('Key Feature deleted successfully!');
     }
 }
