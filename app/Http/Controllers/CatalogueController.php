@@ -58,7 +58,7 @@ class CatalogueController extends Controller
 
         Catalogue::create($input);
 
-        return redirect('/admin/product/catalogue')->withSuccess('Catalogue added successfully!');
+        return redirect('/admin/product/catalogue')->withSuccess('Product Catalogue added successfully!');
     }
 
     public function show(Catalogue $catalogue)
@@ -106,7 +106,7 @@ class CatalogueController extends Controller
             File::delete($imageDelete);
         }
 
-        return redirect('/admin/product/catalogue')->withSuccess('Catalogue updated successfully!');
+        return redirect('/admin/product/catalogue')->withSuccess('Product Catalogue updated successfully!');
     }
 
     public function destroy(Catalogue $catalogue)
@@ -117,6 +117,6 @@ class CatalogueController extends Controller
         
         File::delete($imageDelete);
 
-        return redirect('/admin/product/catalogue')->withSuccess('Catalogue deleted Successfully!');
+        return redirect('/admin/product/catalogue')->withSuccess('Product Catalogue deleted Successfully!');
     }
 }
