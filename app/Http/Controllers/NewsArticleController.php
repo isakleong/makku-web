@@ -114,11 +114,16 @@ class NewsArticleController extends Controller
             
             $input = $request->all();
 
+            $enImageArr = array();
+            $idImageArr = array();
+
             //summernote image upload handling
             $content_en = $request->content_en;
             $domContent_en = new \DOMDocument();
             @$domContent_en->loadHtml($content_en, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
             $imageFile = $domContent_en->getElementsByTagName('img');
+            
+            $counter_1 = 0;
             foreach($imageFile as $item => $image){
                 $data = $image->getAttribute('src');
                 
@@ -129,12 +134,17 @@ class NewsArticleController extends Controller
                     $image_name= "/image/upload/"."en-".time().$item.'.png';
                     $path = public_path() . $image_name;
                     // file_put_contents($path, $imageData);
-                    Image::make($imageData)->resize(1200, 630, function ($constraint) {
-                        $constraint->aspectRatio();
-                    })->save($path);
+                    // Image::make($imageData)->resize(1200, 630, function ($constraint) {
+                    //     $constraint->aspectRatio();
+                    // })->save($path);
+
+                    $enImageArr[$counter_1]["imageData"] = $imageData;
+                    $enImageArr[$counter_1]["imagePath"] = $path;
                     
                     $image->removeAttribute('src');
                     $image->setAttribute('src', $image_name);
+
+                    $counter_1++;
                 } else {
                     // bad character
                 }
@@ -146,6 +156,8 @@ class NewsArticleController extends Controller
             $domContent_id = new \DOMDocument();
             @$domContent_id->loadHtml($content_id, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
             $imageFile = $domContent_id->getElementsByTagName('img');
+
+            $counter_2 = 0;
             foreach($imageFile as $item => $image){
                 $data = $image->getAttribute('src');
                 
@@ -157,12 +169,13 @@ class NewsArticleController extends Controller
                     $path = public_path() . $image_name;
                     // file_put_contents($path, $imageData);
 
-                    Image::make($imageData)->resize(1200, 630, function ($constraint) {
-                        $constraint->aspectRatio();
-                    })->save($path);
+                    $idImageArr[$counter_2]["imageData"] = $imageData;
+                    $idImageArr[$counter_2]["imagePath"] = $path;
                     
                     $image->removeAttribute('src');
                     $image->setAttribute('src', $image_name);
+
+                    $counter_2++;
                 } else {
                     // bad character
                 }
@@ -181,9 +194,6 @@ class NewsArticleController extends Controller
                 $destinationPath = 'image/upload/';
                 $generatedID = hexdec(uniqid());
                 $imageName = $generatedID."-".time(). "." .$image->getClientOriginalExtension();
-                Image::make($image)->resize(1200, 630, function ($constraint) {
-                    $constraint->aspectRatio();
-                })->save($destinationPath.$imageName);
 
                 $input['image'] = $destinationPath.$imageName;
             }
@@ -198,6 +208,28 @@ class NewsArticleController extends Controller
             }
 
             NewsArticle::create($input);
+
+            if(count($enImageArr) > 0) {
+                for ($i=0; $i < count($enImageArr); $i++) {
+                    Image::make($enImageArr[$i]["imageData"])->resize(1200, 630, function ($constraint) {
+                        $constraint->aspectRatio();
+                    })->save($enImageArr[$i]["imagePath"]);
+                }
+            }
+
+            if(count($idImageArr) > 0) {
+                for ($i=0; $i < count($idImageArr); $i++) {
+                    Image::make($idImageArr[$i]["imageData"])->resize(1200, 630, function ($constraint) {
+                        $constraint->aspectRatio();
+                    })->save($idImageArr[$i]["imagePath"]);
+                }
+            }
+
+            if (isset($input['image'])) {
+                Image::make($image)->resize(1200, 630, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($destinationPath.$imageName);
+            }
 
             return redirect('/admin/news/article')->withSuccess('News Article added successfully!');
         } catch (\Exception $e) {
