@@ -9,12 +9,29 @@
     <link rel="stylesheet" href="/lte/assets/css/main/app.css">
     <link rel="shortcut icon" href="/lte/assets/images/logo/favicon.svg" type="image/x-icon">
     <link rel="shortcut icon" href="/lte/assets/images/logo/favicon.png" type="image/png">
+
+    <style>
+        #loader {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            background: url("/lte/assets/images/loader.gif") no-repeat center center;
+            background-color: #ffffff8c;
+            z-index: 99999;
+        }
+    </style>
+
     <script src="/lte/assets/jquery/jquery.min.js"></script>
     @yield('vendorCSS')
 </head>
 
 <body>
     <script src="/lte/assets/js/initTheme.js"></script>
+    <div id='loader'></div>
     <div id="app">
         <div id="sidebar" class="active">
             <div class="sidebar-wrapper active">
@@ -494,6 +511,14 @@
                 imgPreview.src = oFREvent.target.result;
             }
         }
+    </script>
+
+    <script>
+        $(function() {
+            $( "form" ).submit(function() {
+                $('#loader').show();
+            });
+        });
     </script>
 
     @yield('vendorScript')
