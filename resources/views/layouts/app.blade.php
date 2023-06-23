@@ -11,17 +11,22 @@
     <link rel="shortcut icon" href="/lte/assets/images/logo/favicon.png" type="image/png">
 
     <style>
-        #loader {
-            display: none;
+        #loading {
             position: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            width: 100%;
-            background: url("/lte/assets/images/loader.gif") no-repeat center center;
-            background-color: #ffffff8c;
-            z-index: 99999;
+            opacity: 0.7;
+            background-color: #fff;
+            z-index: 9999999;
+        }
+
+        #loading-image {
+        z-index: 100;
         }
     </style>
 
@@ -31,7 +36,9 @@
 
 <body>
     <script src="/lte/assets/js/initTheme.js"></script>
-    <div id='loader'></div>
+    <div id="loading">
+        <img id="loading-image" src="/lte/assets/images/loader_7.gif" alt="Loading..." />
+    </div>
     <div id="app">
         <div id="sidebar" class="active">
             <div class="sidebar-wrapper active">
@@ -518,6 +525,12 @@
             $( "form" ).submit(function() {
                 $('#loader').show();
             });
+        });
+    </script>
+
+    <script>
+        $(window).on('load', function () {
+            $('#loading').hide();
         });
     </script>
 
