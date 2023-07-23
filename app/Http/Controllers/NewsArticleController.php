@@ -72,7 +72,7 @@ class NewsArticleController extends Controller
                 // $news = NewsArticle::filterEN(request(['search']))->latest()->get();
 
             } elseif($locale == "id") {
-                $sectionTitle = 'Berita';
+                $sectionTitle = 'News';
 
                 $menubar = DB::table('menu_bar as b')
                 ->select(DB::raw('b.id, b.title_id as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
@@ -250,7 +250,7 @@ class NewsArticleController extends Controller
             Session::put('languagedata', $locale);
             
             if($locale == "en") {
-                $sectionTitle = 'News';
+                $sectionTitle = $news_article->title_id." | ".$news_article->category->name_id;
 
                 $menubar = DB::table('menu_bar as b')
                 ->select(DB::raw('b.id, b.title_en as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
@@ -275,7 +275,7 @@ class NewsArticleController extends Controller
                 // $news_category = $news_category->load('news');
 
             } elseif($locale == "id") {
-                $sectionTitle = 'Berita';
+                $sectionTitle = $news_article->title_id." | ".$news_article->category->name_id;
 
                 $menubar = DB::table('menu_bar as b')
                 ->select(DB::raw('b.id, b.title_id as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))

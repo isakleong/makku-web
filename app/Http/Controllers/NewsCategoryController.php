@@ -70,7 +70,7 @@ class NewsCategoryController extends Controller
             Session::put('languagedata', $locale);
             
             if($locale == "en") {
-                $sectionTitle = 'News Category';
+                $sectionTitle = $news_category->name_id." (".$news_category->name_en.")";
 
                 $menubar = DB::table('menu_bar as b')
                 ->select(DB::raw('b.id, b.title_en as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
@@ -97,7 +97,7 @@ class NewsCategoryController extends Controller
                 }]);
 
             } elseif($locale == "id") {
-                $sectionTitle = 'Kategori Berita';
+                $sectionTitle = $news_category->name_id." (".$news_category->name_en.")";
 
                 $menubar = DB::table('menu_bar as b')
                 ->select(DB::raw('b.id, b.title_id as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))

@@ -1,3 +1,7 @@
+  
+
+
+
 function initMostViewsByPage(objData, objCategory) {
   var optionsMostViews = {
     annotations: {

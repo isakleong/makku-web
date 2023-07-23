@@ -1,6 +1,6 @@
 @extends('layouts.home')
 
-@section('title') {{$company->name}} - {{$sectionTitle}}  @endsection
+@section('title') {{$sectionTitle}} @endsection
 
 @section('vendorCSS')
 <link href="/home/assets/css/news.css" rel="stylesheet">
@@ -19,7 +19,11 @@
 @section('content')
 <section class="breadcrumbs" data-aos="fade-up" data-aos-delay="100">
     <div class="container">
-      <h1>{{$news_category->name_en}}</h1>
+        @if (strtolower(Session::get('languagedata')) == 'en')
+            <h1>{{$news_category->name_en}}</h1>
+        @else
+            <h1>{{$news_category->name_id}}</h1>
+        @endif
     </div>
 
     <div class="container">
@@ -70,9 +74,9 @@
                                     $strDate = date_format($date,'d M Y')
                                 @endphp
                                 @if (strtolower(Session::get('languagedata')) == 'id')
-                                    <span class="c-blog-highlight__date">{{$news_category->slug}} / {{$strDate}}</span>
+                                    <span class="c-blog-highlight__date">{{$news_category->name_id}} / {{$strDate}}</span>
                                 @else
-                                    <span class="c-blog-highlight__date">{{$news_category->slug}} / {{$strDate}}</span>
+                                    <span class="c-blog-highlight__date">{{$news_category->name_en}} / {{$strDate}}</span>
                                 @endif
                             </div>
                         </a>

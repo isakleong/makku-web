@@ -1,6 +1,6 @@
 @extends('layouts.home')
 
-@section('title') {{$company->name}} - {{$sectionTitle}}  @endsection
+@section('title') {{$sectionTitle}} @endsection
 
 @section('vendorCSS')
 <link href="/home/assets/css/news.css" rel="stylesheet">

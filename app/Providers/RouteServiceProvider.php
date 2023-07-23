@@ -28,6 +28,9 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->configureRateLimiting();
 
+        // Define the route pattern to enforce trailing slash
+        Route::pattern('trailing_slash', '.*\/');
+
         $this->routes(function () {
             Route::middleware('api')
                 ->prefix('api')

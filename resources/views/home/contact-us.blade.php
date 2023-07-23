@@ -1,6 +1,6 @@
 @extends('layouts.home')
 
-@section('title') {{$company->name}} - {{$sectionTitle}}  @endsection
+@section('title') {{$sectionTitle}} @endsection
 
 @section('content')
 <section class="breadcrumbs" data-aos="fade-up" data-aos-delay="100">

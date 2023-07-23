@@ -3,7 +3,7 @@
 
 <head>
   <!-- anti-flicker snippet (recommended)  -->
-  {{-- <style>.async-hide { opacity: 0 !important} </style>
+  <!-- {{-- <style>.async-hide { opacity: 0 !important} </style>
   <script>
     (function(a,s,y,n,c,h,i,d,e) {
       s.className+=' '+y;h.start=1*new Date;
@@ -21,7 +21,7 @@
     });
   </script> --}}
   
-  {{-- <script src="https://www.googleoptimize.com/optimize.js?id=OPT-WP2W8Z7"></script> --}}
+  {{-- <script src="https://www.googleoptimize.com/optimize.js?id=OPT-WP2W8Z7"></script> --}} -->
 
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -33,7 +33,7 @@
 
   <!-- Favicons -->
   <link href="/home/assets/img/favicon.png" rel="icon">
-  <link href="/home/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link href="/home/assets/img/apple-touch-icon.png" rel="touch-icon">
 
   <!-- Vendor CSS Files -->
   <link href="/home/assets/vendor/aos/aos.css" rel="stylesheet">
@@ -293,7 +293,7 @@
                     var urlParam = urlCurrent.replace(/\ben\b/g, data);
                   }
 
-                  window.location.href = urlParam;
+                  window.location.href = urlParam+'/';
                 } else {
                   var urlParam = '/'+data+'/{{Route::current()->getName()}}/';
                   window.location.href = urlParam;

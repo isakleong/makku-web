@@ -90,7 +90,7 @@ class ProductCategoryController extends Controller
             Session::put('languagedata', $locale);
 
             if($locale == "en") {
-                $sectionTitle = 'News';
+                $sectionTitle = 'Our Product';
 
                 $menubar = DB::table('menu_bar as b')
                 ->select(DB::raw('b.id, b.title_en as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
@@ -103,7 +103,7 @@ class ProductCategoryController extends Controller
                 ->get()->first();
 
             } elseif($locale == "id") {
-                $sectionTitle = 'Berita';
+                $sectionTitle = 'Our Product';
 
                 $menubar = DB::table('menu_bar as b')
                 ->select(DB::raw('b.id, b.title_id as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))

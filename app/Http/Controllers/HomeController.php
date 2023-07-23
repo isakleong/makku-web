@@ -110,7 +110,7 @@ class HomeController extends Controller {
                 ->get();
 
             } elseif($locale == "id") {
-                $sectionTitle = 'Tentang Kami';
+                $sectionTitle = 'Our Company';
 
                 $menubar = DB::table('menu_bar as b')
                 ->select(DB::raw('b.id, b.title_id as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
@@ -140,7 +140,7 @@ class HomeController extends Controller {
             Session::put('languagedata', $locale);
 
             if($locale == "en") {
-                $sectionTitle = 'Partnership / Reseller';
+                $sectionTitle = 'Our Product';
 
                 $menubar = DB::table('menu_bar as b')
                 ->select(DB::raw('b.id, b.title_en as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
@@ -153,7 +153,7 @@ class HomeController extends Controller {
                 ->get()->first();
 
             } elseif($locale == "id") {
-                $sectionTitle = 'Kemitraan';
+                $sectionTitle = 'Our Product';
 
                 $menubar = DB::table('menu_bar as b')
                 ->select(DB::raw('b.id, b.title_id as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
@@ -199,7 +199,7 @@ class HomeController extends Controller {
                 ->get();
 
             } elseif($locale == "id") {
-                $sectionTitle = 'Katalog';
+                $sectionTitle = 'Catalogue';
 
                 $menubar = DB::table('menu_bar as b')
                 ->select(DB::raw('b.id, b.title_id as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
@@ -242,7 +242,7 @@ class HomeController extends Controller {
                 ->get()->first();
 
             } elseif($locale == "id") {
-                $sectionTitle = 'Kemitraan';
+                $sectionTitle = 'Partnership / Reseller';
 
                 $menubar = DB::table('menu_bar as b')
                 ->select(DB::raw('b.id, b.title_id as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
@@ -298,7 +298,7 @@ class HomeController extends Controller {
                 ->get();
 
             } elseif($locale == "id") {
-                $sectionTitle = 'Berita';
+                $sectionTitle = 'News';
 
                 $menubar = DB::table('menu_bar as b')
                 ->select(DB::raw('b.id, b.title_id as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
@@ -362,7 +362,7 @@ class HomeController extends Controller {
                 ->get();
 
             } elseif($locale == "id") {
-                $sectionTitle = 'Berita';
+                $sectionTitle = 'News';
 
                 $menubar = DB::table('menu_bar as b')
                 ->select(DB::raw('b.id, b.title_id as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))
@@ -410,7 +410,7 @@ class HomeController extends Controller {
                 ->get()->first();
 
             } elseif($locale == "id") {
-                $sectionTitle = 'Hubungi Kami';
+                $sectionTitle = 'Contact Us';
 
                 $menubar = DB::table('menu_bar as b')
                 ->select(DB::raw('b.id, b.title_id as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))

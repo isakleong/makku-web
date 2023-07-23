@@ -79,7 +79,7 @@ Route::get('/contact-us', function() {
     if(!$languagedata){
         $languagedata = 'en';
     }
-    return redirect('/'.$languagedata.'/contact-us');
+    return redirect('/'.$languagedata.'/contact-us'.'\/');
 });
 
 Route::get('/news/{news_category:slug}', function(NewsCategory $news_category) {
@@ -117,7 +117,7 @@ Route::get('/admin/logout', [AuthController::class, 'logout']);
 //Admin panel
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function() {
     // Route::get('/', [DashboardController::class, 'index']);
-    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');;
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     //spatie laravel image (successfully tested on CKEditor) --> not used anymore, because already using Summernote with image upload handler
     Route::post('images', [\App\Http\Controllers\ImageController::class, 'store'])->middleware('auth')->name('images.store');

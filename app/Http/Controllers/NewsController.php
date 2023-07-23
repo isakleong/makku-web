@@ -78,7 +78,7 @@ class NewsController extends Controller
                 $news = NewsArticle::find($id);
 
             } elseif($locale == "id") {
-                $sectionTitle = 'Berita';
+                $sectionTitle = 'News';
 
                 $menubar = DB::table('menu_bar as b')
                 ->select(DB::raw('b.id, b.title_id as title, b.refer, b.type, b.parent, b.image, (select count(*) from menu_bar s where s.parent=b.id) as ChildrenCount'))

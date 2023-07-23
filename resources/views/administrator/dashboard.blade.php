@@ -53,6 +53,10 @@
                                         <img src="/lte/assets/images/svg-loaders/circles.svg" class="me-4" style="width: 3rem;" alt="audio"/>
                                     </div>
                                     <h6 id="sumViewsData" class="font-extrabold mb-0"></h6>
+                                    <div id="errorSumViews" style='display: none;'>
+                                        <h6 class="font-extrabold mb-3">Failed to get Views data, please try again</h6>
+                                        <button class='btn btn-primary' id="retrySumViews">Retry</button>
+                                    </div>
                                 </div>
 
                                 <div class="col-auto">
@@ -97,6 +101,10 @@
                                         <img src="/lte/assets/images/svg-loaders/circles.svg" class="me-4" style="width: 3rem;" alt="audio"/>
                                     </div>
                                     <h6 id="sumVisitorsData" class="font-extrabold mb-0"></h6>
+                                    <div id="errorSumVisitors" style='display: none;'>
+                                        <h6 class="font-extrabold mb-3">Failed to get Visitors data, please try again</h6>
+                                        <button class='btn btn-primary' id="retrySumVisitors">Retry</button>
+                                    </div>
                                 </div>
 
                                 <div class="col-auto">
@@ -141,6 +149,10 @@
                                         <img src="/lte/assets/images/svg-loaders/circles.svg" class="me-4" style="width: 3rem;" alt="audio"/>
                                     </div>
                                     <h6 id="sumReturningVisitorsData" class="font-extrabold mb-0"></h6>
+                                    <div id="errorSumReturningVisitors" style='display: none;'>
+                                        <h6 class="font-extrabold mb-3">Failed to get Returning Visitors data, please try again</h6>
+                                        <button class='btn btn-primary' id="retrySumReturningVisitors">Retry</button>
+                                    </div>
                                 </div>
 
                                 <div class="col-auto">
@@ -185,6 +197,10 @@
                                         <img src="/lte/assets/images/svg-loaders/circles.svg" class="me-4" style="width: 3rem;" alt="audio"/>
                                     </div>
                                     <h6 id="sumAvgSessionsData" class="font-extrabold mb-0"></h6>
+                                    <div id="errorSumAvgSessions" style='display: none;'>
+                                        <h6 class="font-extrabold mb-3">Failed to get Average Sessions data, please try again</h6>
+                                        <button class='btn btn-primary' id="retrySumAvgSessions">Retry</button>
+                                    </div>
                                 </div>
 
                                 <div class="col-auto">
@@ -239,6 +255,12 @@
                                     </div>
                                 </div>
                             </form>
+                            <div class="row">
+                                <div class="col-lg-12 mb-1" id="errorMostViewsByPage" style='display: none;'>
+                                    <h6 class="font-extrabold mb-3">Failed to get Most Views by Page data, please try again</h6>
+                                    <button class='btn btn-primary' id="retryMostViewsByPage">Retry</button>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="card-body text-center">
@@ -281,6 +303,12 @@
                                     </div>
                                 </div>
                             </form>
+                            <div class="row">
+                                <div class="col-lg-12 mb-1" id="errorTotalVisitorsByDate" style='display: none;'>
+                                    <h6 class="font-extrabold mb-3">Failed to get Total Visitors by Date data, please try again</h6>
+                                    <button class='btn btn-primary' id="retryTotalVisitorsByDate">Retry</button>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="card-body text-center">
@@ -304,30 +332,31 @@
 <script src="/lte/assets/extensions/apexcharts/apexcharts.min.js"></script>
 <script src="/lte/assets/js/pages/dashboard.js"></script>
 
-<script>
-    $(document).ready(function(){
-        $("#loaderSumViews").hide();
-        $("#loaderMostViews").hide();
-        $("#loaderTotalVisitors").hide();
 
+<script>
+    //Init data load handler (when page loaded first time)
+    function initDashboardData() {
         // ============== Card Data ==============
         //Init load handler (views)
         $.ajax({
-            beforeSend: function(){
-                $("#rangeSumViews").attr("disabled", true);
-                $("#sumViewsData").hide();
-                $("#loaderSumViews").show();
-            },
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            type: 'POST',
-            url: '{{ route('admin.dashboard.filterSumViews') }}',
-            data: $("#sumViewsForm").serialize()
+        beforeSend: function(){
+            $('#loading').show();
+
+            $("#rangeSumViews").attr("disabled", true);
+            $("#sumViewsData").hide();
+            $("#loaderSumViews").show();
+        },
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        type: 'POST',
+        url: '{{ route('admin.dashboard.filterSumViews') }}',
+        data: $("#sumViewsForm").serialize()
         })
         .done(function(data){
-            console.log(data);
             $("#loaderSumViews").hide();
+            
+            $('#errorSumViews').hide();
 
             $("#sumViewsData").show();
             $("h6#sumViewsData").text(data);
@@ -335,12 +364,15 @@
             $("#rangeSumViews").attr("disabled", false);
         })
         .fail(function() {
-            alert( "Posting failed." );
+            $('#loading').hide();
+            $('#errorSumViews').show();
         });
 
         //Init load handler (visitors)
         $.ajax({
             beforeSend: function(){
+                $('#loading').show();
+
                 $("#rangeSumVisitors").attr("disabled", true);
                 $("#sumVisitorsData").hide();
                 $("#loaderSumVisitors").show();
@@ -353,8 +385,9 @@
             data: $("#sumVisitorsForm").serialize()
         })
         .done(function(data){
-            console.log(data);
             $("#loaderSumVisitors").hide();
+
+            $('#errorSumVisitors').hide();
 
             $("#sumVisitorsData").show();
             $("h6#sumVisitorsData").text(data);
@@ -362,12 +395,15 @@
             $("#rangeSumVisitors").attr("disabled", false);
         })
         .fail(function() {
-            alert( "Posting failed." );
+            $('#loading').hide();
+            $('#errorSumVisitors').show();
         });
 
         //Init load handler (returning visitors)
         $.ajax({
             beforeSend: function(){
+                $('#loading').show();
+
                 $("#rangeSumReturningVisitors").attr("disabled", true);
                 $("#sumReturningVisitorsData").hide();
                 $("#loaderSumReturningVisitors").show();
@@ -391,18 +427,23 @@
 
             $("#loaderSumReturningVisitors").hide();
 
+            $('#errorSumReturningVisitors').hide();
+
             $("#sumReturningVisitorsData").show();
             $("h6#sumReturningVisitorsData").text(strData);
 
             $("#rangeSumReturningVisitors").attr("disabled", false);
         })
         .fail(function() {
-            alert( "Posting failed." );
+            $('#loading').hide();
+            $('#errorSumReturningVisitors').show();
         });
 
         //Init load handler (average sessions)
         $.ajax({
             beforeSend: function(){
+                $('#loading').show();
+
                 $("#rangeSumAvgSessions").attr("disabled", true);
                 $("#sumAvgSessionsData").hide();
                 $("#loaderSumAvgSessions").show();
@@ -417,6 +458,8 @@
         .done(function(data){
             $("#loaderSumAvgSessions").hide();
 
+            $('#errorSumAvgSessions').hide();
+
             $("#sumAvgSessionsData").show();
             var roundUpData = Number(data).toFixed(2);
             $("h6#sumAvgSessionsData").text(roundUpData);
@@ -424,148 +467,17 @@
             $("#rangeSumAvgSessions").attr("disabled", false);
         })
         .fail(function() {
-            alert( "Posting failed." );
+            $('#loading').hide();
+            $('#errorSumAvgSessions').show();
         });
-
-        //Filter handler (views)
-        $('#rangeSumViews').change(function(e) {
-            e.preventDefault();
-            $.ajax({
-                beforeSend: function(){
-                    $("#sumViewsData").hide();
-                    $("#rangeSumViews").attr("disabled", true);
-                    $("#loaderSumViews").show();
-                },
-                headers: {
-                  'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                type: 'POST',
-                url: '{{ route('admin.dashboard.filterSumViews') }}',
-                data: $("#sumViewsForm").serialize()
-            })
-            .done(function(data){
-                console.log(data);
-                $("#loaderSumViews").hide();
-
-                $("#sumViewsData").show();
-                $("h6#sumViewsData").text(data);
-
-                $("#rangeSumViews").attr("disabled", false);
-            })
-            .fail(function() {
-                alert( "Posting failed." );
-            });
-            return false;
-        });
-
-        //Filter handler (visitors)
-        $('#rangeSumVisitors').change(function(e) {
-            e.preventDefault();
-            $.ajax({
-                beforeSend: function(){
-                    $("#sumVisitorsData").hide();
-                    $("#rangeSumVisitors").attr("disabled", true);
-                    $("#loaderSumVisitors").show();
-                },
-                headers: {
-                  'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                type: 'POST',
-                url: '{{ route('admin.dashboard.filterSumVisitors') }}',
-                data: $("#sumVisitorsForm").serialize()
-            })
-            .done(function(data){
-                console.log(data);
-                $("#loaderSumVisitors").hide();
-
-                $("#sumVisitorsData").show();
-                $("h6#sumVisitorsData").text(data);
-
-                $("#rangeSumVisitors").attr("disabled", false);
-            })
-            .fail(function() {
-                alert( "Posting failed." );
-            });
-            return false;
-        });
-
-        //Filter handler (returning visitors)
-        $('#rangeSumReturningVisitors').change(function(e) {
-            e.preventDefault();
-            $.ajax({
-                beforeSend: function(){
-                    $("#sumReturningVisitorsData").hide();
-                    $("#rangeSumReturningVisitors").attr("disabled", true);
-                    $("#loaderSumReturningVisitors").show();
-                },
-                headers: {
-                  'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                type: 'POST',
-                url: '{{ route('admin.dashboard.filterSumReturningVisitors') }}',
-                data: $("#sumReturningVisitorsForm").serialize()
-            })
-            .done(function(data){
-                console.log(data);
-                var strData = 0;
-                var obj = jQuery.parseJSON(data);
-                $.each(obj, function(key,value) {
-                    if(value.newVsReturning == 'returning') {
-                        strData = value.totalUsers;
-                        return false;
-                    }
-                });
-                
-                $("#loaderSumReturningVisitors").hide();
-
-                $("#sumReturningVisitorsData").show();
-                $("h6#sumReturningVisitorsData").text(strData);
-
-                $("#rangeSumReturningVisitors").attr("disabled", false);
-            })
-            .fail(function() {
-                alert( "Posting failed." );
-            });
-            return false;
-        });
-
-        //Filter handler (average sessions)
-        $('#rangeSumAvgSessions').change(function(e) {
-            e.preventDefault();
-            $.ajax({
-                beforeSend: function(){
-                    $("#sumAvgSessionsData").hide();
-                    $("#rangeSumAvgSessions").attr("disabled", true);
-                    $("#loaderSumAvgSessions").show();
-                },
-                headers: {
-                  'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                type: 'POST',
-                url: '{{ route('admin.dashboard.filterSumAvgSessions') }}',
-                data: $("#sumAvgSessionsForm").serialize()
-            })
-            .done(function(data){
-                console.log(data);
-                $("#loaderSumAvgSessions").hide();
-
-                $("#sumAvgSessionsData").show();
-                var roundUpData = data.toFixed(2);
-                $("h6#sumAvgSessionsData").text(roundUpData);
-
-                $("#rangeSumAvgSessions").attr("disabled", false);
-            })
-            .fail(function() {
-                alert( "Posting failed." );
-            });
-            return false;
-        });
-
         // ============== End of Card Data ==============
-        
-        //Init Graphic Data
+
+        // ============== Graphic Data ==============
+        //Init load handler (most views by page)
         $.ajax({
             beforeSend: function(){
+                $('#loading').show();
+
                 $("#rangeMostViewsByPage").attr("disabled", true);
                 $("#floatingCount").attr("disabled", true);
                 $("#loaderMostViews").show();
@@ -578,25 +490,34 @@
             data: $("#mostViewsByPageForm").serialize()
         })
         .done(function(data){
+            console.log(data);
             var objData = [], objCategory = [];
             var lenData = 0;
             var obj = jQuery.parseJSON(data);
             $.each(obj, function(key,value) {
                 lenData++;
                 objData.push(value.screenPageViews);
-                objCategory.push(value.pageTitle);
+                objCategory.push(value.fullPageUrl);
             });
             initMostViewsByPage(objData, objCategory);
+
             $("#loaderMostViews").hide();
+            
+            $('#errorMostViewsByPage').hide();
+
             $("#rangeMostViewsByPage").attr("disabled", false);
             $("#floatingCount").attr("disabled", false);
         })
         .fail(function() {
-            alert( "Posting failed." );
+            $('#loading').hide();
+            $('#errorMostViewsByPage').show();
         });
 
+        //Init load handler (total visitors by date)
         $.ajax({
             beforeSend: function(){
+                $('#loading').show();
+
                 $("#rangeTotalVisitorsByDate").attr("disabled", true);
                 $("#loaderTotalVisitors").show();
             },
@@ -625,19 +546,165 @@
                 objCategory.push(strDate);
             });
             initTotalVisitorsByDate(objData, objCategory);
+            
+            $('#loading').hide();
+
+            $('#errorTotalVisitorsByDate').hide();
+
             $("#loaderTotalVisitors").hide();
             $("#rangeTotalVisitorsByDate").attr("disabled", false);
         })
         .fail(function() {
-            alert( "Posting failed." );
+            $('#loading').hide();
+            $('#errorTotalVisitorsByDate').show();
         });
-        //End of Init Graphic Data
+        // ============== End of Graphic Data ==============
+    }
 
-        //Filter Handler
-        $("#applyFilterMostViews").click(function(e){
-            e.preventDefault();
+    function filterData(params) {
+        if(params == 'sumViews') {
             $.ajax({
                 beforeSend: function(){
+                    $('#loading').show();
+
+                    $("#sumViewsData").hide();
+                    $("#rangeSumViews").attr("disabled", true);
+                    $("#loaderSumViews").show();
+                },
+                headers: {
+                  'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                type: 'POST',
+                url: '{{ route('admin.dashboard.filterSumViews') }}',
+                data: $("#sumViewsForm").serialize()
+            })
+            .done(function(data){
+                $('#loading').hide();
+
+                $("#loaderSumViews").hide();
+
+                $("#sumViewsData").show();
+                $("h6#sumViewsData").text(data);
+
+                $("#rangeSumViews").attr("disabled", false);
+            })
+            .fail(function() {
+                $('#loading').hide();
+                alert( "Posting failed." );
+            });
+        }
+
+        if(params == 'sumVisitors') {
+            $.ajax({
+                beforeSend: function(){
+                    $('#loading').show();
+
+                    $("#sumVisitorsData").hide();
+                    $("#rangeSumVisitors").attr("disabled", true);
+                    $("#loaderSumVisitors").show();
+                },
+                headers: {
+                  'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                type: 'POST',
+                url: '{{ route('admin.dashboard.filterSumVisitors') }}',
+                data: $("#sumVisitorsForm").serialize()
+            })
+            .done(function(data){
+                $('#loading').hide();
+
+                $("#loaderSumVisitors").hide();
+
+                $("#sumVisitorsData").show();
+                $("h6#sumVisitorsData").text(data);
+
+                $("#rangeSumVisitors").attr("disabled", false);
+            })
+            .fail(function() {
+                $('#loading').hide();
+                alert( "Posting failed." );
+            });
+        }
+
+        if(params == 'sumReturningVisitors') {
+            $.ajax({
+                beforeSend: function(){
+                    $('#loading').show();
+
+                    $("#sumReturningVisitorsData").hide();
+                    $("#rangeSumReturningVisitors").attr("disabled", true);
+                    $("#loaderSumReturningVisitors").show();
+                },
+                headers: {
+                  'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                type: 'POST',
+                url: '{{ route('admin.dashboard.filterSumReturningVisitors') }}',
+                data: $("#sumReturningVisitorsForm").serialize()
+            })
+            .done(function(data){
+                $('#loading').hide();
+
+                var strData = 0;
+                var obj = jQuery.parseJSON(data);
+                $.each(obj, function(key,value) {
+                    if(value.newVsReturning == 'returning') {
+                        strData = value.totalUsers;
+                        return false;
+                    }
+                });
+                
+                $("#loaderSumReturningVisitors").hide();
+
+                $("#sumReturningVisitorsData").show();
+                $("h6#sumReturningVisitorsData").text(strData);
+
+                $("#rangeSumReturningVisitors").attr("disabled", false);
+            })
+            .fail(function() {
+                $('#loading').hide();
+                alert( "Posting failed." );
+            });
+        }
+
+        if(params == 'sumAvgSessions') {
+            $.ajax({
+                beforeSend: function(){
+                    $('#loading').show();
+
+                    $("#sumAvgSessionsData").hide();
+                    $("#rangeSumAvgSessions").attr("disabled", true);
+                    $("#loaderSumAvgSessions").show();
+                },
+                headers: {
+                  'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                type: 'POST',
+                url: '{{ route('admin.dashboard.filterSumAvgSessions') }}',
+                data: $("#sumAvgSessionsForm").serialize()
+            })
+            .done(function(data){
+                $('#loading').hide();
+
+                $("#loaderSumAvgSessions").hide();
+
+                $("#sumAvgSessionsData").show();
+                var roundUpData = Number(data).toFixed(2);
+                $("h6#sumAvgSessionsData").text(roundUpData);
+
+                $("#rangeSumAvgSessions").attr("disabled", false);
+            })
+            .fail(function() {
+                $('#loading').hide();
+                alert( "Posting failed." );
+            });
+        }
+
+        if(params == 'filterMostViews') {
+            $.ajax({
+                beforeSend: function(){
+                    $('#loading').show();
+
                     $("#rangeMostViewsByPage").attr("disabled", true);
                     $("#floatingCount").attr("disabled", true);
                     $("#loaderMostViews").show();
@@ -662,19 +729,24 @@
                     objCategory.push(value.pageTitle);
                 });
                 filterDataMostViewsByPage(objData, objCategory);
+                
+                $('#loading').hide();
+
                 $("#loaderMostViews").hide();
                 $("#rangeMostViewsByPage").attr("disabled", false);
                 $("#floatingCount").attr("disabled", false);
             })
             .fail(function() {
+                $('#loading').hide();
                 alert( "Posting failed." );
             });
-        });
+        }
 
-        $("#rangeTotalVisitorsByDate").change(function(e){
-            e.preventDefault();
+        if(params == 'filterTotalVisitorsByDate') {
             $.ajax({
                 beforeSend: function(){
+                    $('#loading').show();
+
                     $("#rangeTotalVisitorsByDate").attr("disabled", true);
                     $("#loaderTotalVisitors").show();
                 },
@@ -703,17 +775,337 @@
                     objCategory.push(strDate);
                 });
                 filterDataTotalVisitorsByDate(objData, objCategory);
+
+                $('#loading').hide();
+
                 $("#loaderTotalVisitors").hide();
                 $("#rangeTotalVisitorsByDate").attr("disabled", false);
             })
             .fail(function() {
+                $('#loading').hide();
                 alert( "Posting failed." );
             });
+        }
+    }
+
+    function retryData(params) {
+        if(params == 'sumViews') {
+            $.ajax({
+                beforeSend: function(){
+                    $('#loading').show();
+                    $('#errorSumViews').hide();
+
+                    $("#rangeSumViews").attr("disabled", true);
+                    $("#sumViewsData").hide();
+                    $("#loaderSumViews").show();
+                },
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                type: 'POST',
+                url: '{{ route('admin.dashboard.filterSumViews') }}',
+                data: $("#sumViewsForm").serialize()
+            })
+            .done(function(data){
+                $('#loading').hide();
+
+                $("#loaderSumViews").hide();
+
+                $('#errorSumViews').hide();
+
+                $("#sumViewsData").show();
+                $("h6#sumViewsData").text(data);
+
+                $("#rangeSumViews").attr("disabled", false);
+            })
+            .fail(function() {
+                $('#loading').hide();
+                $('#errorSumViews').show();
+            });
+
+        } else if(params == 'sumVisitors'){
+            $.ajax({
+                beforeSend: function(){
+                    $('#loading').show();
+                    $('#errorSumVisitors').hide();
+
+                    $("#rangeSumVisitors").attr("disabled", true);
+                    $("#sumVisitorsData").hide();
+                    $("#loaderSumVisitors").show();
+                },
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                type: 'POST',
+                url: '{{ route('admin.dashboard.filterSumVisitors') }}',
+                data: $("#sumVisitorsForm").serialize()
+            })
+            .done(function(data){
+                $('#loading').hide();
+
+                $("#loaderSumVisitors").hide();
+
+                $('#errorSumVisitors').hide();
+
+                $("#sumVisitorsData").show();
+                $("h6#sumVisitorsData").text(data);
+
+                $("#rangeSumVisitors").attr("disabled", false);
+            })
+            .fail(function() {
+                $('#loading').hide();
+                $('#errorSumVisitors').show();
+            });
+
+        } else if(params == 'sumReturningVisitors') {
+            $.ajax({
+                beforeSend: function(){
+                    $('#loading').show();
+                    $('#errorSumReturningVisitors').hide();
+
+                    $("#rangeSumReturningVisitors").attr("disabled", true);
+                    $("#sumReturningVisitorsData").hide();
+                    $("#loaderSumReturningVisitors").show();
+                },
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                type: 'POST',
+                url: '{{ route('admin.dashboard.filterSumReturningVisitors') }}',
+                data: $("#sumReturningVisitorsForm").serialize()
+            })
+            .done(function(data){
+                $('#loading').hide();
+
+                var strData = 0;
+                var obj = jQuery.parseJSON(data);
+                $.each(obj, function(key,value) {
+                    if(value.newVsReturning == 'returning') {
+                        strData = value.totalUsers;
+                        return false;
+                    }
+                });
+
+                $("#loaderSumReturningVisitors").hide();
+
+                $('#errorSumReturningVisitors').hide();
+
+                $("#sumReturningVisitorsData").show();
+                $("h6#sumReturningVisitorsData").text(strData);
+
+                $("#rangeSumReturningVisitors").attr("disabled", false);
+            })
+            .fail(function() {
+                $('#loading').hide();
+                $('#errorSumReturningVisitors').show();
+            });
+
+        } else if(params == 'sumAvgSessions') {
+            $.ajax({
+                beforeSend: function(){
+                    $('#loading').show();
+                    $('#errorSumAvgSessions').hide();
+
+                    $("#rangeSumAvgSessions").attr("disabled", true);
+                    $("#sumAvgSessionsData").hide();
+                    $("#loaderSumAvgSessions").show();
+                },
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                type: 'POST',
+                url: '{{ route('admin.dashboard.filterSumAvgSessions') }}',
+                data: $("#sumAvgSessionsForm").serialize()
+            })
+            .done(function(data){
+                $('#loading').hide();
+
+                $("#loaderSumAvgSessions").hide();
+
+                $('#errorSumAvgSessions').hide();
+
+                $("#sumAvgSessionsData").show();
+                var roundUpData = Number(data).toFixed(2);
+                $("h6#sumAvgSessionsData").text(roundUpData);
+
+                $("#rangeSumAvgSessions").attr("disabled", false);
+            })
+            .fail(function() {
+                $('#loading').hide();
+                $('#errorSumAvgSessions').show();
+            });
+        } else if(params == 'mostViewsByPage') {
+            $.ajax({
+                beforeSend: function(){
+                    $('#loading').show();
+                    $('#errorMostViewsByPage').hide();
+                    $('#chart-most-views').hide();
+
+                    $("#rangeMostViewsByPage").attr("disabled", true);
+                    $("#floatingCount").attr("disabled", true);
+                    $("#loaderMostViews").show();
+                },
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                type: 'POST',
+                url: '{{ route('admin.dashboard.filterMostViewsByPage') }}',
+                data: $("#mostViewsByPageForm").serialize()
+            })
+            .done(function(data){
+                $('#loading').hide();
+
+                var objData = [], objCategory = [];
+                var lenData = 0;
+                var obj = jQuery.parseJSON(data);
+                $.each(obj, function(key,value) {
+                    lenData++;
+                    objData.push(value.screenPageViews);
+                    objCategory.push(value.pageTitle);
+                });
+                initMostViewsByPage(objData, objCategory);
+
+                $("#loaderMostViews").hide();
+                
+                $('#errorMostViewsByPage').hide();
+
+                $('#chart-most-views').show();
+
+                $("#rangeMostViewsByPage").attr("disabled", false);
+                $("#floatingCount").attr("disabled", false);
+            })
+            .fail(function() {
+                $('#loading').hide();
+                $('#errorMostViewsByPage').show();
+            });
+
+        } else if(params == 'totalVisitorsByDate') {
+            $.ajax({
+                beforeSend: function(){
+                    $('#loading').show();
+                    $('#errorTotalVisitorsByDate').hide();
+                    $('#chart-total-visitors').hide();
+
+                    $("#rangeTotalVisitorsByDate").attr("disabled", true);
+                    $("#loaderTotalVisitors").show();
+                },
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                type: 'POST',
+                url: '{{ route('admin.dashboard.filterTotalUsersByDate') }}',
+                data: $("#totalVisitorsByDateForm").serialize()
+            })
+            .done(function(data){
+                var objData = [], objCategory = [];
+
+                var lenData = 0;
+                var obj = jQuery.parseJSON(data);
+                $.each(obj, function(key,value) {
+                    lenData++;
+                    objData.push(value.totalUsers);
+                    
+                    var tempDate = value.date;
+                    var year = tempDate.substring(0, 4);
+                    var month = tempDate.substring(4, 6);
+                    var day = tempDate.substring(6, 8);
+                    var strDate = day+"-"+month+"-"+year;
+
+                    objCategory.push(strDate);
+                });
+                initTotalVisitorsByDate(objData, objCategory);
+                
+                $('#loading').hide();
+
+                $('#errorTotalVisitorsByDate').hide();
+
+                $('#chart-total-visitors').show();
+
+                $("#loaderTotalVisitors").hide();
+                $("#rangeTotalVisitorsByDate").attr("disabled", false);
+            })
+            .fail(function() {
+                $('#loading').hide();
+                $('#errorTotalVisitorsByDate').show();
+            });
+        }
+
+    }
+</script>
+
+<script>
+    $(document).ready(function(){
+        $("#loaderSumViews").hide();
+        $("#loaderMostViews").hide();
+        $("#loaderTotalVisitors").hide();
+
+        $(function () {
+            initDashboardData();
+        });
+
+        // ============== Retry Data Handler ==============
+        $("#retrySumViews").click(function(e){
+            retryData('sumViews');
+        });
+
+        $("#retrySumVisitors").click(function(e){
+            retryData('sumVisitors');
+        });
+
+        $("#retrySumReturningVisitors").click(function(e){
+            retryData('sumReturningVisitors');
+        });
+
+        $("#retrySumAvgSessions").click(function(e){
+            retryData('sumAvgSessions');
+        });
+
+        $("#retryMostViewsByPage").click(function(e){
+            retryData('mostViewsByPage');
+        });
+
+        $("#retryTotalVisitorsByDate").click(function(e){
+            retryData('totalVisitorsByDate');
+        });
+        // ============== End of Retry Data Handler ==============
+
+        // ============== Filter Data Handler ==============
+        $('#rangeSumViews').change(function(e) {
+            e.preventDefault();
+            filterData('sumViews');
+            return false;
+        });
+
+        $('#rangeSumVisitors').change(function(e) {
+            e.preventDefault();
+            filterData('sumVisitors');
+            return false;
+        });
+
+        $('#rangeSumReturningVisitors').change(function(e) {
+            e.preventDefault();
+            filterData('sumReturningVisitors');
+            return false;
+        });
+
+        $('#rangeSumAvgSessions').change(function(e) {
+            e.preventDefault();
+            filterData('sumAvgSessions');
+            return false;
+        });
+        // ============== End of Filter Data Handler ==============
+
+        //Filter Handler
+        $("#applyFilterMostViews").click(function(e){
+            e.preventDefault();
+            filterData('filterMostViews');
+        });
+
+        $("#rangeTotalVisitorsByDate").change(function(e){
+            e.preventDefault();
+            filterData('filterTotalVisitorsByDate');
         });
         //End of Filter Handler
-
-        
-
     });
 </script>
 
