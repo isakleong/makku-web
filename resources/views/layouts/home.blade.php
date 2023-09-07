@@ -64,13 +64,23 @@
 
 
   <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KRTK7GZC8H"></script>
+  {{-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-KRTK7GZC8H"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
 
     gtag('config', 'G-KRTK7GZC8H');
+  </script> --}}
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WE3YFFZ289"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-WE3YFFZ289');
   </script>
 
   <style>

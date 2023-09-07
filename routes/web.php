@@ -200,6 +200,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function() {
 
 //Homepage
 Route::group([
+    'middleware' => ('slashes'),
     'prefix' => '{locale}',
     'where' => ['locale' => '[a-zA-Z]{2}'],
 ], function(){
